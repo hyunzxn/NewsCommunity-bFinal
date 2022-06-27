@@ -18,7 +18,7 @@ jobs:
           java-version: 11
 
       - name: Grant execute permission for gradlew
-        working-directory: newsCommunity
+        working-directory: /newsCommunity
         run: chmod +x /gradlew
         shell: bash
 
