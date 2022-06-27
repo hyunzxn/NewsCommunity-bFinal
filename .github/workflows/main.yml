@@ -41,7 +41,7 @@ jobs:
           cp -r .ebextensions deploy/.ebextensions
           cd deploy && zip -r newsCommunity-prod-label-${{steps.current-time.outputs.formattedTime}}-${{github.sha}} .
 
-      - name: Deploy Consumer to EB
+      - name: Deploy Consumer to EB1
         uses: einaregilsson/beanstalk-deploy@v14
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
