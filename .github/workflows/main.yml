@@ -18,12 +18,12 @@ jobs:
           java-version: 11
 
       - name: Grant execute permission for gradlew
-        working-directory: ./newsCommunity
-        run: chmod +x ./gradlew
+        working-directory: newsCommunity
+        run: chmod +x /gradlew
         shell: bash
 
       - name: Build with Gradle
-        working-directory: ./newsCommunity
+        working-directory: /newsCommunity
         run: ./gradlew clean build
         shell: bash
 
