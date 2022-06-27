@@ -19,12 +19,12 @@ jobs:
           java-version: 11
 
       - name: Grant execute permission for gradlew
-        working-directory: newsCommunity
+        working-directory: ./server-app
         run: chmod +x ./gradlew
         shell: bash
 
       - name: Build with Gradle
-        working-directory: newsCommunity
+        working-directory: ./server-app
         run: ./gradlew clean build
         shell: bash
 
@@ -38,7 +38,7 @@ jobs:
       - name: Generate deployment package
         run: |
           mkdir -p deploy
-          cp newsCommunity/build/libs/newsCommunity.jar deploy/newsCommunity-prod-ebextensions-1.jar
+          cp server-app/build/libs/server-app.jar deploy/newsCommunity-prod-ebextensions-1.jar
           cp Procfile deploy/Procfile
           cp -r .ebextensions deploy/.ebextensions
           cd deploy && zip -r newsCommunity-prod-label-${{steps.current-time.outputs.formattedTime}}-${{github.sha}} .
