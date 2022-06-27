@@ -1,1 +1,1 @@
-web: java -jar NewsCommunity-bFinal-ebextensions-1.jar
+web: java -jar newsCommunity-ebextensions-1.jar
