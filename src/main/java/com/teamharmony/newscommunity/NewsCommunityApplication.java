@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class NewsCommunityApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(NewsCommunityApplication.class, args);
+		SpringApplication.run(NewsCommunityApplication.class, args);
     }
 	@Bean
 	PasswordEncoder passwordEncoder() {
