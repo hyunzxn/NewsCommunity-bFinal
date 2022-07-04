@@ -25,13 +25,11 @@ public class CommentController {
 
     private final CommentService commentService;
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
 
     @PostMapping("/user/comments")
-    public Long saveComment(@RequestBody CommentRequestDto commentRequestDto) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = (String) authentication.getPrincipal();
+    public Long saveComment(@RequestBody CommentRequestDto commentRequestDto,
+                            @AuthenticationPrincipal UserDetails user) {
+        String username = user.getUsername();
         return commentService.createComment(commentRequestDto, username);
     }
 
