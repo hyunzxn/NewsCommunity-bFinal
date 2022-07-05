@@ -52,4 +52,9 @@ public class CommentController {
         commentRepository.deleteById(id);
         return id;
     }
+
+    @GetMapping("/user/comments/count/{news_id}")
+    public int getCommentCount(@PathVariable String news_id) {
+        return commentService.findComments(news_id).size();
+    }
 }
