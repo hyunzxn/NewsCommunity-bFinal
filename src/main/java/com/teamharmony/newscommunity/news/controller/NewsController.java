@@ -2,7 +2,7 @@ package com.teamharmony.newscommunity.news.controller;
 
 
 import com.teamharmony.newscommunity.news.common.ApiResponse;
-import com.teamharmony.newscommunity.news.dto.createDTO.RequestCreateNewsAccessLogDTO;
+//import com.teamharmony.newscommunity.news.dto.createDTO.RequestCreateNewsAccessLogDTO;
 import com.teamharmony.newscommunity.news.dto.responseDTO.ResponseNewsDTO;
 import com.teamharmony.newscommunity.news.dto.responseDTO.ResponseNewsDetailDTO;
 import com.teamharmony.newscommunity.news.service.NewsService;
