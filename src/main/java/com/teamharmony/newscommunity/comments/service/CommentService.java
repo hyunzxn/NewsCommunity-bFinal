@@ -6,6 +6,7 @@ import com.teamharmony.newscommunity.comments.repository.CommentRepository;
 import com.teamharmony.newscommunity.users.entity.User;
 import com.teamharmony.newscommunity.users.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -38,5 +39,13 @@ public class CommentService {
                 () -> new IllegalArgumentException("댓글을 찾을 수 없습니다")
         );
         comment.update(commentRequestDto);
+    }
+
+    public List<Comment> getSortedCommentsDesc(String newsId) {
+        return commentRepository.findByNewsIdOrderByCreatedAtDesc(newsId);
+    }
+
+    public List<Comment> getSortedCommentsAsc(String newsId) {
+        return commentRepository.findByNewsIdOrderByCreatedAtAsc(newsId);
     }
 }
