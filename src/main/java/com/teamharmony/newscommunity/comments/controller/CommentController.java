@@ -4,19 +4,11 @@ import com.teamharmony.newscommunity.comments.dto.CommentRequestDto;
 import com.teamharmony.newscommunity.comments.entity.Comment;
 import com.teamharmony.newscommunity.comments.repository.CommentRepository;
 import com.teamharmony.newscommunity.comments.service.CommentService;
-import com.teamharmony.newscommunity.users.entity.User;
-import com.teamharmony.newscommunity.users.repo.UserRepository;
-import com.teamharmony.newscommunity.users.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -51,5 +43,19 @@ public class CommentController {
     public Long deleteComment(@PathVariable Long id) {
         commentRepository.deleteById(id);
         return id;
+    }
+
+    @GetMapping("/user/comments/count/{news_id}")
+    public int getCommentCount(@PathVariable String news_id) {
+        return commentService.findComments(news_id).size();
+    }
+
+    @GetMapping("/user/comments/sort/{news_id}")
+    public List<Comment> sortComments(@PathVariable String news_id, @RequestParam String direction) {
+        if (direction.equals("DESC")) {
+            return commentService.getSortedCommentsDesc(news_id);
+        } else {
+            return commentService.getSortedCommentsAsc(news_id);
+        }
     }
 }
