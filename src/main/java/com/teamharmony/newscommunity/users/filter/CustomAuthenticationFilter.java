@@ -18,6 +18,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -56,8 +58,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 				.withSubject(user.getUsername())
 				.withExpiresAt(new Date(System.currentTimeMillis() + 60*60*1000))
 				.sign(algorithm);
-
+		
+		byte[] username = user.getUsername().getBytes(StandardCharsets.UTF_8);
 		response.setHeader("token", access_token);
+		response.setHeader("username", Base64.getEncoder().encodeToString(username));
 		ResponseCookie refresh = ResponseCookie.from("ref_uid", refresh_token)
 		                                       .maxAge(60*60*1000) // 밀리세컨인지 확인해야됨
 		                                       .httpOnly(true)
