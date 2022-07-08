@@ -30,6 +30,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	private final RoleRepository roleRepository;
 	private final UserProfileRepository profileRepository;
 	private final UserRoleRepository userRoleRepository;
+	private final TokensRepository tokensRepository;
+	
 	private final PasswordEncoder passwordEncoder;
 	private final FileStore fileStore;
 	
@@ -62,6 +64,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 	
 	@Override
+	public Tokens updateTokens(String username, String access_token, String refresh_token) {
+		Tokens tokens = getTokens(username);
+		tokens.update(access_token, refresh_token);
+		return tokensRepository.save(tokens);
+	}
+	
+	@Override
 	public void defaultProfile(User user, UserProfile profile) {
 		profile.setUser(user);
 		profileRepository.save(profile);
@@ -88,21 +97,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 				throw new IllegalArgumentException(e);
 			}
 			
-			profileRepository.delete(existingProfile); // 기존 프로필 삭제
-			// UserProfile 객체 생성 후 DB 저장
-			UserProfile profile = new UserProfile(profileVO);
-			profile.setUser(user);
-			profileRepository.save(profile);
+			// 프로필 변경 사항 적용 후 DB 저장
+			existingProfile.update(profileVO);
+			profileRepository.save(existingProfile);
 
 		} else {
-			// 기존 프로필 사진을 가진 UserProfile 객체 생성 후 DB 저장
-			UserProfile profile = UserProfile.builder()
-			                                 .nickname(profileVO.getName_give())
-			                                 .profile_pic(existingProfile.getProfile_pic())
-			                                 .profile_info(profileVO.getAbout_give())
-			                                 .build();
-			profile.setUser(user);
-			profileRepository.save(profile);
+			// 프로필 사진 외 변경 사항 적용 후 DB 저장
+			existingProfile.notUpdatePic(profileVO);
+			profileRepository.save(existingProfile);
 		}
 		Map<String, String> body = new HashMap<>();
 		body.put("result", "success");
@@ -180,6 +182,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	public List<User> getUsers() {
 		log.info("Fetching all users");
 		return userRepository.findAll();
+	}
+	
+	@Override
+	public Tokens getTokens(String username) {
+		log.info("Fetching tokens of user {}", username);
+		return tokensRepository.findByUsername(username);
 	}
 	
 	@Override

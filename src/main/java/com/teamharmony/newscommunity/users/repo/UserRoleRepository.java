@@ -9,5 +9,4 @@ import java.util.Collection;
 
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
 	Collection<UserRole> findByUser(User user);
-	Collection<UserRole> findByRole(Role role);
 }

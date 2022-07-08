@@ -2,6 +2,7 @@ package com.teamharmony.newscommunity.users.security;
 
 import com.teamharmony.newscommunity.users.filter.CustomAuthenticationFilter;
 import com.teamharmony.newscommunity.users.filter.CustomAuthorizationFilter;
+import com.teamharmony.newscommunity.users.repo.TokensRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +26,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final UserDetailsService userDetailsService;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+	private final TokensRepository tokensRepository;
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
@@ -32,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean(), userDetailsService);
+		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean(), userDetailsService, tokensRepository);
 		customAuthenticationFilter.setFilterProcessesUrl("/api/login");
 		http.csrf()
 		    .ignoringAntMatchers("/h2-console/**")
@@ -42,14 +44,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.sessionManagement().sessionCreationPolicy(STATELESS);
 		http.authorizeRequests().antMatchers("/h2-console/**").permitAll();
 		
-		http.authorizeRequests().antMatchers("/api/login/**", "/api/token/**", "/api/signup/**", "/api/news/**","/api/user/**").permitAll();
+		http.authorizeRequests().antMatchers("/api/login/**", "/api/token/**", "/api/signup/**", "/api/news/**").permitAll();
 		http.authorizeRequests().antMatchers(GET, "/api/user/**").hasAuthority("ROLE_USER");
 		http.authorizeRequests().antMatchers(GET, "/api/admin/**").hasAuthority("ROLE_ADMIN");
 		http.authorizeRequests().anyRequest().authenticated();
 		
 		http.addFilter(customAuthenticationFilter);
 		// this filter comes before the other filters
-		http.addFilterBefore(new CustomAuthorizationFilter(userDetailsService), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(new CustomAuthorizationFilter(userDetailsService, tokensRepository), UsernamePasswordAuthenticationFilter.class);
 	}
 	@Bean
 	@Override

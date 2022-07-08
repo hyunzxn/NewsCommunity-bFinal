@@ -39,7 +39,7 @@ public class FileStore {
 		try {
 			return s3.getResourceUrl(path, key);
 		} catch (AmazonServiceException e) {
-			throw  new IllegalStateException("Failed to download file to s3", e);
+			throw  new IllegalStateException("Failed to download file from s3", e);
 		}
 	}
 }
