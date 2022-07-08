@@ -1,14 +1,12 @@
 package com.teamharmony.newscommunity.users.service;
 
-import com.teamharmony.newscommunity.users.entity.Role;
-import com.teamharmony.newscommunity.users.entity.RoleType;
-import com.teamharmony.newscommunity.users.entity.User;
-import com.teamharmony.newscommunity.users.entity.UserRole;
-import com.teamharmony.newscommunity.users.repo.RoleRepository;
-import com.teamharmony.newscommunity.users.repo.UserRepository;
-import com.teamharmony.newscommunity.users.repo.UserRoleRepository;
+import com.teamharmony.newscommunity.users.dto.ProfileVO;
+import com.teamharmony.newscommunity.users.entity.*;
+import com.teamharmony.newscommunity.users.filesotre.FileStore;
+import com.teamharmony.newscommunity.users.repo.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,8 +14,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
+
+import static org.apache.http.entity.ContentType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -26,8 +28,13 @@ import java.util.*;
 public class UserServiceImpl implements UserService, UserDetailsService {
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
+	private final UserProfileRepository profileRepository;
 	private final UserRoleRepository userRoleRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final FileStore fileStore;
+	
+	@Value("${aws.s3.bucket-name}")
+	private String bucketName;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -55,18 +62,84 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 	
 	@Override
-	public UserRole saveUserRole(User user, Role role) {
-		log.info("Saving new userRole");
-		role = roleRepository.findByName(role.getName());
-		UserRole userRole = new UserRole(user, role);
-		return userRoleRepository.save(userRole);
+	public void defaultProfile(User user, UserProfile profile) {
+		profile.setUser(user);
+		profileRepository.save(profile);
 	}
 	
 	@Override
+	public Map<String, String> updateProfile(String username, ProfileVO profileVO) {
+		MultipartFile file = profileVO.getFile_give();
+		User user = getUser(username);
+		UserProfile existingProfile = user.getProfile();	// 해당 유저의 기존 프로필 찾기
+		if (existingProfile == null) throw new IllegalArgumentException(String.format("User profile %s not found", username));
+		
+		if (!file.isEmpty()) {
+			isImage(file); // 파일이 이미지 확장자(*.jpeg, *.png, *.gif)인지 확인
+			// 버킷에 저장될 경로, 파일명 그리고 파일의 metadata 생성
+			String path = String.format("%s/%s", bucketName, username);
+			String fileName = String.format("%s", file.getOriginalFilename());
+			Map<String, String> metadata = extractMetadata(file);
+			
+			try {
+				if(!existingProfile.getProfile_pic().equals("default")) fileStore.delete(path, existingProfile.getProfile_pic()); // 기존 파일 삭제
+				fileStore.save(path, fileName, Optional.of(metadata), file.getInputStream()); // 업데이트 파일 저장
+			} catch (IOException e) {
+				throw new IllegalArgumentException(e);
+			}
+			
+			profileRepository.delete(existingProfile); // 기존 프로필 삭제
+			// UserProfile 객체 생성 후 DB 저장
+			UserProfile profile = new UserProfile(profileVO);
+			profile.setUser(user);
+			profileRepository.save(profile);
+
+		} else {
+			// 기존 프로필 사진을 가진 UserProfile 객체 생성 후 DB 저장
+			UserProfile profile = UserProfile.builder()
+			                                 .nickname(profileVO.getName_give())
+			                                 .profile_pic(existingProfile.getProfile_pic())
+			                                 .profile_info(profileVO.getAbout_give())
+			                                 .build();
+			profile.setUser(user);
+			profileRepository.save(profile);
+		}
+		Map<String, String> body = new HashMap<>();
+		body.put("result", "success");
+		body.put("msg", "프로필 변경이 완료되었습니다.");
+		return body;
+	}
+	
+	@Override
+	public String getProfileImageUrl(String username, UserProfile profile) {
+		if (profile == null) throw new IllegalArgumentException(String.format("User profile %s not found", username));
+		String path = String.format("%s/%s", bucketName,username);
+		// 버킷에서 프로필 사진 가져오기
+		if (!profile.getProfile_pic().equals("default")) {
+			return fileStore.download(path, profile.getProfile_pic());
+		} else {
+			return "default";
+		}
+	}
+	
+	private Map<String, String> extractMetadata(MultipartFile file) {
+		Map<String, String> metadata = new HashMap<>();
+		metadata.put("Content-Type", file.getContentType());
+		metadata.put("Content-Length", String.valueOf(file.getSize()));
+		return metadata;
+	}
+	
+	private void isImage(MultipartFile file) {
+		if (!Arrays.asList(IMAGE_JPEG.getMimeType(), IMAGE_PNG.getMimeType(), IMAGE_GIF.getMimeType())
+		           .contains(file.getContentType()))
+			throw new IllegalArgumentException("File must be an image [ "+ file.getContentType() +" ]");
+	}
+
+	@Override
 	public void addRoleToUser(String username, RoleType roleName) {
 		log.info("Adding role {} to user {}", roleName, username);
-		User user = userRepository.findByUsername(username);
-		Role role = roleRepository.findByName(roleName);
+		User user = getUser(username);
+		Role role = getRole(roleName);
 		UserRole userRole = new UserRole(user, role);
 		userRoleRepository.save(userRole);
 	}
@@ -81,6 +154,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	public Role getRole(RoleType name) {
 		log.info("Fetching role {}", name);
 		return roleRepository.findByName(name);
+	}
+	
+	@Override
+	public Map<String, Object> getProfile(String username, boolean status) {
+		log.info("Fetching profile of user {}", username);
+		User user = getUser(username);
+		UserProfile profile = user.getProfile();
+		Map<String, Object> body = new HashMap<>();
+		body.put("status", status);
+		body.put("link", getProfileImageUrl(username, profile));
+		body.put("profile", profile);
+		return body;
 	}
 	
 	@Override
@@ -101,7 +186,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	public Map<String, Boolean> checkUser(String username) {
 		log.info("Checking duplicates username {}", username);
 		Map<String, Boolean> body = new HashMap<>();
-		Boolean exists = userRepository.findByUsername(username) != null;
+		Boolean exists = getUser(username) != null;
 		body.put("exists", exists);
 		return body;
 	}

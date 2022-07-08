@@ -5,15 +5,18 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teamharmony.newscommunity.users.dto.ProfileVO;
 import com.teamharmony.newscommunity.users.dto.SignupDto;
 import com.teamharmony.newscommunity.users.entity.Role;
 import com.teamharmony.newscommunity.users.entity.RoleType;
 import com.teamharmony.newscommunity.users.entity.User;
+import com.teamharmony.newscommunity.users.entity.UserProfile;
 import com.teamharmony.newscommunity.users.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,17 +42,20 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/api")
 public class UserController {
 	private final UserService userService;
+	
 	// 전체 유저 불러오기
 	@GetMapping("/admin/users")
 	public ResponseEntity<List<User>>getUsers() {
 		return ResponseEntity.ok().body(userService.getUsers());
 	}
+	
 	// 회원 가입 요청 처리
 	@PostMapping("/signup")
 	public ResponseEntity<User>saveUser(SignupDto dto) {
 		User user = User.builder().dto(dto).build();
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/signup").toUriString());
 		userService.saveUser(user);
+		// 기본 사용자 권한 추가
 		Role role = new Role(RoleType.USER);
 		role = userService.getRole(role.getName());
 		try {
@@ -57,11 +63,18 @@ public class UserController {
 				userService.saveRole(new Role(RoleType.USER));
 			}
 			userService.addRoleToUser(user.getUsername(),RoleType.USER);
+			// 기본 프로필 추가
+			UserProfile profile = UserProfile.builder()
+			                                 .nickname(user.getUsername())
+			                                 .profile_pic("default")
+			                                 .build();
+			userService.defaultProfile(user, profile);
 			return ResponseEntity.created(uri).body(user);
 		} catch (DataIntegrityViolationException|ConstraintViolationException e) {
 			return ResponseEntity.badRequest().build();
 		}
 	}
+	
 	// 회원 ID 중복 확인
 	@PostMapping("/signup/checkdup")
 	public ResponseEntity<?>checkUser(@RequestParam("username_give") String username) {
@@ -86,12 +99,34 @@ public class UserController {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save").toUriString());
 		return ResponseEntity.created(uri).body(userService.saveRole(role));
 	}
+	
 	// 회원 권한 추가
 	@PostMapping("/role/addtouser")
 	public ResponseEntity<?>addRoleToUser(@RequestBody RoleToUserForm form) {
 		userService.addRoleToUser(form.getUsername(), form.getRoleName());
 		return ResponseEntity.ok().build();
 	}
+	
+	// 회원 프로필 정보
+	@GetMapping("/user/profile/{username}")
+	public ResponseEntity<Map<String, Object>>getProfile(@PathVariable String username, @AuthenticationPrincipal UserDetails user) {
+		boolean status = username.equals(user.getUsername());
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/profile/{username}").toUriString());
+		return ResponseEntity.created(uri).body(userService.getProfile(username, status));
+	}
+	
+	// 회원 프로필 업데이트
+	@PostMapping(
+			path = "/user/update_profile",
+			consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE
+	)
+	public ResponseEntity<?>updateProfile(ProfileVO profile, @AuthenticationPrincipal UserDetails user) {
+		String username = user.getUsername();
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/update_profile").toUriString());
+		return ResponseEntity.created(uri).body(userService.updateProfile(username, profile));
+	}
+	
 	// 토큰 리프레쉬
 	@GetMapping("/token/refresh")
 	public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
