@@ -41,4 +41,14 @@ public class UserProfile {
 	public UserProfile(ProfileVO vo) {
 		this(vo.getName_give(), vo.getFile_give().getOriginalFilename(), vo.getAbout_give());
 	}
+	
+	public void update(ProfileVO vo) {
+		this.nickname = vo.getName_give();
+		this.profile_pic = vo.getFile_give().getOriginalFilename();
+		this.profile_info = vo.getAbout_give();
+	}
+	public void notUpdatePic(ProfileVO vo) {
+		this.nickname = vo.getName_give();
+		this.profile_info = vo.getAbout_give();
+	}
 }

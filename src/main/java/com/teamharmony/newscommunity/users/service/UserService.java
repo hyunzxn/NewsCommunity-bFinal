@@ -10,6 +10,7 @@ import java.util.Map;
 public interface UserService {
 	User saveUser(User user);
 	Role saveRole(Role role);
+	Tokens updateTokens(String username, String access_token, String refresh_token);
 	void defaultProfile(User user, UserProfile profile);
 	Map<String, String> updateProfile(String username, ProfileVO profile);
 	String getProfileImageUrl(String username, UserProfile profile);
@@ -19,5 +20,6 @@ public interface UserService {
 	Role getRole(RoleType name);
 	Collection<Role> getRoles(User user);
 	List<User> getUsers();
+	Tokens getTokens(String username);
 	Map<String, Boolean> checkUser(String username);
 }
