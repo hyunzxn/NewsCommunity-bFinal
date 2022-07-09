@@ -3,6 +3,8 @@ package com.teamharmony.newscommunity.users.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teamharmony.newscommunity.users.entity.Tokens;
+import com.teamharmony.newscommunity.users.repo.TokensRepository;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +20,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -27,10 +31,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
 	private final UserDetailsService userDetailsService;
+	private final TokensRepository tokensRepository;
 	
-	public CustomAuthenticationFilter(AuthenticationManager authenticationManager, UserDetailsService userDetailsService) {
+	public CustomAuthenticationFilter(AuthenticationManager authenticationManager, UserDetailsService userDetailsService, TokensRepository tokensRepository) {
 		this.authenticationManager = authenticationManager;
 		this.userDetailsService = userDetailsService;
+		this.tokensRepository = tokensRepository;
 	}
 	// 로그인 시도
 	@Override
@@ -49,23 +55,45 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 		Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
 		String access_token = JWT.create()
 				.withSubject(user.getUsername())
-				.withExpiresAt(new Date(System.currentTimeMillis() + 10*60*1000))
+				.withExpiresAt(new Date(System.currentTimeMillis() + 16*60*60*1000)) // 테스트를 위해 만료시간 16시간으로 설정
 				.withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 				.sign(algorithm);
 		String refresh_token = JWT.create()
 				.withSubject(user.getUsername())
-				.withExpiresAt(new Date(System.currentTimeMillis() + 60*60*1000))
+				.withExpiresAt(new Date(System.currentTimeMillis() + 7*24*60*60*1000))
 				.sign(algorithm);
-
+		
+		String username = user.getUsername();
+		Tokens existingTokens = tokensRepository.findByUsername(username);
+		if (existingTokens==null) {
+			// 유저가 토큰 정보를 가지고 있지 않으면 생성 후 DB 저장
+			try {
+				Tokens newTokens = Tokens.builder()
+				                             .username(username)
+				                             .accessToken(access_token)
+				                             .refreshToken(refresh_token)
+				                             .build();
+				tokensRepository.save(newTokens);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		} else {
+			// 유저가 토큰 정보를 가지고 있으면 변경 후 DB 저장
+			existingTokens.update(access_token, refresh_token);
+			tokensRepository.save(existingTokens);
+		}
+		
+		byte[] usernameHeader = username.getBytes(StandardCharsets.UTF_8);
 		response.setHeader("token", access_token);
+		response.setHeader("username", Base64.getEncoder().encodeToString(usernameHeader));
 		ResponseCookie refresh = ResponseCookie.from("ref_uid", refresh_token)
-		                                       .maxAge(60*60*1000) // 밀리세컨인지 확인해야됨
+		                                       .maxAge(7*24*60*60*1000) // 밀리세컨인지 확인해야됨
 		                                       .httpOnly(true)
 			                                     .secure(true)
 						                               .sameSite("None")
-				                                   .path("/") // have to modify
+				                                   .path("/")
 				                                   .build();
-		response.addHeader(SET_COOKIE, refresh.toString());
+		response.setHeader(SET_COOKIE, refresh.toString());
 		
 		response.setContentType(APPLICATION_JSON_VALUE);
 		new ObjectMapper().writeValue(response.getOutputStream(), "success");

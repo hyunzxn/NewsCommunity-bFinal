@@ -27,7 +27,7 @@ public class SimpleCorsFilter implements Filter {
 		response.setHeader("Access-Control-Allow-Credentials", "true");
 		
 		response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Authorization, x-csrftoken, content-type");
-		response.setHeader("Access-Control-Expose-Headers", "token");
+		response.setHeader("Access-Control-Expose-Headers", "token, username, error");
 		
 		if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
 			response.setStatus(HttpServletResponse.SC_OK);

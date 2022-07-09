@@ -49,6 +49,11 @@ public class User  extends Timestamped {
 		likesList.add(likes);
 	}
 
+
+	@JsonManagedReference
+	@OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST)
+	private UserProfile profile;
+
 	@Builder
 	public User(SignupDto dto) {
 		this.username = dto.getUsername_give();
