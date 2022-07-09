@@ -47,4 +47,15 @@ public class NewsController {
         return ApiResponse.success("result", newsId);
     }
 
+    //4. TODO: 뉴스 조회수 업데이트 요청  //DONE
+    @PutMapping("/views/{newsId}")
+    public ApiResponse<String> UpdateView(@PathVariable String newsId){
+        /*  detail.html에 유저 접근시 해당 뉴스의 조회수를 올려주기 위한 흐름
+            param: newsTable에서 해당 뉴스의 view를 조회하기 위해 newsId를 받아옴
+            return: view를 ApiResponse에 담아 보냄
+         */
+        newsService.addView(newsId);
+        return ApiResponse.success("result", "success");
+    }
+
 }
