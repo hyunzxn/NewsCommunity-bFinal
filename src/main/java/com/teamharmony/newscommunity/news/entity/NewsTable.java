@@ -36,5 +36,8 @@ public class NewsTable {
 
     @Column(nullable = false, length = 30)
     private String write_time;      // 작성 시간
+
+    @Column(nullable = false)
+    private Long view;      // 작성 시간
 }
 
