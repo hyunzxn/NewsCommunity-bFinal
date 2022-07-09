@@ -38,6 +38,7 @@ public class NewsTable {
     private String write_time;      // 작성 시간
 
     @Column(nullable = false)
-    private Long view;      // 작성 시간
+    private Long view;               // 조회수
+
 }
 
