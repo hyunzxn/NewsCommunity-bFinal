@@ -40,5 +40,7 @@ public class NewsTable {
     @Column(nullable = false)
     private Long view;               // 조회수
 
+    public void updateView() {this.view += 1;}  // DB에 대한 조회수 증가 요청을 처리할 함수
+
 }
 
