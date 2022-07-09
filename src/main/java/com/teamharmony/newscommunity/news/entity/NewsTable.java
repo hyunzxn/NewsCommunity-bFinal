@@ -1,6 +1,7 @@
 package com.teamharmony.newscommunity.news.entity;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 @Setter @Getter
 @NoArgsConstructor
 @Entity
+@AllArgsConstructor
 public class NewsTable {
     /* 파이썬 뉴스 정보 관리 외부 모듈로부터 RDS에 저장된 NewsTable을 연동하기 위한 엔티티 */
 
