@@ -32,7 +32,7 @@ public class NewsTable {
     private String news_url;        // 해당 뉴스의 원본 주소 (네이버 뉴스의 해당 뉴스 주소)
 
     @Column(nullable = false, length = 100)
-    private String explain;         // 뉴스에 대한 설명
+    private String explains;         // 뉴스에 대한 설명
 
     @Column(nullable = false, length = 30)
     private String write_time;      // 작성 시간
