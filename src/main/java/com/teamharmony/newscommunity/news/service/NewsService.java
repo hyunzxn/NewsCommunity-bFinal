@@ -10,6 +10,7 @@ import com.teamharmony.newscommunity.news.repository.NewsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -58,5 +59,19 @@ public class NewsService {
         return newsAccessLog.getNews_id();
     }
 
+    //4. TODO: 뉴스 조회수 증가 //DONE
+    @Transactional
+    public void addView(String newsId) {
+        /*
+            /api/news/view의 경로로 요청된 메서드의 응답을 처리하는 함수, 해당 newsId의 view 컬럼의 값을 1 추가해줌
+            param: 수정할 뉴스의 id를 담은 newsId
+            return: 수정된 뉴스의 id
+         */
+        NewsTable newsTable = newsRepository.findById(newsId).orElseThrow(
+                ()-> new NullPointerException("해당 뉴스가 존재 안합니다.")
+        );
+        newsTable.updateView();
+        newsRepository.save(newsTable);
+    }
 
 }
