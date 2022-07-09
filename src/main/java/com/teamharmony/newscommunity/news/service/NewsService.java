@@ -1,6 +1,6 @@
 package com.teamharmony.newscommunity.news.service;
 
-import com.teamharmony.newscommunity.news.dto.createDTO.RequestCreateNewsAccessLogDTO;
+import com.teamharmony.newscommunity.news.dto.requestCreateDTO.RequestCreateNewsAccessLogDTO;
 import com.teamharmony.newscommunity.news.dto.responseDTO.ResponseNewsDTO;
 import com.teamharmony.newscommunity.news.dto.responseDTO.ResponseNewsDetailDTO;
 import com.teamharmony.newscommunity.news.entity.NewsAccessLog;
@@ -10,7 +10,6 @@ import com.teamharmony.newscommunity.news.repository.NewsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -18,7 +17,7 @@ import java.util.List;
 public class NewsService {
     /* 뉴스 정보 조회 기능을 수행하는 Service*/
     private final NewsRepository newsRepository;
-//    private final NewsAccessLogRepository newsAccessLogRepository;
+    private final NewsAccessLogRepository newsAccessLogRepository;
 
     //1. TODO: 뉴스 정보 일괄 요청 // DONE
     public ResponseNewsDTO getNews(){
@@ -44,5 +43,20 @@ public class NewsService {
         );
         return new ResponseNewsDetailDTO(newsTable);
     }
+
+    //3. TODO: 뉴스 접속 기록 등록  // DONE
+    public String setNewsAccessLog(RequestCreateNewsAccessLogDTO requestCreateNewsAccessLogDTO){
+        /*
+            /api/news/logs의 경로로 요청된 POST 메서드의 응답을 처리하는 메서드, 클릭한 news의 id와 유저 id를 통해 접근
+            param: requestCreateNewsAccessLogDTO // newsId, userId 정보가 담겨옴
+            return: newsAccessLog.getNews_Id()        // 생성된 뉴스로그에 담긴 뉴스 id를 리턴
+         */
+        NewsAccessLog newsAccessLog = NewsAccessLog.builder()
+                .requestCreateNewsAccessLogDTO(requestCreateNewsAccessLogDTO)
+                .build();                               // newsAccessLog를 requestCreateNewsAccessLogDTO로 초기화
+        newsAccessLogRepository.save(newsAccessLog);    // newsAccessLogRepository를 통해 newsAccessRepository에 newsAccessLog 저장
+        return newsAccessLog.getNews_id();
+    }
+
 
 }

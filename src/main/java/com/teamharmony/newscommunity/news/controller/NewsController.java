@@ -2,14 +2,12 @@ package com.teamharmony.newscommunity.news.controller;
 
 
 import com.teamharmony.newscommunity.news.common.ApiResponse;
+import com.teamharmony.newscommunity.news.dto.requestCreateDTO.RequestCreateNewsAccessLogDTO;
 import com.teamharmony.newscommunity.news.dto.responseDTO.ResponseNewsDTO;
 import com.teamharmony.newscommunity.news.dto.responseDTO.ResponseNewsDetailDTO;
 import com.teamharmony.newscommunity.news.service.NewsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/news")
@@ -36,6 +34,17 @@ public class NewsController {
             return: 뉴스정보가 담긴 ResponseNewsDetailDTO
         */
         return ApiResponse.success("result", newsService.getNewsDetail(newsId));
+    }
+
+    // 3. TODO: 뉴스 접근 기록을 저장하는 log에 대한 GET 요청, 조회  //DONE
+    @PostMapping("/logs")
+    public ApiResponse<String> createNewsAccessLog(@RequestBody RequestCreateNewsAccessLogDTO requestCreateNewsAccessLogDTO){
+        /*  사용자가 뉴스 preview를 클릭해 detail 페이지에 접근할 때마다 기록 작성
+            param: form('news_id', 'user_id', 'news_title')을 RequestCreateNewsAccessLogDTO에 담아 전달
+            return: 로그를 작성한 뉴스의 id
+         */
+        String newsId = newsService.setNewsAccessLog(requestCreateNewsAccessLogDTO);
+        return ApiResponse.success("result", newsId);
     }
 
 }
