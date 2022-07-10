@@ -9,5 +9,6 @@ import java.util.List;
 public interface SupportRepository extends JpaRepository<Support, Long> {
     List<Support> findAllByOrderByCreatedAtDesc();
 
+    List<Support> findAllByUsername(String username);
 }
 
