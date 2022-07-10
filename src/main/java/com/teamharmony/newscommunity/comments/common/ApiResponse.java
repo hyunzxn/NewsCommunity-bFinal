@@ -1,4 +1,4 @@
-package com.teamharmony.newscommunity.news.common;
+package com.teamharmony.newscommunity.comments.common;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
