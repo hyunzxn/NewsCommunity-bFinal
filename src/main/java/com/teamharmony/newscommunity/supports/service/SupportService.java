@@ -68,23 +68,33 @@ public class SupportService {
     }
 
     //삭제
-    public Long removeContent(Long contentId) {
-        supportRepository.deleteById(contentId);
-        return contentId;
+    public String removeContent(Long contentId, UserDetails user) {
+        Support supportObject = supportRepository.findById(contentId).orElseThrow(
+                () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
+        );
+        Long supportsUserID = supportObject.getUser().getId(); //현재 게시글에서 userID정보획득
+        String username = user.getUsername(); //현재 로그인한 사람 이름가져오기
+        User currentUser = userRepository.findByUsername(username); // 현재 로그인한 사람 이름(unigue)으로 user정보 획득
+        Long loginUserId = currentUser.getId();// 로그인한 사용자ID 정보(Long) 획득
+
+        if (supportsUserID == loginUserId){ //글 쓴 사람의 Id번호와 지금 로그인한 사람의 ID 번호 동일
+            supportRepository.deleteById(contentId);
+        }
+        String result = "User: "+username+", ContentNumber: "+contentId;
+        return result;
     }
 
     //수정
     @Transactional
     public String update(Long support_id, SupportRequestUpdateDto requestUpdateDto, UserDetails user) {
         Support supportObject = supportRepository.findById(support_id).orElseThrow(
-                () -> new IllegalArgumentException("해당 아이디가 존재하지 않습니다.")
+                () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
         );
 
         Long supportsUserID = supportObject.getUser().getId(); //현재 게시글에서 userID정보획득
-
         String username = user.getUsername(); //현재 로그인한 사람 이름가져오기
-        User currentUser = userRepository.findByUsername(username); // 현재 로그인한 사람 이름으로 user정보 획득
-        Long loginUserId = currentUser.getId();// 로그인한 사용자ID 정보 획득
+        User currentUser = userRepository.findByUsername(username); // 현재 로그인한 사람 이름(unigue)으로 user정보 획득
+        Long loginUserId = currentUser.getId();// 로그인한 사용자ID 정보(Long) 획득
 
         if (supportsUserID == loginUserId){ //글 쓴 사람의 Id번호와 지금 로그인한 사람의 ID 번호 동일
             supportObject.setPost_content(requestUpdateDto.getPost_content());

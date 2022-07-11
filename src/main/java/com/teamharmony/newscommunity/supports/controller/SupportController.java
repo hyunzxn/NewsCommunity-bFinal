@@ -20,7 +20,8 @@ import java.util.List;
 @RequestMapping("/api/")
 public class SupportController {
     private final SupportService supportService;
-//bean이면 서비스에서 주입이 가능한데, bean이 아니면 불가해서 controllerd에서 서비스로 넘겨줘야 한다.
+
+    //bean이면 서비스에서 주입이 가능한데, bean이 아니면 불가해서 controllerd에서 서비스로 넘겨줘야 한다.
     //생성
     @PostMapping("/supports")
     @ResponseBody
@@ -53,8 +54,7 @@ public class SupportController {
     //삭제
     @DeleteMapping("/supports/{content_id}")
     @ResponseBody
-    public long deleteSupport(@PathVariable Long content_id) {
-        supportService.removeContent(content_id);
-        return content_id;
+    public String deleteSupport(@PathVariable Long content_id, @AuthenticationPrincipal UserDetails user) {
+        return supportService.removeContent(content_id, user);
     }
 }
