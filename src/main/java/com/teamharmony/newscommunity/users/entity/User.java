@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.teamharmony.newscommunity.comments.entity.Comment;
 import com.teamharmony.newscommunity.comments.entity.Likes;
+import com.teamharmony.newscommunity.supports.entity.Support;
 import com.teamharmony.newscommunity.users.dto.SignupDto;
 import lombok.*;
 
@@ -39,6 +40,10 @@ public class User  extends Timestamped {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Likes> likesList;
 
+	@JsonBackReference
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Support> supports;
+
 	public void addComment(Comment comment) {
 		comment.setUser(this);
 		comments.add(comment);
@@ -47,6 +52,10 @@ public class User  extends Timestamped {
 	public void addLikes(Likes likes) {
 		likes.setUser(this);
 		likesList.add(likes);
+	}
+	public void addSupports(Support support) {
+		support.setUser(this);
+		supports.add(support);
 	}
 
 
