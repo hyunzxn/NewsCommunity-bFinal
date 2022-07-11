@@ -11,6 +11,7 @@ import com.teamharmony.newscommunity.users.entity.*;
 import com.teamharmony.newscommunity.users.filter.CustomAuthorizationFilter;
 import com.teamharmony.newscommunity.users.repo.TokensRepository;
 import com.teamharmony.newscommunity.users.service.UserService;
+import com.teamharmony.newscommunity.users.service.UserServiceImpl;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
@@ -39,19 +40,39 @@ import static org.springframework.http.HttpHeaders.SET_COOKIE;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+	/**
+	 * 사용자 관련 요청을 처리
+	 *
+	 * @author yj
+	 */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
 public class UserController {
 	private final UserService userService;
 	
-	// 전체 유저 불러오기
+	/**
+	 * 전체 유저 불러오기
+	 *
+	 * @return		전체 유저를 담은 List
+	 * @see 			UserService#getUsers
+	 */
 	@GetMapping("/admin/users")
 	public ResponseEntity<List<User>>getUsers() {
 		return ResponseEntity.ok().body(userService.getUsers());
 	}
 	
-	// 회원 가입 요청 처리
+	/**
+	 * 회원 가입 요청 처리
+	 *
+	 * @param 		dto 가입하려는 사용자 ID와 비밀번호를 담은 객체
+	 * @return 		사용자 ID, PW, 권한 등 사용자 정보를 담은 객체
+	 * @see				UserService#saveUser
+	 * @see				UserService#getRole
+	 * @see				UserService#saveRole
+	 * @see				UserService#addRoleToUser
+	 * @see				UserService#defaultProfile
+	 */
 	@PostMapping("/signup")
 	public ResponseEntity<User>saveUser(SignupDto dto) {
 		User user = User.builder().dto(dto).build();
@@ -66,20 +87,22 @@ public class UserController {
 			}
 			userService.addRoleToUser(user.getUsername(),RoleType.USER);
 			// 기본 프로필 추가
-			UserProfile profile = UserProfile.builder()
-			                                 .nickname(user.getUsername())
-			                                 .profile_pic("default")
-			                                 .build();
-			userService.defaultProfile(user, profile);
+			userService.defaultProfile(user);
 			return ResponseEntity.created(uri).body(user);
 		} catch (DataIntegrityViolationException|ConstraintViolationException e) {
 			return ResponseEntity.badRequest().build();
 		}
 	}
 	
-	// 회원 ID 중복 확인
+	/**
+	 * 회원 ID 중복 확인
+	 *
+	 * @param 		username 가입하려는 사용자 ID
+	 * @return 		중복 여부
+	 * @see				UserService#checkUser
+	 */
 	@PostMapping("/signup/checkdup")
-	public ResponseEntity<?>checkUser(@RequestParam("username_give") String username) {
+	public ResponseEntity<?>checkUser(@RequestParam("username") String username) {
 		//todo validator
 		
 		// 회원 ID 입력값 공백 제거
@@ -88,28 +111,52 @@ public class UserController {
 		return ResponseEntity.created(uri).body(userService.checkUser(username));
 	}
 	
-	// 현재 로그인한 유저 ID
+	/**
+	 * 현재 로그인한 유저 ID
+	 *
+	 * @param 		user 인증된 사용자 정보
+	 * @return 		인증된 사용자 ID
+	 * @see				UserDetails#getUsername
+	 */
 	@GetMapping("/user/me")
 	public ResponseEntity<String>getUsername(@AuthenticationPrincipal UserDetails user) {
 		String username = user.getUsername();
 		return ResponseEntity.ok().body(username);
 	}
 	
-	// 권한 추가
+	/**
+	 * 권한 추가
+	 *
+	 * @param 		role enum 타입 권한명이 담긴 객체
+	 * @return 		인증된 사용자 ID
+	 * @see				UserService#saveRole
+	 */
 	@PostMapping("/role/save")
 	public ResponseEntity<Role>saveUser(@RequestBody Role role) {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save").toUriString());
 		return ResponseEntity.created(uri).body(userService.saveRole(role));
 	}
 	
-	// 회원 권한 추가
+	/**
+	 * 사용자 정보에 권한 추가
+	 *
+	 * @param 		form 사용자 ID와 권한명이 담긴 객체
+	 * @see				UserService#addRoleToUser
+	 */
 	@PostMapping("/role/addtouser")
 	public ResponseEntity<?>addRoleToUser(@RequestBody RoleToUserForm form) {
 		userService.addRoleToUser(form.getUsername(), form.getRoleName());
 		return ResponseEntity.ok().build();
 	}
 	
-	// 회원 프로필 정보
+	/**
+	 * 회원 프로필 정보
+	 *
+	 * @param 		username 프로필 회원 ID
+	 * @param 		user 인증된 사용자 정보
+	 * @return 		인증된 사용자 ID와 일치 여부, 프로필 사진 url, 프로필 정보
+	 * @see				UserService#getProfile
+	 */
 	@GetMapping("/user/profile/{username}")
 	public ResponseEntity<Map<String, Object>>getProfile(@PathVariable String username, @AuthenticationPrincipal UserDetails user) {
 		boolean status = username.equals(user.getUsername());
@@ -117,7 +164,14 @@ public class UserController {
 		return ResponseEntity.created(uri).body(userService.getProfile(username, status));
 	}
 	
-	// 회원 프로필 업데이트
+	/**
+	 * 회원 프로필 업데이트
+	 *
+	 * @param 		profile 닉네임, 프로필 사진 파일, 소개글을 담은 객체
+	 * @param 		user 인증된 사용자 정보
+	 * @return 		성공 확인, 메시지
+	 * @see				UserService#updateProfile
+	 */
 	@PostMapping(
 			path = "/user/update_profile",
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
@@ -129,7 +183,14 @@ public class UserController {
 		return ResponseEntity.created(uri).body(userService.updateProfile(username, profile));
 	}
 	
-	// 토큰 리프레쉬
+	/**
+	 * 접근 토큰, 갱신 토큰 갱신
+	 *
+	 * @see				UserService#getTokens
+	 * @see				UserService#getUser
+	 * @see				UserService#getRoles
+	 * @see				UserService#updateTokens
+	 */
 	@GetMapping("/token/refresh")
 	public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// 클라이언트가 쿠키에 리프레쉬 토큰을 갖고 있는지 확인
@@ -180,19 +241,17 @@ public class UserController {
 		}
 	}
 	
-	private void removeRefCookie(HttpServletResponse response) {
-		ResponseCookie refresh = ResponseCookie.from("ref_uid", "")
-		                                       .maxAge(0)
-		                                       .path("/")
-		                                       .build();
-		response.setHeader(SET_COOKIE, refresh.toString());
-	}
-	
-	@GetMapping("/token/signout")
+	/**
+	 * 로그아웃
+	 *
+	 * @param 		user 인증된 사용자 정보
+	 * @see				UserService#updateTokens
+	 */
+	@GetMapping("/user/signout")
 	public void signOut(HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal UserDetails user) throws IOException {
 		// 클라이언트가 쿠키에 리프레쉬 토큰을 갖고 있는지 확인
 		String refCookie = getRefCookie(request);
-		// 쿠키가 있으면 삭제 후(만료시간 0으로 설정)
+		// 쿠키가 있으면 삭제
 		if (refCookie != null) {
 			removeRefCookie(response);
 		}
@@ -200,6 +259,7 @@ public class UserController {
 		userService.updateTokens(user.getUsername(), "", "");
 	}
 	
+	// 리프레쉬 쿠키값 가져오기
 	private String getRefCookie(HttpServletRequest request) {
 		Cookie[] cookies = request.getCookies();
 		Cookie cookie = null;
@@ -214,6 +274,16 @@ public class UserController {
 		return cookie.getValue();
 	}
 	
+	// 리프레쉬 쿠키 삭제(만료시간 0으로 설정)
+	private void removeRefCookie(HttpServletResponse response) {
+		ResponseCookie refresh = ResponseCookie.from("ref_uid", "")
+		                                       .maxAge(0)
+		                                       .path("/")
+		                                       .build();
+		response.setHeader(SET_COOKIE, refresh.toString());
+	}
+	
+	// 에러 발생시 헤더와 output 설정
 	private void setError(HttpServletResponse response, String msg) throws IOException {
 		response.setHeader("error", msg);
 		response.setStatus(FORBIDDEN.value());

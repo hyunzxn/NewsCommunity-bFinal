@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,8 +18,12 @@ public class UserProfile {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	private Long id;
+	@Column(nullable = false)
+	@Size(max = 10, message = "닉네임은 최대 10자까지 입력 가능합니다.")
 	private String nickname;
+	@Column(nullable = false)
 	private String profile_pic;
+	@Size(max = 60, message = "소개글은 최대 60자까지 입력 가능합니다.")
 	private String profile_info;
 	@JsonBackReference
 	@OneToOne
@@ -39,16 +44,16 @@ public class UserProfile {
 	}
 
 	public UserProfile(ProfileVO vo) {
-		this(vo.getName_give(), vo.getFile_give().getOriginalFilename(), vo.getAbout_give());
+		this(vo.getName(), vo.getFile().getOriginalFilename(), vo.getAbout());
 	}
 	
 	public void update(ProfileVO vo) {
-		this.nickname = vo.getName_give();
-		this.profile_pic = vo.getFile_give().getOriginalFilename();
-		this.profile_info = vo.getAbout_give();
+		this.nickname = vo.getName();
+		this.profile_pic = vo.getFile().getOriginalFilename();
+		this.profile_info = vo.getAbout();
 	}
 	public void notUpdatePic(ProfileVO vo) {
-		this.nickname = vo.getName_give();
-		this.profile_info = vo.getAbout_give();
+		this.nickname = vo.getName();
+		this.profile_info = vo.getAbout();
 	}
 }
