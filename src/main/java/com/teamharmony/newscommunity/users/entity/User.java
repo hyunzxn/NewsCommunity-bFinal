@@ -65,7 +65,7 @@ public class User  extends Timestamped {
 
 	@Builder
 	public User(SignupDto dto) {
-		this.username = dto.getUsername_give();
-		this.password = dto.getPassword_give();
+		this.username = dto.getUsername();
+		this.password = dto.getPassword();
 	}
 }

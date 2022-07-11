@@ -79,7 +79,7 @@ public class UserController {
 	
 	// 회원 ID 중복 확인
 	@PostMapping("/signup/checkdup")
-	public ResponseEntity<?>checkUser(@RequestParam("username_give") String username) {
+	public ResponseEntity<?>checkUser(@RequestParam("username") String username) {
 		//todo validator
 		
 		// 회원 ID 입력값 공백 제거
