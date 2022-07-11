@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,8 +18,12 @@ public class UserProfile {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	private Long id;
+	@Column(nullable = false)
+	@Size(max = 10, message = "닉네임은 최대 10자까지 입력 가능합니다.")
 	private String nickname;
+	@Column(nullable = false)
 	private String profile_pic;
+	@Size(max = 60, message = "소개글은 최대 60자까지 입력 가능합니다.")
 	private String profile_info;
 	@JsonBackReference
 	@OneToOne
