@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	
 	@Override
 	public Map<String, String> updateProfile(String username, ProfileVO profileVO) {
-		MultipartFile file = profileVO.getFile_give();
+		MultipartFile file = profileVO.getFile();
 		User user = getUser(username);
 		UserProfile existingProfile = user.getProfile();	// 해당 유저의 기존 프로필 찾기
 		if (existingProfile == null) throw new IllegalArgumentException(String.format("User profile %s not found", username));

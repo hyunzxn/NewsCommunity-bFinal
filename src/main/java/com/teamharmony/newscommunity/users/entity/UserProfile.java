@@ -39,16 +39,16 @@ public class UserProfile {
 	}
 
 	public UserProfile(ProfileVO vo) {
-		this(vo.getName_give(), vo.getFile_give().getOriginalFilename(), vo.getAbout_give());
+		this(vo.getName(), vo.getFile().getOriginalFilename(), vo.getAbout());
 	}
 	
 	public void update(ProfileVO vo) {
-		this.nickname = vo.getName_give();
-		this.profile_pic = vo.getFile_give().getOriginalFilename();
-		this.profile_info = vo.getAbout_give();
+		this.nickname = vo.getName();
+		this.profile_pic = vo.getFile().getOriginalFilename();
+		this.profile_info = vo.getAbout();
 	}
 	public void notUpdatePic(ProfileVO vo) {
-		this.nickname = vo.getName_give();
-		this.profile_info = vo.getAbout_give();
+		this.nickname = vo.getName();
+		this.profile_info = vo.getAbout();
 	}
 }
