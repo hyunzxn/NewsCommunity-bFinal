@@ -18,7 +18,11 @@ public class LikesController {
     private final LikesService likesService;
     private final UserRepository userRepository;
 
-    // 좋아요 업데이트 요청을 받는 API
+    /**
+     * 좋아요 요청을 받는 API
+     * @param id
+     * @param user
+     */
     @PostMapping("/user/likes/{id}")
     public void likes(@PathVariable Long id,
                       @AuthenticationPrincipal UserDetails user) {
@@ -26,13 +30,20 @@ public class LikesController {
         likesService.likes(id, username);
     }
 
-    // 좋아요 된 댓글들을 모두 보여주는 API
+    /**
+     * 좋아요가 눌린 댓글들 리스트를 보여주는 API
+     * @return
+     */
     @GetMapping("/user/likes")
     public List<Likes> getLikedComments() {
         return likesService.findLikedComments();
     }
 
-    // 각 댓글의 좋아요 개수를 반환하는 API
+    /**
+     * 특정 댓글에 표시된 좋아요 개수를 보여주는 API
+     * @param commentId
+     * @return
+     */
     @GetMapping("/user/likes/{commentId}")
     public int getLikedCommentsByCommentId(@PathVariable Long commentId) {
         return likesService.LikedCommentsCount(commentId);

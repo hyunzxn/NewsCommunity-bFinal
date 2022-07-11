@@ -40,11 +40,13 @@ public class Comment extends Timestamped {
         this.newsId = commentRequestDto.getNewsId();
     }
 
+    // Comment 객체가 가지고 있는 likesList 필드에 새로운 likes를 추가하는 메소드
     public void addLikes(Likes likes) {
         likes.setComment(this);
         likesList.add(likes);
     }
 
+    // 댓글을 수정하는 메소드
     public void update(CommentRequestDto commentRequestDto) {
         this.content = commentRequestDto.getContent();
     }
