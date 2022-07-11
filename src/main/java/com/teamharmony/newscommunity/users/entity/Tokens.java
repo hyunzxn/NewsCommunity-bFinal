@@ -23,7 +23,9 @@ public class Tokens {
 	private Long id;
 	@Column(unique = true, nullable=false)
 	private String username;
+	@Column(nullable = false)
 	private String accessToken;
+	@Column(nullable = false)
 	private String refreshToken;
 	
 	public void update(String access_token, String refresh_token) {
