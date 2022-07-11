@@ -13,22 +13,22 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 public class ProfileVO {
-	private String name_give;
-	private MultipartFile file_give;
-	private String about_give;
+	private String name;
+	private MultipartFile file;
+	private String about;
 	
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		ProfileVO that = (ProfileVO) o;
-		return Objects.equals(name_give, that.name_give) &&
-				Objects.equals(file_give, that.file_give) &&
-						Objects.equals(about_give, that.about_give);
+		return Objects.equals(name, that.name) &&
+				Objects.equals(file, that.file) &&
+						Objects.equals(about, that.about);
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(name_give, file_give, about_give);
+		return Objects.hash(name, file, about);
 	}
 }
