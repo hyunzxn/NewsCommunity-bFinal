@@ -2,13 +2,10 @@ package com.teamharmony.newscommunity.bookmarks.controller;
 
 import com.teamharmony.newscommunity.bookmarks.dto.RequestBookmarkDTO;
 import com.teamharmony.newscommunity.bookmarks.dto.ResponseBookmarkDTO;
-import com.teamharmony.newscommunity.bookmarks.entity.Bookmarks;
 import com.teamharmony.newscommunity.bookmarks.service.BookmarkService;
-import com.teamharmony.newscommunity.comments.common.ApiResponse;
+import com.teamharmony.newscommunity.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
