@@ -38,6 +38,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Value("${aws.s3.bucket-name}")
 	private String bucketName;
 	
+	/**
+	 * 인증을 위한 사용자 조회
+	 *
+	 * @param 		username 해당 사용자 ID
+	 * @return 		사용자 정보를 담은 객체
+	 * @see				UserDetailsService#loadUserByUsername
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userRepository.findByUsername(username);
@@ -71,7 +78,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 	
 	@Override
-	public void defaultProfile(User user, UserProfile profile) {
+	public void defaultProfile(User user) {
+		UserProfile profile = UserProfile.builder()
+		                                 .nickname(user.getUsername())
+		                                 .profile_pic("default")
+		                                 .build();
 		profile.setUser(user);
 		profileRepository.save(profile);
 	}
@@ -84,7 +95,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		if (existingProfile == null) throw new IllegalArgumentException(String.format("User profile %s not found", username));
 		
 		if (!file.isEmpty()) {
-			isImage(file); // 파일이 이미지 확장자(*.jpeg, *.png, *.gif)인지 확인
+			isImage(file); // 파일이 이미지인지 확인
 			// 버킷에 저장될 경로, 파일명 그리고 파일의 metadata 생성
 			String path = String.format("%s/%s", bucketName, username);
 			String fileName = String.format("%s", file.getOriginalFilename());
