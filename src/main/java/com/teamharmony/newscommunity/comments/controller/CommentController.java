@@ -1,10 +1,13 @@
 package com.teamharmony.newscommunity.comments.controller;
 
 import com.teamharmony.newscommunity.comments.dto.CommentRequestDto;
+import com.teamharmony.newscommunity.comments.dto.CommentResponseDto;
 import com.teamharmony.newscommunity.comments.entity.Comment;
 import com.teamharmony.newscommunity.comments.repository.CommentRepository;
 import com.teamharmony.newscommunity.comments.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -25,10 +28,11 @@ public class CommentController {
      * @return 저장된 댓글의 id
      */
     @PostMapping("/user/comments")
-    public Long saveComment(@RequestBody CommentRequestDto commentRequestDto,
-                            @AuthenticationPrincipal UserDetails user) {
+    public ResponseEntity<?> saveComment(@RequestBody CommentRequestDto commentRequestDto,
+                                         @AuthenticationPrincipal UserDetails user) {
         String username = user.getUsername();
-        return commentService.createComment(commentRequestDto, username);
+        commentService.createComment(commentRequestDto, username);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -37,8 +41,8 @@ public class CommentController {
      * @return 해당 뉴스 아이디에 해당하는 댓글 리스트
      */
     @GetMapping("/user/comments/{news_id}")
-    public List<Comment> getComment(@PathVariable String news_id) {
-        return commentService.findComments(news_id);
+    public ResponseEntity<List<CommentResponseDto>> getComment(@PathVariable String news_id) {
+        return new ResponseEntity<>(commentService.findComments(news_id), HttpStatus.OK);
     }
 
 
@@ -67,9 +71,9 @@ public class CommentController {
     }
 
     /**
-     * 댓글의 좋아요 개수를 반환합니다.
+     * 해당 뉴스에 달린 댓글의 개수를 반환합니다.
      * @param news_id
-     * @return 특정 댓글의 좋아요 개수
+     * @return 해당 기사에 달린 댓글의 개수
      */
     @GetMapping("/user/comments/count/{news_id}")
     public int getCommentCount(@PathVariable String news_id) {
@@ -83,11 +87,11 @@ public class CommentController {
      * @return 재정렬된 댓글 리스트
      */
     @GetMapping("/user/comments/sort/{news_id}")
-    public List<Comment> sortComments(@PathVariable String news_id, @RequestParam String direction) {
+    public ResponseEntity<List<CommentResponseDto>> sortComments(@PathVariable String news_id, @RequestParam String direction) {
         if (direction.equals("DESC")) {
-            return commentService.getSortedCommentsDesc(news_id);
+            return new ResponseEntity<>(commentService.getSortedCommentsDesc(news_id), HttpStatus.OK);
         } else {
-            return commentService.getSortedCommentsAsc(news_id);
+            return new ResponseEntity<>(commentService.getSortedCommentsAsc(news_id), HttpStatus.OK);
         }
     }
 }
