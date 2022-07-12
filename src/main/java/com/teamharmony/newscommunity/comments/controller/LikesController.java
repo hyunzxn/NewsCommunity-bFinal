@@ -4,6 +4,7 @@ import com.teamharmony.newscommunity.comments.entity.Likes;
 import com.teamharmony.newscommunity.comments.service.LikesService;
 import com.teamharmony.newscommunity.users.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -24,19 +25,11 @@ public class LikesController {
      * @param user
      */
     @PostMapping("/user/likes/{id}")
-    public void likes(@PathVariable Long id,
-                      @AuthenticationPrincipal UserDetails user) {
+    public ResponseEntity<?> likes(@PathVariable Long id,
+                                   @AuthenticationPrincipal UserDetails user) {
         String username = user.getUsername();
         likesService.likes(id, username);
-    }
-
-    /**
-     * 좋아요가 눌린 댓글들 리스트를 보여주는 API
-     * @return
-     */
-    @GetMapping("/user/likes")
-    public List<Likes> getLikedComments() {
-        return likesService.findLikedComments();
+        return ResponseEntity.ok().body("좋아요");
     }
 
     /**
@@ -44,8 +37,8 @@ public class LikesController {
      * @param commentId
      * @return
      */
-    @GetMapping("/user/likes/{commentId}")
-    public int getLikedCommentsByCommentId(@PathVariable Long commentId) {
+    @GetMapping("/user/likes/count/{commentId}")
+    public int getLikedCommentsCountByCommentId(@PathVariable Long commentId) {
         return likesService.LikedCommentsCount(commentId);
     }
 }

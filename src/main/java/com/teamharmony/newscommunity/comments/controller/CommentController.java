@@ -32,7 +32,7 @@ public class CommentController {
                                          @AuthenticationPrincipal UserDetails user) {
         String username = user.getUsername();
         commentService.createComment(commentRequestDto, username);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body("댓글 작성 성공");
     }
 
     /**
@@ -42,7 +42,7 @@ public class CommentController {
      */
     @GetMapping("/user/comments/{news_id}")
     public ResponseEntity<List<CommentResponseDto>> getComment(@PathVariable String news_id) {
-        return new ResponseEntity<>(commentService.findComments(news_id), HttpStatus.OK);
+        return ResponseEntity.ok().body(commentService.findComments(news_id));
     }
 
 
@@ -53,10 +53,10 @@ public class CommentController {
      * @return 수정된 댓글의 id
      */
     @PutMapping("/user/comments/{id}")
-    public Long editComment(@PathVariable Long id,
-                            @RequestBody CommentRequestDto commentRequestDto) {
+    public ResponseEntity<?> editComment(@PathVariable Long id,
+                                         @RequestBody CommentRequestDto commentRequestDto) {
         commentService.updateComment(id, commentRequestDto);
-        return id;
+        return ResponseEntity.ok().body("수정 성공");
     }
 
     /**
@@ -65,9 +65,9 @@ public class CommentController {
      * @return 삭제된 댓글의 id
      */
     @DeleteMapping("/user/comments/{id}")
-    public Long deleteComment(@PathVariable Long id) {
+    public ResponseEntity<?> deleteComment(@PathVariable Long id) {
         commentRepository.deleteById(id);
-        return id;
+        return ResponseEntity.ok().body("삭제 성공");
     }
 
     /**
@@ -89,9 +89,9 @@ public class CommentController {
     @GetMapping("/user/comments/sort/{news_id}")
     public ResponseEntity<List<CommentResponseDto>> sortComments(@PathVariable String news_id, @RequestParam String direction) {
         if (direction.equals("DESC")) {
-            return new ResponseEntity<>(commentService.getSortedCommentsDesc(news_id), HttpStatus.OK);
+            return ResponseEntity.ok().body(commentService.getSortedCommentsDesc(news_id));
         } else {
-            return new ResponseEntity<>(commentService.getSortedCommentsAsc(news_id), HttpStatus.OK);
+            return ResponseEntity.ok().body(commentService.getSortedCommentsAsc(news_id));
         }
     }
 }

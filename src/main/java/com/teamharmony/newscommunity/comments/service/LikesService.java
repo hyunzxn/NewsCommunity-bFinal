@@ -45,10 +45,6 @@ public class LikesService {
             }
     }
 
-    public List<Likes> findLikedComments() {
-        return likesRepository.findAll();
-    }
-
 //    해당 댓글이 가지고 있는 좋아요 개수를 반환합니다.
     public int LikedCommentsCount(Long id) {
         return likesRepository.findByComment_CommentId(id).size();
