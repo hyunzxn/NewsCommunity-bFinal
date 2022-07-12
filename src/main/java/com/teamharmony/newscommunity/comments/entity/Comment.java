@@ -2,7 +2,8 @@ package com.teamharmony.newscommunity.comments.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.teamharmony.newscommunity.comments.dto.CommentRequestDto;
+import com.teamharmony.newscommunity.comments.dto.CommentCreateRequestDto;
+import com.teamharmony.newscommunity.comments.dto.CommentEditRequestDto;
 import com.teamharmony.newscommunity.users.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,9 +36,9 @@ public class Comment extends Timestamped {
     private List<Likes> likesList;
 
 
-    public Comment(CommentRequestDto commentRequestDto) {
-        this.content = commentRequestDto.getContent();
-        this.newsId = commentRequestDto.getNewsId();
+    public Comment(CommentCreateRequestDto commentCreateRequestDto) {
+        this.content = commentCreateRequestDto.getContent();
+        this.newsId = commentCreateRequestDto.getNewsId();
     }
 
     // Comment 객체가 가지고 있는 likesList 필드에 새로운 likes를 추가하는 메소드
@@ -47,7 +48,7 @@ public class Comment extends Timestamped {
     }
 
     // 댓글을 수정하는 메소드
-    public void update(CommentRequestDto commentRequestDto) {
-        this.content = commentRequestDto.getContent();
+    public void update(CommentEditRequestDto commentEditRequestDto) {
+        this.content = commentEditRequestDto.getContent();
     }
 }

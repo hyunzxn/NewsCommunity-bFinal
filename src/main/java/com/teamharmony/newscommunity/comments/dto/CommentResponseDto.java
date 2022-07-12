@@ -1,7 +1,7 @@
 package com.teamharmony.newscommunity.comments.dto;
 
-import com.teamharmony.newscommunity.users.dto.UserProfileDto;
-import com.teamharmony.newscommunity.users.dto.UsernameDto;
+import com.teamharmony.newscommunity.users.dto.response.ProfileResponseDto;
+import com.teamharmony.newscommunity.users.dto.response.UserResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,21 +13,23 @@ public class CommentResponseDto {
     private Long commentId;
     private LocalDateTime modifiedAt;
     private String content;
-
-    // User 관련된 Dto를 이렇게 쓰는 것이 맞는것인가?
-    private UsernameDto usernameDto;
-    private UserProfileDto userProfileDto;
+    private UserResponseDto userResponseDto;
+    private ProfileResponseDto profileResponseDto;
 
 
 
     @Builder
-    public CommentResponseDto(Long commentId, LocalDateTime modifiedAt, String content,
-                              UsernameDto usernameDto, UserProfileDto userProfileDto) {
+    public CommentResponseDto(Long commentId,
+                              LocalDateTime modifiedAt,
+                              String content,
+                              UserResponseDto userResponseDto,
+                              ProfileResponseDto profileResponseDto) {
+
         this.commentId = commentId;
         this.modifiedAt = modifiedAt;
         this.content = content;
-        this.usernameDto = usernameDto;
-        this.userProfileDto = userProfileDto;
+        this.userResponseDto = userResponseDto;
+        this.profileResponseDto = profileResponseDto;
     }
 
 }

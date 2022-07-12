@@ -1,11 +1,12 @@
 package com.teamharmony.newscommunity.comments.service;
 
-import com.teamharmony.newscommunity.comments.dto.CommentRequestDto;
+import com.teamharmony.newscommunity.comments.dto.CommentCreateRequestDto;
+import com.teamharmony.newscommunity.comments.dto.CommentEditRequestDto;
 import com.teamharmony.newscommunity.comments.dto.CommentResponseDto;
 import com.teamharmony.newscommunity.comments.entity.Comment;
 import com.teamharmony.newscommunity.comments.repository.CommentRepository;
-import com.teamharmony.newscommunity.users.dto.UserProfileDto;
-import com.teamharmony.newscommunity.users.dto.UsernameDto;
+import com.teamharmony.newscommunity.users.dto.response.ProfileResponseDto;
+import com.teamharmony.newscommunity.users.dto.response.UserResponseDto;
 import com.teamharmony.newscommunity.users.entity.User;
 import com.teamharmony.newscommunity.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +24,9 @@ public class CommentService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void createComment(CommentRequestDto commentRequestDto, String username) {
-        Comment comment = new Comment(commentRequestDto);
-
+    public void createComment(CommentCreateRequestDto commentCreateRequestDto, String username) {
+        Comment comment = new Comment(commentCreateRequestDto);
         User user = userRepository.findByUsername(username);
-
         user.addComment(comment);
     }
 
@@ -48,18 +47,22 @@ public class CommentService {
                         .commentId(comment.getCommentId())
                         .content(comment.getContent())
                         .modifiedAt(comment.getModifiedAt())
-                        .usernameDto(new UsernameDto(comment.getUser().getUsername()))
-                        .userProfileDto(new UserProfileDto(comment.getUser().getProfile().getNickname(), comment.getUser().getProfile().getProfile_pic()))
+                        .userResponseDto(new UserResponseDto(comment.getUser().getUsername()))
+                        .profileResponseDto(new ProfileResponseDto(comment.getUser().getProfile()))
                         .build())
                         .collect(Collectors.toList());
     }
 
     @Transactional
-    public void updateComment(Long id, CommentRequestDto commentRequestDto) {
+    public void updateComment(Long id, CommentEditRequestDto commentEditRequestDto) {
         Comment comment = commentRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("댓글을 찾을 수 없습니다")
         );
-        comment.update(commentRequestDto);
+        comment.update(commentEditRequestDto);
+    }
+
+    public void deleteComment(Long id) {
+        commentRepository.deleteById(id);
     }
 
     /* 기존 Entity 바로 return 하던 코드
@@ -75,8 +78,8 @@ public class CommentService {
                         .commentId(comment.getCommentId())
                         .content(comment.getContent())
                         .modifiedAt(comment.getModifiedAt())
-                        .usernameDto(new UsernameDto(comment.getUser().getUsername()))
-                        .userProfileDto(new UserProfileDto(comment.getUser().getProfile().getNickname(), comment.getUser().getProfile().getProfile_pic()))
+                        .userResponseDto(new UserResponseDto(comment.getUser().getUsername()))
+                        .profileResponseDto(new ProfileResponseDto(comment.getUser().getProfile()))
                         .build())
                 .collect(Collectors.toList());
     }
@@ -92,8 +95,8 @@ public class CommentService {
                         .commentId(comment.getCommentId())
                         .content(comment.getContent())
                         .modifiedAt(comment.getModifiedAt())
-                        .usernameDto(new UsernameDto(comment.getUser().getUsername()))
-                        .userProfileDto(new UserProfileDto(comment.getUser().getProfile().getNickname(), comment.getUser().getProfile().getProfile_pic()))
+                        .userResponseDto(new UserResponseDto(comment.getUser().getUsername()))
+                        .profileResponseDto(new ProfileResponseDto(comment.getUser().getProfile()))
                         .build())
                 .collect(Collectors.toList());
     }

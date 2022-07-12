@@ -1,12 +1,10 @@
 package com.teamharmony.newscommunity.comments.controller;
 
-import com.teamharmony.newscommunity.comments.dto.CommentRequestDto;
+import com.teamharmony.newscommunity.comments.dto.CommentCreateRequestDto;
+import com.teamharmony.newscommunity.comments.dto.CommentEditRequestDto;
 import com.teamharmony.newscommunity.comments.dto.CommentResponseDto;
-import com.teamharmony.newscommunity.comments.entity.Comment;
-import com.teamharmony.newscommunity.comments.repository.CommentRepository;
 import com.teamharmony.newscommunity.comments.service.CommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,19 +17,18 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
-    private final CommentRepository commentRepository;
 
     /**
      * requestBody로 넘어오는 댓글내용과 newsId를 받아서 저장합니다.
-     * @param commentRequestDto
+     * @param commentCreateRequestDto
      * @param user
      * @return 저장된 댓글의 id
      */
     @PostMapping("/user/comments")
-    public ResponseEntity<?> saveComment(@RequestBody CommentRequestDto commentRequestDto,
+    public ResponseEntity<?> saveComment(@RequestBody CommentCreateRequestDto commentCreateRequestDto,
                                          @AuthenticationPrincipal UserDetails user) {
         String username = user.getUsername();
-        commentService.createComment(commentRequestDto, username);
+        commentService.createComment(commentCreateRequestDto, username);
         return ResponseEntity.ok().body("댓글 작성 성공");
     }
 
@@ -49,13 +46,13 @@ public class CommentController {
     /**
      * 특정 댓글을 수정합니다.
      * @param id
-     * @param commentRequestDto
+     * @param commentCreateRequestDto
      * @return 수정된 댓글의 id
      */
     @PutMapping("/user/comments/{id}")
     public ResponseEntity<?> editComment(@PathVariable Long id,
-                                         @RequestBody CommentRequestDto commentRequestDto) {
-        commentService.updateComment(id, commentRequestDto);
+                                         @RequestBody CommentEditRequestDto commentEditRequestDto) {
+        commentService.updateComment(id, commentEditRequestDto);
         return ResponseEntity.ok().body("수정 성공");
     }
 
@@ -66,7 +63,7 @@ public class CommentController {
      */
     @DeleteMapping("/user/comments/{id}")
     public ResponseEntity<?> deleteComment(@PathVariable Long id) {
-        commentRepository.deleteById(id);
+        commentService.deleteComment(id);
         return ResponseEntity.ok().body("삭제 성공");
     }
 
@@ -76,8 +73,8 @@ public class CommentController {
      * @return 해당 기사에 달린 댓글의 개수
      */
     @GetMapping("/user/comments/count/{news_id}")
-    public int getCommentCount(@PathVariable String news_id) {
-        return commentService.findComments(news_id).size();
+    public ResponseEntity<Integer> getCommentCount(@PathVariable String news_id) {
+        return ResponseEntity.ok().body(commentService.findComments(news_id).size());
     }
 
     /**
