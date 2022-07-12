@@ -1,7 +1,6 @@
 package com.teamharmony.newscommunity.news.entity;
 
-import com.teamharmony.newscommunity.news.dto.requestCreateDTO.RequestCreateNewsAccessLogDTO;
-import com.teamharmony.newscommunity.news.util.TimestampedOnLog;
+import com.teamharmony.newscommunity.news.dto.RequestCreateNewsAccessLogDTO;
 import lombok.*;
 
 import javax.persistence.Column;

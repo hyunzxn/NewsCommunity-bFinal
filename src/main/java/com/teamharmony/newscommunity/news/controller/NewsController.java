@@ -1,9 +1,9 @@
 package com.teamharmony.newscommunity.news.controller;
 
 import com.teamharmony.newscommunity.common.ApiResponse;
-import com.teamharmony.newscommunity.news.dto.requestCreateDTO.RequestCreateNewsAccessLogDTO;
-import com.teamharmony.newscommunity.news.dto.responseDTO.ResponseNewsDTO;
-import com.teamharmony.newscommunity.news.dto.responseDTO.ResponseNewsDetailDTO;
+import com.teamharmony.newscommunity.news.dto.RequestCreateNewsAccessLogDTO;
+import com.teamharmony.newscommunity.news.dto.ResponseNewsDTO;
+import com.teamharmony.newscommunity.news.dto.ResponseNewsDetailDTO;
 import com.teamharmony.newscommunity.news.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
