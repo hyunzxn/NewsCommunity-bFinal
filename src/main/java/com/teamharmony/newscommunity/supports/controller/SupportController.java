@@ -20,7 +20,7 @@ public class SupportController {
 
     //bean이면 서비스에서 주입이 가능한데, bean이 아니면 불가해서 controllerd에서 서비스로 넘겨줘야 한다.
     //생성
-    @PostMapping("/supports")
+    @PostMapping("/user/supports")
     public Support createSupport(@RequestBody SupportRequestDto requestedDto, @AuthenticationPrincipal UserDetails user) {
         String username = user.getUsername();
         return supportService.generateSupport(requestedDto, username);
@@ -33,19 +33,20 @@ public class SupportController {
     }
 
     //내가 작성한 글만 조회하기
-    @GetMapping("/supports/mine")
+    @GetMapping("/user/supports/mine")
     public List<SupportResponseDto> getMySupports(@AuthenticationPrincipal UserDetails user) {
         String username = user.getUsername();
         return supportService.getSupportsListWrittenByMe(username);
     }
     //수정
-    @PutMapping("/supports/{content_id}")
+    @PutMapping("/user/supports/{content_id}")
     public String modifySupportContent(@PathVariable Long content_id, @RequestBody SupportRequestUpdateDto requestedDto, @AuthenticationPrincipal UserDetails user) {
-        return supportService.update(content_id, requestedDto, user);
+        String username = user.getUsername();
+        return supportService.update(content_id, requestedDto, username);
     }
 
     //삭제
-    @DeleteMapping("/supports/{content_id}")
+    @DeleteMapping("/user/supports/{content_id}")
     public String deleteSupport(@PathVariable Long content_id, @AuthenticationPrincipal UserDetails user) {
         return supportService.removeContent(content_id, user);
     }
