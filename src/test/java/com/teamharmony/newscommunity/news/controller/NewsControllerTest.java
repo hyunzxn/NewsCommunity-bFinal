@@ -6,7 +6,7 @@ import com.teamharmony.newscommunity.common.ApiResponse;
 import com.teamharmony.newscommunity.news.dto.responseDTO.ResponseNewsDetailDTO;
 import com.teamharmony.newscommunity.news.entity.NewsTable;
 import com.teamharmony.newscommunity.news.service.NewsService;
-import com.teamharmony.newscommunity.users.repo.TokensRepository;
+import com.teamharmony.newscommunity.users.repository.TokensRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

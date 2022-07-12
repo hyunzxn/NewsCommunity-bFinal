@@ -6,15 +6,13 @@ import com.teamharmony.newscommunity.supports.dto.SupportResponseDto;
 import com.teamharmony.newscommunity.supports.entity.Support;
 import com.teamharmony.newscommunity.supports.repository.SupportRepository;
 import com.teamharmony.newscommunity.users.entity.User;
-import com.teamharmony.newscommunity.users.repo.UserRepository;
+import com.teamharmony.newscommunity.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

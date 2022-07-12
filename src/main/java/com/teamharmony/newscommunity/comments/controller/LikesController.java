@@ -2,7 +2,7 @@ package com.teamharmony.newscommunity.comments.controller;
 
 import com.teamharmony.newscommunity.comments.entity.Likes;
 import com.teamharmony.newscommunity.comments.service.LikesService;
-import com.teamharmony.newscommunity.users.repo.UserRepository;
+import com.teamharmony.newscommunity.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
