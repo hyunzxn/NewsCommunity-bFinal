@@ -1,4 +1,4 @@
-package com.teamharmony.newscommunity.users.dto;
+package com.teamharmony.newscommunity.users.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor

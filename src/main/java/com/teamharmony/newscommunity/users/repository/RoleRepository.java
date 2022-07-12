@@ -1,4 +1,4 @@
-package com.teamharmony.newscommunity.users.repo;
+package com.teamharmony.newscommunity.users.repository;
 
 
 import com.teamharmony.newscommunity.users.entity.Role;

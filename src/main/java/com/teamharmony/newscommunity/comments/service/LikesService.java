@@ -5,7 +5,7 @@ import com.teamharmony.newscommunity.comments.entity.Likes;
 import com.teamharmony.newscommunity.comments.repository.CommentRepository;
 import com.teamharmony.newscommunity.comments.repository.LikesRepository;
 import com.teamharmony.newscommunity.users.entity.User;
-import com.teamharmony.newscommunity.users.repo.UserRepository;
+import com.teamharmony.newscommunity.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
