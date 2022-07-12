@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamharmony.newscommunity.users.entity.Tokens;
-import com.teamharmony.newscommunity.users.repo.TokensRepository;
+import com.teamharmony.newscommunity.users.repository.TokensRepository;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

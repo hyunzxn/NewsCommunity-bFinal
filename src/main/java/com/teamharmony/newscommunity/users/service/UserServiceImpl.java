@@ -1,9 +1,11 @@
 package com.teamharmony.newscommunity.users.service;
 
-import com.teamharmony.newscommunity.users.dto.ProfileVO;
+import com.teamharmony.newscommunity.users.dto.response.ProfileResponseDto;
+import com.teamharmony.newscommunity.users.dto.response.UserResponseDto;
+import com.teamharmony.newscommunity.users.vo.ProfileVO;
 import com.teamharmony.newscommunity.users.entity.*;
 import com.teamharmony.newscommunity.users.filesotre.FileStore;
-import com.teamharmony.newscommunity.users.repo.*;
+import com.teamharmony.newscommunity.users.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static org.apache.http.entity.ContentType.*;
 
 @Service
@@ -43,7 +47,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	 *
 	 * @param 		username 해당 사용자 ID
 	 * @return 		사용자 정보를 담은 객체
-	 * @see				UserDetailsService#loadUserByUsername
+	 * @see   		UserDetailsService#loadUserByUsername
 	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -83,6 +87,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		                                 .nickname(user.getUsername())
 		                                 .profile_pic("default")
 		                                 .build();
+		
 		profile.setUser(user);
 		profileRepository.save(profile);
 	}
@@ -174,10 +179,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		log.info("Fetching profile of user {}", username);
 		User user = getUser(username);
 		UserProfile profile = user.getProfile();
+		ProfileResponseDto profileDto = new ProfileResponseDto(profile);
 		Map<String, Object> body = new HashMap<>();
 		body.put("status", status);
 		body.put("link", getProfileImageUrl(username, profile));
-		body.put("profile", profile);
+		body.put("profile", profileDto);
 		return body;
 	}
 	
@@ -190,9 +196,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 	
 	@Override
-	public List<User> getUsers() {
+	public List<UserResponseDto> getUsers() {
 		log.info("Fetching all users");
-		return userRepository.findAll();
+		List<User> users= userRepository.findAll();
+		return users.stream().map(UserResponseDto::toDto).collect(toList());
 	}
 	
 	@Override

@@ -4,9 +4,8 @@ import com.teamharmony.newscommunity.comments.dto.CommentRequestDto;
 import com.teamharmony.newscommunity.comments.entity.Comment;
 import com.teamharmony.newscommunity.comments.repository.CommentRepository;
 import com.teamharmony.newscommunity.users.entity.User;
-import com.teamharmony.newscommunity.users.repo.UserRepository;
+import com.teamharmony.newscommunity.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

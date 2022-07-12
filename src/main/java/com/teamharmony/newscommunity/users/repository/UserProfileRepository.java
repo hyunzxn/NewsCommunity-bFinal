@@ -1,6 +1,5 @@
-package com.teamharmony.newscommunity.users.repo;
+package com.teamharmony.newscommunity.users.repository;
 
-import com.teamharmony.newscommunity.users.entity.User;
 import com.teamharmony.newscommunity.users.entity.UserProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.teamharmony.newscommunity.comments.entity.Comment;
 import com.teamharmony.newscommunity.comments.entity.Likes;
 import com.teamharmony.newscommunity.supports.entity.Support;
-import com.teamharmony.newscommunity.users.dto.SignupDto;
+import com.teamharmony.newscommunity.users.dto.request.SignupRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -68,7 +68,7 @@ public class User  extends Timestamped {
 	private UserProfile profile;
 
 	@Builder
-	public User(SignupDto dto) {
+	public User(SignupRequestDto dto) {
 		this.username = dto.getUsername();
 		this.password = dto.getPassword();
 	}
