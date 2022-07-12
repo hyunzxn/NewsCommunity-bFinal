@@ -13,45 +13,45 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+
+/**
+ *  뉴스 정보 조회 기능을 수행하는 Service
+ * @author hyeoKing
+ */
 @RequiredArgsConstructor
 @Service
 public class NewsService {
-    /* 뉴스 정보 조회 기능을 수행하는 Service*/
     private final NewsRepository newsRepository;
     private final NewsAccessLogRepository newsAccessLogRepository;
-
-    //1. TODO: 뉴스 정보 일괄 요청 // DONE
+    /**
+     * /api/news의 경로로 요청된 GET 메서드의 응답을 처리하는 메서드
+     * @param: None
+     * @Return: ResponseNewsDTO [뉴스 제목, 요약, 이미지_url, 실제뉴스URL, 설명, 작성시간]
+     **/
     public ResponseNewsDTO getNews(){
-        /* /api/news의 경로로 요청된 GET 메서드의 응답을 처리하는 메서드, 뉴스정보 리스트를 반환함
-         * param: None
-         * return: ResponseNewsDTO [뉴스 제목, 요약, 이미지_url, 실제뉴스URL, 설명, 작성시간]
-         * */
         List<NewsTable> newsTableList = newsRepository.findAll();
         return ResponseNewsDTO.builder()
                 .newsTableList(newsTableList)
                 .build();
     }
 
-    //2. TODO: 뉴스 상세 정보 요청  // DONE
+    /** /api/news/details의 경로로 요청된 GET 메서드의 응답을 처리하는 메서드, news의 id로 뉴스 내용 조회
+     * @param: newsId
+     * @Return: ResponseNewsDetailDTO // newsid, title, summary, image_url, news_url, write_time가 담김
+     **/
     public ResponseNewsDetailDTO getNewsDetail(String newsId){
-        /*
-           /api/news/details의 경로로 요청된 GET 메서드의 응답을 처리하는 메서드, 클릭한 news의 id로 뉴스 내용 조회
-           param: newsId
-           return: ResponseNewsDetailDTO // newsid, title, summary, image_url, news_url, write_time가 담김
-         */
+
         NewsTable newsTable = newsRepository.findById(newsId).orElseThrow(
                 ()-> new NullPointerException("해당 뉴스 id가 존재 안합니다.")
         );
         return new ResponseNewsDetailDTO(newsTable);
     }
 
-    //3. TODO: 뉴스 접속 기록 등록  // DONE
+    /**
+    /api/news/logs의 경로로 요청된 POST 메서드의 응답을 처리하는 메서드, 클릭한 news의 id와 유저 id로 접근
+    @param: requestCreateNewsAccessLogDTO // newsId, userId 정보가 담겨옴
+    @Return: newsAccessLog.getNews_Id()        // 생성된 뉴스로그에 담긴 뉴스 id를 리턴 **/
     public String setNewsAccessLog(RequestCreateNewsAccessLogDTO requestCreateNewsAccessLogDTO){
-        /*
-            /api/news/logs의 경로로 요청된 POST 메서드의 응답을 처리하는 메서드, 클릭한 news의 id와 유저 id를 통해 접근
-            param: requestCreateNewsAccessLogDTO // newsId, userId 정보가 담겨옴
-            return: newsAccessLog.getNews_Id()        // 생성된 뉴스로그에 담긴 뉴스 id를 리턴
-         */
         NewsAccessLog newsAccessLog = NewsAccessLog.builder()
                 .requestCreateNewsAccessLogDTO(requestCreateNewsAccessLogDTO)
                 .build();                               // newsAccessLog를 requestCreateNewsAccessLogDTO로 초기화
@@ -59,19 +59,16 @@ public class NewsService {
         return newsAccessLog.getNews_id();
     }
 
-    //4. TODO: 뉴스 조회수 증가 //DONE
+    /**
+     * /api/news/view의 경로로 요청된 메서드의 응답을 처리하는 함수, 해당 newsId의 view 컬럼의 값을 1 추가
+     * @param newsId
+     */
     @Transactional
     public void addView(String newsId) {
-        /*
-            /api/news/view의 경로로 요청된 메서드의 응답을 처리하는 함수, 해당 newsId의 view 컬럼의 값을 1 추가해줌
-            param: 수정할 뉴스의 id를 담은 newsId
-            return: 수정된 뉴스의 id
-         */
         NewsTable newsTable = newsRepository.findById(newsId).orElseThrow(
                 ()-> new NullPointerException("해당 뉴스가 존재 안합니다.")
         );
         newsTable.updateView();
         newsRepository.save(newsTable);
     }
-
 }

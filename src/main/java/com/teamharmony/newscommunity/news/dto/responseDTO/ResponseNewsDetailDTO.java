@@ -5,6 +5,11 @@ import com.teamharmony.newscommunity.news.entity.NewsTable;
 import lombok.Builder;
 import lombok.Getter;
 
+
+/**
+ * 뉴스 상세정보를 Response하기 위한 DTO
+ * @author hyeoKing
+ */
 @Getter
 public class ResponseNewsDetailDTO {
     private String id;              // 뉴스의 id 정보: Oauth 값을 String 형태로 변환
@@ -13,8 +18,11 @@ public class ResponseNewsDetailDTO {
     private String image_url;       // html 상의 이미지 표현을 위한 뉴스의 이미지가 저장된 image_url
     private String news_url;        // 해당 뉴스의 원본 주소 (네이버 뉴스의 해당 뉴스 주소)
     private String write_time;      // 작성 시간
-    private Long view;
+    private Long view;              // 조회수
 
+    /**
+     * @param newsTable
+     */
     @Builder
     public ResponseNewsDetailDTO(NewsTable newsTable){
         this.id = newsTable.getId();

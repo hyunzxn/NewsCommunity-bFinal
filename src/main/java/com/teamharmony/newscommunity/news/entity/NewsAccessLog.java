@@ -9,6 +9,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.UUID;
 
+
+/**
+ * 뉴스에 접근(클릭)에 관련된 기록을 남기기 위한 엔티티
+ *
+ *  @author : hyeoKing
+ */
 @Entity
 @Getter
 @AllArgsConstructor
