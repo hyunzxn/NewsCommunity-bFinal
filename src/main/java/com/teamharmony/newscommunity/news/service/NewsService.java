@@ -1,8 +1,8 @@
 package com.teamharmony.newscommunity.news.service;
 
-import com.teamharmony.newscommunity.news.dto.requestCreateDTO.RequestCreateNewsAccessLogDTO;
-import com.teamharmony.newscommunity.news.dto.responseDTO.ResponseNewsDTO;
-import com.teamharmony.newscommunity.news.dto.responseDTO.ResponseNewsDetailDTO;
+import com.teamharmony.newscommunity.news.dto.RequestCreateNewsAccessLogDTO;
+import com.teamharmony.newscommunity.news.dto.ResponseNewsDTO;
+import com.teamharmony.newscommunity.news.dto.ResponseNewsDetailDTO;
 import com.teamharmony.newscommunity.news.entity.NewsAccessLog;
 import com.teamharmony.newscommunity.news.entity.NewsTable;
 import com.teamharmony.newscommunity.news.repository.NewsAccessLogRepository;
