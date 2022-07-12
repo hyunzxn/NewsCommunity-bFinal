@@ -1,7 +1,7 @@
 package com.teamharmony.newscommunity.users.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.teamharmony.newscommunity.users.dto.ProfileVO;
+import com.teamharmony.newscommunity.users.vo.ProfileVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

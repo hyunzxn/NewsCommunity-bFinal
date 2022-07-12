@@ -5,18 +5,15 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.teamharmony.newscommunity.users.dto.ProfileVO;
-import com.teamharmony.newscommunity.users.dto.SignupDto;
+import com.teamharmony.newscommunity.users.dto.response.UserResponseDto;
+import com.teamharmony.newscommunity.users.vo.ProfileVO;
+import com.teamharmony.newscommunity.users.dto.request.SignupRequestDto;
 import com.teamharmony.newscommunity.users.entity.*;
-import com.teamharmony.newscommunity.users.filter.CustomAuthorizationFilter;
-import com.teamharmony.newscommunity.users.repo.TokensRepository;
 import com.teamharmony.newscommunity.users.service.UserService;
-import com.teamharmony.newscommunity.users.service.UserServiceImpl;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -40,11 +37,11 @@ import static org.springframework.http.HttpHeaders.SET_COOKIE;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-	/**
-	 * 사용자 관련 요청을 처리
-	 *
-	 * @author yj
-	 */
+/**
+ * 사용자 관련 요청을 처리
+ *
+ * @author yj
+ */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
@@ -58,7 +55,7 @@ public class UserController {
 	 * @see 			UserService#getUsers
 	 */
 	@GetMapping("/admin/users")
-	public ResponseEntity<List<User>>getUsers() {
+	public ResponseEntity<List<UserResponseDto>>getUsers() {
 		return ResponseEntity.ok().body(userService.getUsers());
 	}
 	
@@ -66,15 +63,14 @@ public class UserController {
 	 * 회원 가입 요청 처리
 	 *
 	 * @param 		dto 가입하려는 사용자 ID와 비밀번호를 담은 객체
-	 * @return 		사용자 ID, PW, 권한 등 사용자 정보를 담은 객체
-	 * @see				UserService#saveUser
-	 * @see				UserService#getRole
-	 * @see				UserService#saveRole
-	 * @see				UserService#addRoleToUser
-	 * @see				UserService#defaultProfile
+	 * @see   		UserService#saveUser
+	 * @see   		UserService#getRole
+	 * @see   		UserService#saveRole
+	 * @see   		UserService#addRoleToUser
+	 * @see   		UserService#defaultProfile
 	 */
 	@PostMapping("/signup")
-	public ResponseEntity<User>saveUser(SignupDto dto) {
+	public ResponseEntity<?>saveUser(SignupRequestDto dto) {
 		User user = User.builder().dto(dto).build();
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/signup").toUriString());
 		userService.saveUser(user);
@@ -88,7 +84,7 @@ public class UserController {
 			userService.addRoleToUser(user.getUsername(),RoleType.USER);
 			// 기본 프로필 추가
 			userService.defaultProfile(user);
-			return ResponseEntity.created(uri).body(user);
+			return ResponseEntity.ok().build();
 		} catch (DataIntegrityViolationException|ConstraintViolationException e) {
 			return ResponseEntity.badRequest().build();
 		}

@@ -1,6 +1,7 @@
 package com.teamharmony.newscommunity.users.service;
 
-import com.teamharmony.newscommunity.users.dto.ProfileVO;
+import com.teamharmony.newscommunity.users.dto.response.UserResponseDto;
+import com.teamharmony.newscommunity.users.vo.ProfileVO;
 import com.teamharmony.newscommunity.users.entity.*;
 
 import java.util.Collection;
@@ -118,7 +119,7 @@ public interface UserService {
 	 * @return 		전체 사용자 정보
 	 * @see				UserServiceImpl#getUsers
 	 */
-	List<User> getUsers();
+	List<UserResponseDto> getUsers();
 	
 	/**
 	 * 사용자의 허용 토큰 정보 조회
