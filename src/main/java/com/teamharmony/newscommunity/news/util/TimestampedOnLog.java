@@ -7,6 +7,11 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
+
+/**
+ * AccessLog에 적용할 Timestamped
+ * @Author hyeoking
+ */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class TimestampedOnLog {

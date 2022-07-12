@@ -10,13 +10,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+
+/**
+ * 파이썬 뉴스 정보 관리 외부 모듈로부터 RDS에 저장된 NewsTable을 연동하기 위한 엔티티
+ * @Author hyeoKing
+ */
 @Setter @Getter
 @NoArgsConstructor
 @Entity
 @AllArgsConstructor
 public class NewsTable {
-    /* 파이썬 뉴스 정보 관리 외부 모듈로부터 RDS에 저장된 NewsTable을 연동하기 위한 엔티티 */
-
     @Id
     @Column(nullable = false, unique = true, length = 30)
     private String id;              // 뉴스의 id 정보: Oauth 값을 String 형태로 변환

@@ -25,7 +25,7 @@ public class Bookmarks extends TimestampedOnBookmark {
     @Column(nullable = false, length=70)
     String newsId;      // 사용자가 접근한 newsId
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 50)
     String userId;      // 해당 뉴스에 접근한 userId
 
     @Builder

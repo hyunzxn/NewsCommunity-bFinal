@@ -6,10 +6,12 @@ import lombok.Getter;
 import java.util.List;
 
 
+/**
+ * NewsController의 /news에 대한 GET요청의 응답으로 뉴스 정보들이 담긴 List<NewsTable>을 담을 클래스
+ * @author hyeoKing
+ */
 @Getter
 public class ResponseNewsDTO {
-    /*= NewsController의 /news에 대한 GET요청의 응답으로 뉴스 정보들이 담긴 List<NewsTable>을 담을 클래스 */
-
     private List<NewsTable> newsTableList;
 
     @Builder
