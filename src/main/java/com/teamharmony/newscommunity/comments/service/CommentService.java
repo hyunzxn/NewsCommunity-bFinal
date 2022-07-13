@@ -47,7 +47,7 @@ public class CommentService {
                         .commentId(comment.getCommentId())
                         .content(comment.getContent())
                         .modifiedAt(comment.getModifiedAt())
-                        .userResponseDto(new UserResponseDto(comment.getUser().getUsername()))
+                        .createdAt(comment.getCreatedAt())
                         .profileResponseDto(new ProfileResponseDto(comment.getUser().getProfile()))
                         .build())
                         .collect(Collectors.toList());
@@ -78,7 +78,7 @@ public class CommentService {
                         .commentId(comment.getCommentId())
                         .content(comment.getContent())
                         .modifiedAt(comment.getModifiedAt())
-                        .userResponseDto(new UserResponseDto(comment.getUser().getUsername()))
+                        .createdAt(comment.getCreatedAt())
                         .profileResponseDto(new ProfileResponseDto(comment.getUser().getProfile()))
                         .build())
                 .collect(Collectors.toList());
@@ -95,7 +95,7 @@ public class CommentService {
                         .commentId(comment.getCommentId())
                         .content(comment.getContent())
                         .modifiedAt(comment.getModifiedAt())
-                        .userResponseDto(new UserResponseDto(comment.getUser().getUsername()))
+                        .createdAt(comment.getCreatedAt())
                         .profileResponseDto(new ProfileResponseDto(comment.getUser().getProfile()))
                         .build())
                 .collect(Collectors.toList());

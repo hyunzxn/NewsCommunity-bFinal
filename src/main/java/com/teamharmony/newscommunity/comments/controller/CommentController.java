@@ -46,7 +46,7 @@ public class CommentController {
     /**
      * 특정 댓글을 수정합니다.
      * @param id
-     * @param commentCreateRequestDto
+     * @param commentEditRequestDto
      * @return 수정된 댓글의 id
      */
     @PutMapping("/user/comments/{id}")

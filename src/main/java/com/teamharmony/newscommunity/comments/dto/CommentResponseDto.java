@@ -12,8 +12,8 @@ public class CommentResponseDto {
 
     private Long commentId;
     private LocalDateTime modifiedAt;
+    private LocalDateTime createdAt;
     private String content;
-    private UserResponseDto userResponseDto;
     private ProfileResponseDto profileResponseDto;
 
 
@@ -21,14 +21,14 @@ public class CommentResponseDto {
     @Builder
     public CommentResponseDto(Long commentId,
                               LocalDateTime modifiedAt,
+                              LocalDateTime createdAt,
                               String content,
-                              UserResponseDto userResponseDto,
                               ProfileResponseDto profileResponseDto) {
 
         this.commentId = commentId;
         this.modifiedAt = modifiedAt;
+        this.createdAt = createdAt;
         this.content = content;
-        this.userResponseDto = userResponseDto;
         this.profileResponseDto = profileResponseDto;
     }
 
