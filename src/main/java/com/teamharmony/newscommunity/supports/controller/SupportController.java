@@ -21,9 +21,9 @@ public class SupportController {
     //bean이면 서비스에서 주입이 가능한데, bean이 아니면 불가해서 controllerd에서 서비스로 넘겨줘야 한다.
     //생성
     @PostMapping("/user/supports")
-    public Support createSupport(@RequestBody SupportRequestDto requestedDto, @AuthenticationPrincipal UserDetails user) {
+    public Support createSupport(@RequestBody SupportRequestDto requestDto, @AuthenticationPrincipal UserDetails user) {
         String username = user.getUsername();
-        return supportService.generateSupport(requestedDto, username);
+        return supportService.generateSupport(requestDto, username);
     }
 
     //조회
@@ -34,9 +34,9 @@ public class SupportController {
 
     //내가 작성한 글만 조회하기
     @GetMapping("/user/supports/mine")
-    public List<SupportResponseDto> getMySupports(@AuthenticationPrincipal UserDetails user) {
+    public List<SupportResponseDto> getMySupportList(@AuthenticationPrincipal UserDetails user) {
         String username = user.getUsername();
-        return supportService.getSupportsListWrittenByMe(username);
+        return supportService.getMySupportList(username);
     }
     //수정
     @PutMapping("/user/supports/{content_id}")
