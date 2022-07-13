@@ -1,7 +1,7 @@
-package com.teamharmony.newscommunity.users.security;
+package com.teamharmony.newscommunity.security;
 
-import com.teamharmony.newscommunity.users.filter.CustomAuthenticationFilter;
-import com.teamharmony.newscommunity.users.filter.CustomAuthorizationFilter;
+import com.teamharmony.newscommunity.filter.CustomAuthenticationFilter;
+import com.teamharmony.newscommunity.filter.CustomAuthorizationFilter;
 import com.teamharmony.newscommunity.users.repository.TokensRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;

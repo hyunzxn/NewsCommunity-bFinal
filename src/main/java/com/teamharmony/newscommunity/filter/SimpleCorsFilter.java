@@ -1,4 +1,4 @@
-package com.teamharmony.newscommunity.users.filter;
+package com.teamharmony.newscommunity.filter;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

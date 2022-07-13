@@ -1,4 +1,4 @@
-package com.teamharmony.newscommunity.users.filter;
+package com.teamharmony.newscommunity.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

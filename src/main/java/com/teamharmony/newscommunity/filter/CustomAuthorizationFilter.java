@@ -1,10 +1,11 @@
-package com.teamharmony.newscommunity.users.filter;
+package com.teamharmony.newscommunity.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teamharmony.newscommunity.security.AuthConstants;
 import com.teamharmony.newscommunity.users.repository.TokensRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.teamharmony.newscommunity.users.security.AuthConstants.TOKEN_TYPE;
 import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -49,9 +49,9 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 		} else {
 			String authorizationHeader = request.getHeader(AUTHORIZATION);
 			// it has the word bearer in front of a token, we know that it's our token
-			if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_TYPE)) {
+			if (authorizationHeader != null && authorizationHeader.startsWith(AuthConstants.TOKEN_TYPE)) {
 				try {
-						String access_token = authorizationHeader.substring(TOKEN_TYPE.length());
+						String access_token = authorizationHeader.substring(AuthConstants.TOKEN_TYPE.length());
 						Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
 						JWTVerifier verifier = JWT.require(algorithm)
 																			.build();
