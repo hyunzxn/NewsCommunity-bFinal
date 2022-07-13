@@ -1,7 +1,7 @@
 package com.teamharmony.newscommunity.users.service;
 
-import com.teamharmony.newscommunity.users.dto.response.ProfileResponseDto;
-import com.teamharmony.newscommunity.users.dto.response.UserResponseDto;
+import com.teamharmony.newscommunity.users.dto.ProfileResponseDto;
+import com.teamharmony.newscommunity.users.dto.UserResponseDto;
 import com.teamharmony.newscommunity.users.vo.ProfileVO;
 import com.teamharmony.newscommunity.users.entity.*;
 import com.teamharmony.newscommunity.users.filesotre.FileStore;

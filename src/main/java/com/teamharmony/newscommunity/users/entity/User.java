@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.teamharmony.newscommunity.comments.entity.Comment;
 import com.teamharmony.newscommunity.comments.entity.Likes;
 import com.teamharmony.newscommunity.supports.entity.Support;
-import com.teamharmony.newscommunity.users.dto.request.SignupRequestDto;
+import com.teamharmony.newscommunity.users.dto.SignupRequestDto;
 import lombok.*;
 
 import javax.persistence.*;

@@ -1,4 +1,4 @@
-package com.teamharmony.newscommunity.users.dto.request;
+package com.teamharmony.newscommunity.users.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
