@@ -66,7 +66,7 @@ public class SupportService {
     }
 
     //삭제
-    public String removeContent(Long contentId, UserDetails user) {
+    public Long removeContent(Long contentId, UserDetails user) {
         Support supportObject = supportRepository.findById(contentId).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
         );
@@ -78,13 +78,12 @@ public class SupportService {
         if (supportsUserID == loginUserId){ //글 쓴 사람의 Id번호와 지금 로그인한 사람의 ID 번호 동일
             supportRepository.deleteById(contentId);
         }
-        String result = "User: "+username+", ContentNumber: "+contentId;
-        return result;
+        return contentId;
     }
 
     //수정
     @Transactional
-    public String update(Long support_id, SupportRequestUpdateDto requestUpdateDto, String username) {
+    public Long update(Long support_id, SupportRequestUpdateDto requestUpdateDto, String username) {
         Support supportObject = supportRepository.findById(support_id).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
         );
@@ -97,7 +96,6 @@ public class SupportService {
             supportObject.setPost_content(requestUpdateDto.getPost_content());
             supportObject.update(requestUpdateDto);
         }
-        String result = "supportsUserID "+supportsUserID+", loginUserId "+loginUserId;
-        return result;
+        return support_id;
     }
 }
