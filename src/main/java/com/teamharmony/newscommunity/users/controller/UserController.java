@@ -127,7 +127,7 @@ public class UserController {
 	 * @return 		인증된 사용자 ID
 	 * @see				UserService#saveRole
 	 */
-	@PostMapping("/role/save")
+	@PostMapping("/admin/role/save")
 	public ResponseEntity<Role>saveUser(@RequestBody Role role) {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save").toUriString());
 		return ResponseEntity.created(uri).body(userService.saveRole(role));
@@ -139,7 +139,7 @@ public class UserController {
 	 * @param 		form 사용자 ID와 권한명이 담긴 객체
 	 * @see				UserService#addRoleToUser
 	 */
-	@PostMapping("/role/addtouser")
+	@PostMapping("/admin/role/addtouser")
 	public ResponseEntity<?>addRoleToUser(@RequestBody RoleToUserForm form) {
 		userService.addRoleToUser(form.getUsername(), form.getRoleName());
 		return ResponseEntity.ok().build();
