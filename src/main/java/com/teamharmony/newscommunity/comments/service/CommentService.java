@@ -100,4 +100,19 @@ public class CommentService {
                         .build())
                 .collect(Collectors.toList());
     }
+
+    public List<CommentResponseDto> getCommentsByUserId(String username) {
+        User user = userRepository.findByUsername(username);
+        Long userId = user.getId();
+
+        List<Comment> commentList = commentRepository.findByUser_Id(userId);
+        return commentList.stream().map(comment -> CommentResponseDto.builder()
+                        .commentId(comment.getCommentId())
+                        .content(comment.getContent())
+                        .modifiedAt(comment.getModifiedAt())
+                        .createdAt(comment.getCreatedAt())
+                        .profileResponseDto(new ProfileResponseDto(comment.getUser().getProfile()))
+                        .build())
+                .collect(Collectors.toList());
+    }
 }

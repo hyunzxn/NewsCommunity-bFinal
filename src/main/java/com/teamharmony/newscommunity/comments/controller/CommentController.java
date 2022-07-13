@@ -91,4 +91,10 @@ public class CommentController {
             return ResponseEntity.ok().body(commentService.getSortedCommentsAsc(news_id));
         }
     }
+
+    @GetMapping("/user/comments/profile")
+    public ResponseEntity<List<CommentResponseDto>> getCommentsOnProfilePage(@AuthenticationPrincipal UserDetails user) {
+        String username = user.getUsername();
+        return ResponseEntity.ok().body(commentService.getCommentsByUserId(username));
+    }
 }
