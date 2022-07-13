@@ -21,8 +21,8 @@ public class SupportService {
     private final UserRepository userRepository;
     //생성
     @Transactional
-    public Support generateSupport(SupportRequestDto requestedDto, String username){
-        Support support = new Support(requestedDto, username);
+    public Support generateSupport(SupportRequestDto requestDto, String username){
+        Support support = new Support(requestDto, username);
         User user = userRepository.findByUsername(username);
         user.addSupports(support);
         supportRepository.save(support);
@@ -48,8 +48,8 @@ public class SupportService {
     }
 
     // 내가 작성한 것만 찾기
-    public List<SupportResponseDto> getSupportsListWrittenByMe(String username) {
-        List<Support> supportList = supportRepository.findAllByUsername(username);
+    public List<SupportResponseDto> getMySupportList(String username) {
+        List<Support> supportList = supportRepository.findAllByUsernameOrderByCreatedAtDesc(username);
         List<SupportResponseDto> resultList = new LinkedList<>();
         for (Support supportItems : supportList) {
             SupportResponseDto supportResponseDto = SupportResponseDto.builder()
@@ -84,13 +84,12 @@ public class SupportService {
 
     //수정
     @Transactional
-    public String update(Long support_id, SupportRequestUpdateDto requestUpdateDto, UserDetails user) {
+    public String update(Long support_id, SupportRequestUpdateDto requestUpdateDto, String username) {
         Support supportObject = supportRepository.findById(support_id).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
         );
 
         Long supportsUserID = supportObject.getUser().getId(); //현재 게시글에서 userID정보획득
-        String username = user.getUsername(); //현재 로그인한 사람 이름가져오기
         User currentUser = userRepository.findByUsername(username); // 현재 로그인한 사람 이름(unigue)으로 user정보 획득
         Long loginUserId = currentUser.getId();// 로그인한 사용자ID 정보(Long) 획득
 

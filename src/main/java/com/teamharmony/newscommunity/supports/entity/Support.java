@@ -28,25 +28,20 @@ public class Support extends Timestamped{
     @Column(nullable = false)
     private String post_content;
 
+    @Column(nullable = false)
+    private String post_email;
+
+
     @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Support(String username, String post_title, String post_content) {
-        this.username = username;
-        this.post_title = post_title;
-        this.post_content = post_content;
-    }
-
-    public Support(SupportRequestDto requestedDto) {
-        this.post_title = requestedDto.getPost_title();
-        this.post_content = requestedDto.getPost_content();
-    }
     public Support(SupportRequestDto requestedDto, String username) {
         this.username = username;
         this.post_title = requestedDto.getPost_title();
         this.post_content = requestedDto.getPost_content();
+        this.post_email = requestedDto.getPost_email();
     }
 
     public void update(SupportRequestUpdateDto requestDto){
