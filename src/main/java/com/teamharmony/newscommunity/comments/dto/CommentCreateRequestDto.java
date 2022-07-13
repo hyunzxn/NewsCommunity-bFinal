@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class CommentRequestDto {
+public class CommentCreateRequestDto {
     private String content;
     private String newsId;
 }
