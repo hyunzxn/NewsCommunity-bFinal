@@ -1,4 +1,4 @@
-package com.teamharmony.newscommunity.news.dto.responseDTO;
+package com.teamharmony.newscommunity.news.dto;
 
 
 import com.teamharmony.newscommunity.news.entity.NewsTable;

@@ -3,7 +3,7 @@ package com.teamharmony.newscommunity.news.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamharmony.newscommunity.common.ApiResponse;
-import com.teamharmony.newscommunity.news.dto.responseDTO.ResponseNewsDetailDTO;
+import com.teamharmony.newscommunity.news.dto.ResponseNewsDetailDTO;
 import com.teamharmony.newscommunity.news.entity.NewsTable;
 import com.teamharmony.newscommunity.news.service.NewsService;
 import com.teamharmony.newscommunity.users.repository.TokensRepository;

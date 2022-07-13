@@ -1,4 +1,4 @@
-package com.teamharmony.newscommunity.news.util;
+package com.teamharmony.newscommunity.news.entity;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
