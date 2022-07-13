@@ -169,9 +169,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 	
 	@Override
-	public Role getRole(RoleType name) {
-		log.info("Fetching role {}", name);
-		return roleRepository.findByName(name);
+	public Role getRole(RoleType roleName) {
+		log.info("Fetching role {}", roleName);
+		Role role = roleRepository.findByName(roleName);
+		if (role == null) throw new IllegalArgumentException(String.format("%s not found", roleName));
+		return role;
 	}
 	
 	@Override
