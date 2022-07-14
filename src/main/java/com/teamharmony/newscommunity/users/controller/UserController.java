@@ -146,6 +146,19 @@ public class UserController {
 	}
 	
 	/**
+	 * 회원 프로필 사진 URL
+	 *
+	 * @param 		username 프로필 회원 ID
+	 * @return 		프로필 사진 url
+	 * @see				UserService#getProfileImageUrl
+	 */
+	@GetMapping("/user/profile/pic/{username}")
+	public ResponseEntity<String>getProfilePicUrl(@PathVariable String username) {
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/profile/pic/{username}").toUriString());
+		return ResponseEntity.created(uri).body(userService.getProfileImageUrl(username));
+	}
+	
+	/**
 	 * 회원 프로필 업데이트
 	 *
 	 * @param 		profile 닉네임, 프로필 사진 파일, 소개글을 담은 객체
