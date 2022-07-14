@@ -138,12 +138,12 @@ public class UserService implements UserDetailsService {
 	 * @return 		성공 확인, 메시지
 	 */
 	public Map<String, String> updateProfile(String username, ProfileVO profileVO) {
-		MultipartFile file = profileVO.getFile();
-		User user = getUser(username);
-		UserProfile existingProfile = user.getProfile();	// 해당 유저의 기존 프로필 찾기
+		UserProfile existingProfile = getUser(username).getProfile();	// 해당 유저의 기존 프로필 찾기
 		if (existingProfile == null) throw new IllegalArgumentException(String.format("User profile %s not found", username));
 		
-		if (!file.isEmpty()) {
+		if (profileVO.getFile()!=null) {
+			MultipartFile file = profileVO.getFile();
+			file.isEmpty();
 			isImage(file); // 파일이 이미지인지 확인
 			// 버킷에 저장될 경로, 파일명 그리고 파일의 metadata 생성
 			String path = String.format("%s/%s", bucketName, username);
@@ -154,7 +154,7 @@ public class UserService implements UserDetailsService {
 				if(!existingProfile.getProfile_pic().equals("default")) fileStore.delete(path, existingProfile.getProfile_pic()); // 기존 파일 삭제
 				fileStore.save(path, fileName, Optional.of(metadata), file.getInputStream()); // 업데이트 파일 저장
 			} catch (IOException e) {
-				throw new IllegalArgumentException(e);
+				throw new IllegalArgumentException("Failed to save image to s3 cause=", e.getCause());
 			}
 			
 			// 프로필 변경 사항 적용 후 DB 저장

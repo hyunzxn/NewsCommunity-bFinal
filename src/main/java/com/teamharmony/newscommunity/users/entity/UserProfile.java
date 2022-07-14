@@ -50,6 +50,6 @@ public class UserProfile {
 	}
 	public void notUpdatePic(ProfileVO vo) {
 		this.nickname = vo.getName();
-		this.profile_info = vo.getAbout();
+		this.profile_info = vo.getAbout()!=null ? vo.getAbout() : "";
 	}
 }
