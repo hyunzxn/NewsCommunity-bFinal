@@ -11,8 +11,7 @@ import com.teamharmony.newscommunity.users.dto.SignupRequestDto;
 import com.teamharmony.newscommunity.users.entity.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.hibernate.HibernateException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
@@ -62,30 +62,16 @@ public class UserController {
 	 * 회원 가입 요청 처리
 	 *
 	 * @param 		dto 가입하려는 사용자 ID와 비밀번호를 담은 객체
-	 * @see   		UserService#saveUser
-	 * @see   		UserService#getRole
-	 * @see   		UserService#saveRole
-	 * @see   		UserService#addRoleToUser
-	 * @see   		UserService#defaultProfile
+	 * @see   		UserService#signUp
 	 */
 	@PostMapping("/signup")
-	public ResponseEntity<?>saveUser(SignupRequestDto dto) {
-		User user = User.builder().dto(dto).build();
+	public ResponseEntity<?>signUp(@Valid SignupRequestDto dto) {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/signup").toUriString());
-		userService.saveUser(user);
-		// 기본 사용자 권한 추가
-		Role role = new Role(RoleType.USER);
-		role = userService.getRole(role.getName());
 		try {
-			if (role == null) {
-				userService.saveRole(new Role(RoleType.USER));
-			}
-			userService.addRoleToUser(user.getUsername(),RoleType.USER);
-			// 기본 프로필 추가
-			userService.defaultProfile(user);
-			return ResponseEntity.ok().build();
-		} catch (DataIntegrityViolationException|ConstraintViolationException e) {
-			return ResponseEntity.badRequest().build();
+			userService.signUp(dto);
+			return ResponseEntity.created(uri).build();
+		} catch (HibernateException e) {
+			return ResponseEntity.internalServerError().build();
 		}
 	}
 	

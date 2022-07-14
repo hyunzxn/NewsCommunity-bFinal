@@ -7,7 +7,10 @@ import com.teamharmony.newscommunity.users.filesotre.FileStore;
 import com.teamharmony.newscommunity.users.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.HibernateException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -57,6 +60,24 @@ public class UserService implements UserDetailsService {
 		userRole.forEach(r -> roles.add(r.getRole()));
 		roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName().toString())));
 		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+	}
+	
+	public void signUp(SignupRequestDto dto) throws HibernateException {
+		User user = new User(dto);
+		saveUser(user);
+		Role role = getRole(new Role(RoleType.USER).getName());
+		
+		try {
+			if (role == null) {
+				saveRole(new Role(RoleType.USER));
+			}
+			addRoleToUser(user.getUsername(), RoleType.USER);
+			// 기본 프로필 추가
+			defaultProfile(user);
+		} catch (DataIntegrityViolationException|ConstraintViolationException e) {
+			log.error("Faild to sign up");
+			throw new HibernateException("Failed to add role or profile to user cause=", e.getCause());
+		}
 	}
 	
 	/**
