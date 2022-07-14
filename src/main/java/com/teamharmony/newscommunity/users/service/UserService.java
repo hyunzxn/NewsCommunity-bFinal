@@ -176,10 +176,10 @@ public class UserService implements UserDetailsService {
 	 * 버킷에 저장된 프로필 사진 조회
 	 *
 	 * @param 		username 프로필 정보를 가져올 회원 ID
-	 * @param 		profile 프로필 정보
 	 * @return 		프로필 사진 URL
 	 */
-	public String getProfileImageUrl(String username, UserProfile profile) {
+	public String getProfileImageUrl(String username) {
+		UserProfile profile = getUser(username).getProfile();
 		if (profile == null) throw new IllegalArgumentException(String.format("User profile %s not found", username));
 		String path = String.format("%s/%s", bucketName,username);
 		// 버킷에서 프로필 사진 가져오기
@@ -279,7 +279,7 @@ public class UserService implements UserDetailsService {
 		ProfileResponseDto profileDto = new ProfileResponseDto(profile);
 		Map<String, Object> body = new HashMap<>();
 		body.put("status", status);
-		body.put("link", getProfileImageUrl(username, profile));
+		body.put("link", getProfileImageUrl(username));
 		body.put("profile", profileDto);
 		return body;
 	}
