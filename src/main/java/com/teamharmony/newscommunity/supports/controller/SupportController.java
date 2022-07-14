@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -23,7 +24,7 @@ public class SupportController {
     //bean이면 서비스에서 주입이 가능한데, bean이 아니면 불가해서 controllerd에서 서비스로 넘겨줘야 한다.
     //생성
     @PostMapping("/user/supports")
-    public Support createSupport(@RequestBody SupportRequestDto requestDto, @AuthenticationPrincipal UserDetails user) {
+    public Support createSupport(@RequestBody @Valid SupportRequestDto requestDto, @AuthenticationPrincipal UserDetails user) {
         String username = user.getUsername();
         return supportService.generateSupport(requestDto, username);
     }
