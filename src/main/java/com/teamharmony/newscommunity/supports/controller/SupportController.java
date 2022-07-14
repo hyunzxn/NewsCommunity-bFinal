@@ -21,7 +21,6 @@ import java.util.List;
 public class SupportController {
     private final SupportService supportService;
 
-    //bean이면 서비스에서 주입이 가능한데, bean이 아니면 불가해서 controllerd에서 서비스로 넘겨줘야 한다.
     //생성
     @PostMapping("/user/supports")
     public Support createSupport(@RequestBody @Valid SupportRequestDto requestDto, @AuthenticationPrincipal UserDetails user) {
@@ -29,11 +28,6 @@ public class SupportController {
         return supportService.generateSupport(requestDto, username);
     }
 
-//    //조회
-//    @GetMapping("/supports")
-//    public List<SupportResponseDto> readSupport() {
-//        return supportService.getSupportsList();
-//    }
     //조회
     @GetMapping("/supports")
     public ResponseEntity<List<SupportResponseDto>> readSupport() {
