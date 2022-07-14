@@ -53,7 +53,7 @@ public class CommentController {
      */
     @PutMapping("/user/comments/{id}")
     public ResponseEntity<?> editComment(@PathVariable Long id,
-                                         @RequestBody CommentEditRequestDto commentEditRequestDto) {
+                                         @RequestBody @Validated CommentEditRequestDto commentEditRequestDto) {
         commentService.updateComment(id, commentEditRequestDto);
         return ResponseEntity.ok().body("수정 성공");
     }
