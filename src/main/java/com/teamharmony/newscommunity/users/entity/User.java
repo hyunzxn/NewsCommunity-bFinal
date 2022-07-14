@@ -10,6 +10,7 @@ import com.teamharmony.newscommunity.users.dto.SignupRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,7 +31,7 @@ public class User  extends Timestamped {
 	@Size(min = 2, max = 10)
 	private String username;
 	@Column(nullable = false)
-	@Size(min = 8, max = 20)
+	@NotBlank
 	private String password;
 	private String email;
 	@OneToMany(mappedBy="user", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
