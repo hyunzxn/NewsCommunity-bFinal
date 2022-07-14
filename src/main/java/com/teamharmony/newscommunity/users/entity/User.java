@@ -67,7 +67,6 @@ public class User  extends Timestamped {
 	@OneToOne(mappedBy = "user", cascade = CascadeType.PERSIST)
 	private UserProfile profile;
 
-	@Builder
 	public User(SignupRequestDto dto) {
 		this.username = dto.getUsername();
 		this.password = dto.getPassword();

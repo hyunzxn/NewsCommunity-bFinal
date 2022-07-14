@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamharmony.newscommunity.users.dto.UserResponseDto;
 import com.teamharmony.newscommunity.users.service.UserService;
 import com.teamharmony.newscommunity.users.vo.ProfileVO;
@@ -98,13 +97,8 @@ public class UserController {
 	 * @see				UserService#checkUser
 	 */
 	@PostMapping("/signup/checkdup")
-	public ResponseEntity<?>checkUser(@RequestParam("username") String username) {
-		//todo validator
-		
-		// 회원 ID 입력값 공백 제거
-		username = username.replaceAll("\\s", "");
-		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/signup/checkdup").toUriString());
-		return ResponseEntity.created(uri).body(userService.checkUser(username));
+	public ResponseEntity<?>checkUser(@NotBlank @RequestParam String username) {
+		return ResponseEntity.ok().body(userService.checkUser(username));
 	}
 	
 	/**
@@ -124,7 +118,6 @@ public class UserController {
 	 * 권한 추가
 	 *
 	 * @param 		role enum 타입 권한명이 담긴 객체
-	 * @return 		인증된 사용자 ID
 	 * @see				UserService#saveRole
 	 */
 	@PostMapping("/admin/role/save")

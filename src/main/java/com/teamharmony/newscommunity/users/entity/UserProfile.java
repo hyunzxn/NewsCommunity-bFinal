@@ -43,10 +43,6 @@ public class UserProfile {
 		this.profile_info = profile_info;
 	}
 
-	public UserProfile(ProfileVO vo) {
-		this(vo.getName(), vo.getFile().getOriginalFilename(), vo.getAbout());
-	}
-	
 	public void update(ProfileVO vo) {
 		this.nickname = vo.getName();
 		this.profile_pic = vo.getFile().getOriginalFilename();
