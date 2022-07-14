@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -25,7 +27,7 @@ public class CommentController {
      * @return 저장된 댓글의 id
      */
     @PostMapping("/user/comments")
-    public ResponseEntity<?> saveComment(@RequestBody CommentCreateRequestDto commentCreateRequestDto,
+    public ResponseEntity<?> saveComment(@RequestBody @Validated CommentCreateRequestDto commentCreateRequestDto,
                                          @AuthenticationPrincipal UserDetails user) {
         String username = user.getUsername();
         commentService.createComment(commentCreateRequestDto, username);
