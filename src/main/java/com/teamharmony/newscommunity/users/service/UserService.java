@@ -1,5 +1,7 @@
 package com.teamharmony.newscommunity.users.service;
 
+import com.teamharmony.newscommunity.auth.entity.Tokens;
+import com.teamharmony.newscommunity.auth.repository.TokensRepository;
 import com.teamharmony.newscommunity.users.dto.*;
 import com.teamharmony.newscommunity.users.vo.ProfileVO;
 import com.teamharmony.newscommunity.users.entity.*;
