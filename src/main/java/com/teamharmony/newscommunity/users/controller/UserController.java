@@ -121,9 +121,10 @@ public class UserController {
 	 * @see				UserService#saveRole
 	 */
 	@PostMapping("/admin/role/save")
-	public ResponseEntity<Role>saveUser(@RequestBody Role role) {
+	public ResponseEntity<Void>saveUser(@RequestBody Role role) {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save").toUriString());
-		return ResponseEntity.created(uri).body(userService.saveRole(role));
+		userService.saveRole(role);
+		return ResponseEntity.created(uri).build();
 	}
 	
 	/**
@@ -133,9 +134,10 @@ public class UserController {
 	 * @see				UserService#addRoleToUser
 	 */
 	@PostMapping("/admin/role/addtouser")
-	public ResponseEntity<?>addRoleToUser(@RequestBody RoleToUserForm form) {
+	public ResponseEntity<Void>addRoleToUser(@RequestBody RoleToUserForm form) {
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/admin/role/addtouser").toUriString());
 		userService.addRoleToUser(form.getUsername(), form.getRoleName());
-		return ResponseEntity.ok().build();
+		return ResponseEntity.created(uri).build();
 	}
 	
 	/**
@@ -237,8 +239,8 @@ public class UserController {
 	 * @see				UserService#updateTokens
 	 */
 	@GetMapping("/user/signout")
-	public void signOut(HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal UserDetails user) throws IOException {
-		// 클라이언트가 쿠키에 리프레쉬 토큰을 갖고 있는지 확인
+	public ResponseEntity<Void>signOut(HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal UserDetails user) {
+// 클라이언트가 쿠키에 리프레쉬 토큰을 갖고 있는지 확인
 		String refCookie = getRefCookie(request);
 		// 쿠키가 있으면 삭제
 		if (refCookie != null) {
@@ -246,6 +248,7 @@ public class UserController {
 		}
 		// DB에 저장된 토큰 값 공백 처리
 		userService.updateTokens(user.getUsername(), "", "");
+		return ResponseEntity.ok().build();
 	}
 	
 	// 리프레쉬 쿠키값 가져오기

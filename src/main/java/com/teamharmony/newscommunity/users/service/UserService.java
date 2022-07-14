@@ -63,23 +63,21 @@ public class UserService implements UserDetailsService {
 	 * 저장소에 사용자 저장
 	 *
 	 * @param 		user 저장할 사용자 정보
-	 * @return 		저장된 사용자 정보
 	 */
-	public User saveUser(User user) {
+	public void saveUser(User user) {
 		log.info("Saving new user {} to the database", user.getUsername());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		return userRepository.save(user);
+		userRepository.save(user);
 	}
 	
 	/**
 	 * 저장소에 권한 저장
 	 *
 	 * @param 		role 저장할 권한 정보
-	 * @return 		저장된 권한 정보
 	 */
-	public Role saveRole(Role role) {
+	public void saveRole(Role role) {
 		log.info("Saving new role {} to the database", role.getName());
-		return roleRepository.save(role);
+		roleRepository.save(role);
 	}
 	
 	/**
