@@ -72,6 +72,8 @@ public class UserController {
 			return ResponseEntity.created(uri).build();
 		} catch (HibernateException e) {
 			return ResponseEntity.internalServerError().build();
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().build();
 		}
 	}
 	

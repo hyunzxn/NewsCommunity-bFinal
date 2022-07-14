@@ -209,10 +209,11 @@ public class UserService implements UserDetailsService {
 	 * @param 		username 권한을 추가할 사용자 ID
 	 * @param 		roleName 추가할 권한명
 	 */
-	public void addRoleToUser(String username, RoleType roleName) {
+	public void addRoleToUser(String username, RoleType roleName) throws IllegalArgumentException {
 		log.info("Adding role {} to user {}", roleName, username);
 		User user = getUser(username);
 		Role role = getRole(roleName);
+		if (role == null) throw new IllegalArgumentException(String.format("%s not found", roleName));
 		UserRole userRole = new UserRole(user, role);
 		userRoleRepository.save(userRole);
 	}
@@ -236,9 +237,7 @@ public class UserService implements UserDetailsService {
 	 */
 	public Role getRole(RoleType roleName) {
 		log.info("Fetching role {}", roleName);
-		Role role = roleRepository.findByName(roleName);
-		if (role == null) throw new IllegalArgumentException(String.format("%s not found", roleName));
-		return role;
+		return roleRepository.findByName(roleName);
 	}
 	
 	/**
