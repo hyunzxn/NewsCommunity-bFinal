@@ -5,15 +5,14 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.teamharmony.newscommunity.users.dto.response.UserResponseDto;
-import com.teamharmony.newscommunity.users.vo.ProfileVO;
-import com.teamharmony.newscommunity.users.dto.request.SignupRequestDto;
-import com.teamharmony.newscommunity.users.entity.*;
+import com.teamharmony.newscommunity.users.dto.UserResponseDto;
 import com.teamharmony.newscommunity.users.service.UserService;
+import com.teamharmony.newscommunity.users.vo.ProfileVO;
+import com.teamharmony.newscommunity.users.dto.SignupRequestDto;
+import com.teamharmony.newscommunity.users.entity.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.hibernate.HibernateException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +24,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Date;
@@ -63,29 +64,17 @@ public class UserController {
 	 * 회원 가입 요청 처리
 	 *
 	 * @param 		dto 가입하려는 사용자 ID와 비밀번호를 담은 객체
-	 * @see   		UserService#saveUser
-	 * @see   		UserService#getRole
-	 * @see   		UserService#saveRole
-	 * @see   		UserService#addRoleToUser
-	 * @see   		UserService#defaultProfile
+	 * @see   		UserService#signUp
 	 */
 	@PostMapping("/signup")
-	public ResponseEntity<?>saveUser(SignupRequestDto dto) {
-		User user = User.builder().dto(dto).build();
+	public ResponseEntity<?>signUp(@Valid SignupRequestDto dto) {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/signup").toUriString());
-		userService.saveUser(user);
-		// 기본 사용자 권한 추가
-		Role role = new Role(RoleType.USER);
-		role = userService.getRole(role.getName());
 		try {
-			if (role == null) {
-				userService.saveRole(new Role(RoleType.USER));
-			}
-			userService.addRoleToUser(user.getUsername(),RoleType.USER);
-			// 기본 프로필 추가
-			userService.defaultProfile(user);
-			return ResponseEntity.ok().build();
-		} catch (DataIntegrityViolationException|ConstraintViolationException e) {
+			userService.signUp(dto);
+			return ResponseEntity.created(uri).build();
+		} catch (HibernateException e) {
+			return ResponseEntity.internalServerError().build();
+		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().build();
 		}
 	}
@@ -98,13 +87,8 @@ public class UserController {
 	 * @see				UserService#checkUser
 	 */
 	@PostMapping("/signup/checkdup")
-	public ResponseEntity<?>checkUser(@RequestParam("username") String username) {
-		//todo validator
-		
-		// 회원 ID 입력값 공백 제거
-		username = username.replaceAll("\\s", "");
-		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/signup/checkdup").toUriString());
-		return ResponseEntity.created(uri).body(userService.checkUser(username));
+	public ResponseEntity<?>checkUser(@NotBlank @RequestParam String username) {
+		return ResponseEntity.ok().body(userService.checkUser(username));
 	}
 	
 	/**
@@ -124,13 +108,13 @@ public class UserController {
 	 * 권한 추가
 	 *
 	 * @param 		role enum 타입 권한명이 담긴 객체
-	 * @return 		인증된 사용자 ID
 	 * @see				UserService#saveRole
 	 */
-	@PostMapping("/role/save")
-	public ResponseEntity<Role>saveUser(@RequestBody Role role) {
+	@PostMapping("/admin/role/save")
+	public ResponseEntity<Void>saveUser(@RequestBody Role role) {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save").toUriString());
-		return ResponseEntity.created(uri).body(userService.saveRole(role));
+		userService.saveRole(role);
+		return ResponseEntity.created(uri).build();
 	}
 	
 	/**
@@ -139,10 +123,11 @@ public class UserController {
 	 * @param 		form 사용자 ID와 권한명이 담긴 객체
 	 * @see				UserService#addRoleToUser
 	 */
-	@PostMapping("/role/addtouser")
-	public ResponseEntity<?>addRoleToUser(@RequestBody RoleToUserForm form) {
+	@PostMapping("/admin/role/addtouser")
+	public ResponseEntity<Void>addRoleToUser(@RequestBody RoleToUserForm form) {
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/admin/role/addtouser").toUriString());
 		userService.addRoleToUser(form.getUsername(), form.getRoleName());
-		return ResponseEntity.ok().build();
+		return ResponseEntity.created(uri).build();
 	}
 	
 	/**
@@ -244,8 +229,8 @@ public class UserController {
 	 * @see				UserService#updateTokens
 	 */
 	@GetMapping("/user/signout")
-	public void signOut(HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal UserDetails user) throws IOException {
-		// 클라이언트가 쿠키에 리프레쉬 토큰을 갖고 있는지 확인
+	public ResponseEntity<Void>signOut(HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal UserDetails user) {
+// 클라이언트가 쿠키에 리프레쉬 토큰을 갖고 있는지 확인
 		String refCookie = getRefCookie(request);
 		// 쿠키가 있으면 삭제
 		if (refCookie != null) {
@@ -253,6 +238,7 @@ public class UserController {
 		}
 		// DB에 저장된 토큰 값 공백 처리
 		userService.updateTokens(user.getUsername(), "", "");
+		return ResponseEntity.ok().build();
 	}
 	
 	// 리프레쉬 쿠키값 가져오기

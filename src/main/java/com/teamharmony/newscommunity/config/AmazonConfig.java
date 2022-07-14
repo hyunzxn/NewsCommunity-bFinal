@@ -1,4 +1,4 @@
-package com.teamharmony.newscommunity.users.config;
+package com.teamharmony.newscommunity.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

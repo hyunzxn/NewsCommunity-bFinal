@@ -1,7 +1,6 @@
 package com.teamharmony.newscommunity.comments.dto;
 
-import com.teamharmony.newscommunity.users.dto.response.ProfileResponseDto;
-import com.teamharmony.newscommunity.users.dto.response.UserResponseDto;
+import com.teamharmony.newscommunity.users.dto.ProfileResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 

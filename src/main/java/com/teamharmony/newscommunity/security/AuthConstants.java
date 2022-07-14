@@ -1,4 +1,4 @@
-package com.teamharmony.newscommunity.users.security;
+package com.teamharmony.newscommunity.security;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
