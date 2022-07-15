@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @AllArgsConstructor
@@ -23,6 +24,7 @@ public class Comment extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long commentId;
+    @Size(max = 300, message = "글자수 초과")
     private String content;
     private String newsId;
 
