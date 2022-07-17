@@ -1,4 +1,4 @@
-package com.teamharmony.newscommunity.users.entity;
+package com.teamharmony.newscommunity.auth.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -35,8 +35,6 @@ public class UserService implements UserDetailsService {
 	private final RoleRepository roleRepository;
 	private final UserProfileRepository profileRepository;
 	private final UserRoleRepository userRoleRepository;
-	private final TokensRepository tokensRepository;
-	
 	private final PasswordEncoder passwordEncoder;
 	private final FileStore fileStore;
 	
@@ -102,20 +100,6 @@ public class UserService implements UserDetailsService {
 	}
 	
 	/**
-	 * 토큰 값 변경
-	 *
-	 * @param 		username 해당 사용자 ID
-	 * @param 		access_token 허용된 접근 토큰 값
-	 * @param 		refresh_token 허용된 갱신 토큰 값
-	 * @return 		저장된 토큰 정보
-	 */
-	public Tokens updateTokens(String username, String access_token, String refresh_token) {
-		Tokens tokens = getTokens(username);
-		tokens.update(access_token, refresh_token);
-		return tokensRepository.save(tokens);
-	}
-	
-	/**
 	 * 회원 가입시 기본 프로필 적용
 	 *
 	 * @param 		user 기본 프로필을 적용할 사용자 정보
@@ -176,10 +160,10 @@ public class UserService implements UserDetailsService {
 	 * 버킷에 저장된 프로필 사진 조회
 	 *
 	 * @param 		username 프로필 정보를 가져올 회원 ID
-	 * @param 		profile 프로필 정보
 	 * @return 		프로필 사진 URL
 	 */
-	public String getProfileImageUrl(String username, UserProfile profile) {
+	public String getProfileImageUrl(String username) {
+		UserProfile profile = getUser(username).getProfile();
 		if (profile == null) throw new IllegalArgumentException(String.format("User profile %s not found", username));
 		String path = String.format("%s/%s", bucketName,username);
 		// 버킷에서 프로필 사진 가져오기
@@ -241,20 +225,6 @@ public class UserService implements UserDetailsService {
 	}
 	
 	/**
-	 * 사용자가 지닌 권한 정보 조회
-	 *
-	 * @param 		user 조회할 사용자 ID
-	 * @return 		사용자가 지닌 권한 정보
-	 * @see				UserService#getRoles
-	 */
-	public Collection<Role> getRoles(User user) {
-		Collection<UserRole> userRole = userRoleRepository.findByUser(user);
-		Collection<Role> roles = new ArrayList<>();
-		userRole.forEach(r -> roles.add(r.getRole()));
-		return roles;
-	}
-	
-	/**
 	 * 전체 사용자 조회
 	 *
 	 * @return 		전체 사용자 정보
@@ -279,20 +249,9 @@ public class UserService implements UserDetailsService {
 		ProfileResponseDto profileDto = new ProfileResponseDto(profile);
 		Map<String, Object> body = new HashMap<>();
 		body.put("status", status);
-		body.put("link", getProfileImageUrl(username, profile));
+		body.put("link", getProfileImageUrl(username));
 		body.put("profile", profileDto);
 		return body;
-	}
-	
-	/**
-	 * 사용자의 허용 토큰 정보 조회
-	 *
-	 * @param 		username 조회할 사용자 ID
-	 * @return 		사용자의 허용 토큰 정보
-	 */
-	public Tokens getTokens(String username) {
-		log.info("Fetching tokens of user {}", username);
-		return tokensRepository.findByUsername(username);
 	}
 	
 	/**
