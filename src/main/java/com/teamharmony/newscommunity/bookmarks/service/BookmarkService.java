@@ -4,6 +4,7 @@ import com.teamharmony.newscommunity.bookmarks.dto.RequestBookmarkDTO;
 import com.teamharmony.newscommunity.bookmarks.dto.ResponseBookmarkDTO;
 import com.teamharmony.newscommunity.bookmarks.entity.Bookmarks;
 import com.teamharmony.newscommunity.bookmarks.repository.BookmarkRepository;
+import com.teamharmony.newscommunity.exception.InvalidRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +50,10 @@ public class BookmarkService {
      */
     @Transactional
     public String deleteBookmark(RequestBookmarkDTO requestBookmarkDTO){
+        // + DONE: 북마크가 존재하지 않으면 예외처리
+        if (checkBookmarkDuplicate(requestBookmarkDTO) == null){
+            throw new InvalidRequestException("해당 사용자는 북마크 하지 않았기 때문에 북마크 해제 요청을 할 수 없습니다.", ("newsId: " + requestBookmarkDTO.getNewsId() + ", userId: "+ requestBookmarkDTO.getNewsId()), "B501");
+        }
         // + TODO: 북마크가 존재하지 않으면 예외처리
         bookmarkRepository.deleteBookmarkByNewsIdAndUserId(requestBookmarkDTO.getNewsId(), requestBookmarkDTO.getUserId());
         return requestBookmarkDTO.getNewsId();
