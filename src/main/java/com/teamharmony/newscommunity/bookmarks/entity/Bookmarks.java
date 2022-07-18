@@ -27,10 +27,14 @@ public class Bookmarks extends TimestampedOnBookmark {
     @Column(nullable = false, length = 50)
     String userId;      // 해당 뉴스에 접근한 userId
 
+    @Column(nullable = false, length = 50)
+    String title;
+
     @Builder
-    public Bookmarks(RequestBookmarkDTO requestBookmarkDTO){
+    public Bookmarks(String newsId, String userId, String title){
         this.id = UUID.randomUUID().toString();
-        this.newsId = requestBookmarkDTO.getNewsId();
-        this.userId = requestBookmarkDTO.getUserId();
+        this.newsId = newsId;
+        this.userId = userId;
+        this.title = title;
     }
 }

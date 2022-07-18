@@ -20,11 +20,12 @@ public class BookmarkService {
      * @param requestBookmarkDTO
      * @return 저장된 북마크 로그의 id가 리턴
      */
-
     public String createBookmark(RequestBookmarkDTO requestBookmarkDTO){
         // + TODO: 북마크 생성 예외처리(기존에 news, user id가 같은 로그가 존재시 예외처리)
         Bookmarks bookmark = Bookmarks.builder()
-                .requestBookmarkDTO(requestBookmarkDTO)
+                .newsId(requestBookmarkDTO.getNewsId())
+                .userId(requestBookmarkDTO.getUserId())
+                .title(requestBookmarkDTO.getTitle())
                 .build();
         return bookmarkRepository.save(bookmark).getId();
     }

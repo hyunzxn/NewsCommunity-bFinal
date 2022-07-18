@@ -6,4 +6,5 @@ import lombok.Getter;
 public class RequestBookmarkDTO {
     private String newsId;
     private String userId;
+    private String title;
 }
