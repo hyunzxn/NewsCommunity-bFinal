@@ -22,20 +22,20 @@ public class GlobalHandlerException {
         String message = ex.getMessage();
         String invalidValue = ex.getInvalidValue();
 
-
-        Error errorMessage = new Error();
-        errorMessage.setField(fieldName);
-        errorMessage.setMessage(message);
-        errorMessage.setInvalidValue(invalidValue);
+        Error errorMessage = Error.builder()
+                                    .field(fieldName)
+                                    .invalidValue(invalidValue)
+                                    .build();
         errorList.add(errorMessage);
 
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setErrorList(errorList);
-        errorResponse.setMessage(message);
-        errorResponse.setRequestUrl(httpServletRequest.getRequestURI());
-        errorResponse.setStatusCode(HttpStatus.BAD_REQUEST.toString());
-        errorResponse.setResultCode("FAIL");
-        errorResponse.setCode(ex.getCode());
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .errorList(errorList)
+                .message(message)
+                .requestUrl(httpServletRequest.getRequestURI())
+                .statusCode(HttpStatus.BAD_REQUEST.toString())
+                .resultCode("FAIL")
+                .code(ex.getCode())
+                .build();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
