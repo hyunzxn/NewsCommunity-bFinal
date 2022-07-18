@@ -208,7 +208,7 @@ public class UserService implements UserDetailsService {
 	 * @param 		username 조회할 사용자 ID
 	 * @return 		사용자 정보
 	 */
-	public User getUser(String username) {
+	private User getUser(String username) {
 		log.info("Fetching user {}", username);
 		return userRepository.findByUsername(username);
 	}
@@ -219,7 +219,7 @@ public class UserService implements UserDetailsService {
 	 * @param 		roleName 조회할 권한명
 	 * @return 		권한 정보
 	 */
-	public Role getRole(RoleType roleName) {
+	private Role getRole(RoleType roleName) {
 		log.info("Fetching role {}", roleName);
 		return roleRepository.findByName(roleName);
 	}
