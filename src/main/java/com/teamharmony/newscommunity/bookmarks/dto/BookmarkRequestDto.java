@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class RequestBookmarkDTO {
+public class BookmarkRequestDto {
     private String newsId;
     private String userId;
     private String title;

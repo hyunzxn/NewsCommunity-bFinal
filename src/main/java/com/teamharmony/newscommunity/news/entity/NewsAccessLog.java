@@ -1,6 +1,6 @@
 package com.teamharmony.newscommunity.news.entity;
 
-import com.teamharmony.newscommunity.news.dto.RequestCreateNewsAccessLogDTO;
+import com.teamharmony.newscommunity.news.dto.CreateNewsAccessLogRequestDto;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -35,7 +35,7 @@ public class NewsAccessLog extends TimestampedOnLog {
     private String title;                   // 접근하 뉴스의 제목
 
     @Builder
-    public NewsAccessLog(RequestCreateNewsAccessLogDTO requestCreateNewsAccessLogDTO){
+    public NewsAccessLog(CreateNewsAccessLogRequestDto requestCreateNewsAccessLogDTO){
         this.id = UUID.randomUUID().toString();
         this.news_id = requestCreateNewsAccessLogDTO.getNews_id();
         this.user_id = requestCreateNewsAccessLogDTO.getUser_id();

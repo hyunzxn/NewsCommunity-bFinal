@@ -1,9 +1,8 @@
 package com.teamharmony.newscommunity.news.controller;
 
 import com.teamharmony.newscommunity.common.ApiResponse;
-import com.teamharmony.newscommunity.news.dto.RequestCreateNewsAccessLogDTO;
-import com.teamharmony.newscommunity.news.dto.ResponseNewsDTO;
-import com.teamharmony.newscommunity.news.dto.ResponseNewsDetailDTO;
+import com.teamharmony.newscommunity.news.dto.CreateNewsAccessLogRequestDto;
+import com.teamharmony.newscommunity.news.dto.NewsDetailResponseDto;
 import com.teamharmony.newscommunity.news.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,7 +26,7 @@ public class NewsController {
      * @return 뉴스정보(NewsTable)리스트가 담긴 ResponseNewsDTO를 리턴
      */
     @GetMapping("")
-    public ResponseEntity<List<ResponseNewsDetailDTO>> getNews(){
+    public ResponseEntity<List<NewsDetailResponseDto>> getNews(){
         return ResponseEntity.status(HttpStatus.OK).body(newsService.getNews());
     }
 
@@ -37,7 +36,7 @@ public class NewsController {
      * @return      뉴스 상세 정보가 담긴 ResponseNewsDetailDTO
      */
     @GetMapping("/details/{newsId}")
-    public ApiResponse<ResponseNewsDetailDTO> getNewsDetial(@PathVariable String newsId){
+    public ApiResponse<NewsDetailResponseDto> getNewsDetial(@PathVariable String newsId){
         return ApiResponse.success("result", newsService.getNewsDetail(newsId));
     }
 
@@ -47,7 +46,7 @@ public class NewsController {
      * @See NewsService#setNewsAccessLog
      */
     @PostMapping("/logs")
-    public ApiResponse<String> createNewsAccessLog(@RequestBody RequestCreateNewsAccessLogDTO requestCreateNewsAccessLogDTO){
+    public ApiResponse<String> createNewsAccessLog(@RequestBody CreateNewsAccessLogRequestDto requestCreateNewsAccessLogDTO){
         String newsId = newsService.setNewsAccessLog(requestCreateNewsAccessLogDTO);
         return ApiResponse.success("result", newsId);
     }

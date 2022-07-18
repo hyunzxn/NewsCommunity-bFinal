@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
  */
 @Getter
 @NoArgsConstructor
-public class RequestCreateNewsAccessLogDTO {
+public class CreateNewsAccessLogRequestDto {
     private String news_id;
     private String user_id;
     private String title;
@@ -22,7 +22,7 @@ public class RequestCreateNewsAccessLogDTO {
      * @param title   식별 뉴스의 제목
      */
     @Builder
-    public RequestCreateNewsAccessLogDTO(String news_id, String user_id, String title){
+    public CreateNewsAccessLogRequestDto(String news_id, String user_id, String title){
         this.news_id = news_id;         // 테스트 코드에서의 객체 생성시, 실수를 줄이기 위해 @Builder 기입
         this.user_id = user_id;
         this.title = title;

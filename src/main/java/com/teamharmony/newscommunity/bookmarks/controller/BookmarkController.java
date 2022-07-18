@@ -1,7 +1,7 @@
 package com.teamharmony.newscommunity.bookmarks.controller;
 
-import com.teamharmony.newscommunity.bookmarks.dto.RequestBookmarkDTO;
-import com.teamharmony.newscommunity.bookmarks.dto.ResponseBookmarkDTO;
+import com.teamharmony.newscommunity.bookmarks.dto.BookmarkRequestDto;
+import com.teamharmony.newscommunity.bookmarks.dto.BookmarkResponseDto;
 import com.teamharmony.newscommunity.bookmarks.service.BookmarkService;
 import com.teamharmony.newscommunity.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class BookmarkController {
      * @return 생성된 북마크의 식별번호(Id: String, based on UUID4)
      */
     @PostMapping("")
-    public ApiResponse<String> createBookmark(@RequestBody RequestBookmarkDTO requestBookmarkDTO){
+    public ApiResponse<String> createBookmark(@RequestBody BookmarkRequestDto requestBookmarkDTO){
         return ApiResponse.success("result", bookmarkService.createBookmark(requestBookmarkDTO));
     }
 
@@ -34,7 +34,7 @@ public class BookmarkController {
      */
     @GetMapping("")
     public ApiResponse<Boolean> isBookmark(@RequestParam String newsId, @RequestParam String userId){
-        RequestBookmarkDTO requestBookmarkDTO = new RequestBookmarkDTO(newsId, userId, null);
+        BookmarkRequestDto requestBookmarkDTO = new BookmarkRequestDto(newsId, userId, null);
         return ApiResponse.success("result", bookmarkService.isBookmarkCheck(requestBookmarkDTO));
     }
 
@@ -45,7 +45,7 @@ public class BookmarkController {
      * @return 해당 뉴스에 대한 사용자의 북마크 여부 (True||False)
      */
     @DeleteMapping("")
-    public ApiResponse<String> cancel(@RequestBody RequestBookmarkDTO requestBookmarkDTO){
+    public ApiResponse<String> cancel(@RequestBody BookmarkRequestDto requestBookmarkDTO){
         return ApiResponse.success("result", bookmarkService.deleteBookmark(requestBookmarkDTO));
     }
 
@@ -55,7 +55,7 @@ public class BookmarkController {
      * @return 해당 유저가 북마킹한 내역인 List<Bookmark>를 리턴
      */
     @GetMapping("/profiles/{userId}")
-    public ResponseEntity<List<ResponseBookmarkDTO>> bookmark(@PathVariable String userId){
+    public ResponseEntity<List<BookmarkResponseDto>> bookmark(@PathVariable String userId){
         return ResponseEntity.status(HttpStatus.OK).body(bookmarkService.selectAllUserBookmark(userId));
     }
 }

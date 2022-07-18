@@ -1,8 +1,7 @@
 package com.teamharmony.newscommunity.news.service;
 
-import com.teamharmony.newscommunity.news.dto.RequestCreateNewsAccessLogDTO;
-import com.teamharmony.newscommunity.news.dto.ResponseNewsDTO;
-import com.teamharmony.newscommunity.news.dto.ResponseNewsDetailDTO;
+import com.teamharmony.newscommunity.news.dto.CreateNewsAccessLogRequestDto;
+import com.teamharmony.newscommunity.news.dto.NewsDetailResponseDto;
 import com.teamharmony.newscommunity.news.entity.NewsAccessLog;
 import com.teamharmony.newscommunity.news.entity.NewsTable;
 import com.teamharmony.newscommunity.news.repository.NewsAccessLogRepository;
@@ -47,8 +46,8 @@ class NewsServiceTest {
             when(this.newsAccessLogRepository.save(any(NewsAccessLog.class))) //when// // 2. save를 통해 인자값 입력시 첫번째 arg 리턴
                     .then(AdditionalAnswers.returnsFirstArg());
 
-            RequestCreateNewsAccessLogDTO expected =                          //given//   // 1. 예측값 생성, (Test Title라는 문자열을 title로 가지고있는 newsTable 객체)
-                    RequestCreateNewsAccessLogDTO.builder()
+            CreateNewsAccessLogRequestDto expected =                          //given//   // 1. 예측값 생성, (Test Title라는 문자열을 title로 가지고있는 newsTable 객체)
+                    CreateNewsAccessLogRequestDto.builder()
                             .news_id(UUID.randomUUID().toString())
                             .user_id("테스트용 아이디입니다")
                             .title("테스트용 타이틀입니다.")
@@ -87,8 +86,8 @@ class NewsServiceTest {
             given(this.newsRepository.findById("test-uuid"))                            //1. given(2): newsRepository에 findById 요청을 보냈을 때,
                     .willReturn(optional);
 
-            ResponseNewsDetailDTO actual = this.newsService.getNewsDetail("test-uuid");                  //2. when(1): newsService의 getNewsDetail로 test-uuid가 넘겨졌을 때, 실제값(actual)에 저장
-            ResponseNewsDetailDTO expect = ResponseNewsDetailDTO.builder().newsTable(optional.get()).build();   //2. when(2): 기존에 정의해둔 newsTable의 값을 expect값에 build
+            NewsDetailResponseDto actual = this.newsService.getNewsDetail("test-uuid");                  //2. when(1): newsService의 getNewsDetail로 test-uuid가 넘겨졌을 때, 실제값(actual)에 저장
+            NewsDetailResponseDto expect = NewsDetailResponseDto.builder().newsTable(optional.get()).build();   //2. when(2): 기존에 정의해둔 newsTable의 값을 expect값에 build
 
             assertEquals(actual.getId(), expect.getId());                               //3. then: actual과 expect를 비교
             assertEquals(actual.getNews_url(), expect.getNews_url());
@@ -103,7 +102,7 @@ class NewsServiceTest {
         @Test
         void getNews(){
             doReturn(newsList()).when(newsRepository).findAll();                // 1. given: newsRepository에서 findall을 호출시, 아래 newsList()를 통해 생성된 List<newsTable>이 반환되도록
-            final List<ResponseNewsDetailDTO> expect = newsService.getNews();               // 2. when:  newsService의 getNews()가 호출되었을 때, 나온 ResponseNewsDTO값을 expect에 할당
+            final List<NewsDetailResponseDto> expect = newsService.getNews();               // 2. when:  newsService의 getNews()가 호출되었을 때, 나온 ResponseNewsDTO값을 expect에 할당
             assertThat(expect.size()).isEqualTo(5); // 3. Then:   expect의 크기가 5인지(예상하는 리스트 크기(5)) 확인
         }
         private List<NewsTable> newsList() {
