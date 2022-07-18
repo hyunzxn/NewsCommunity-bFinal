@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.Pattern;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -22,6 +23,7 @@ public class Tokens {
 	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
 	@Column(unique = true, nullable=false)
+	@Pattern(regexp = "(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}")
 	private String username;
 	@Column(nullable = false)
 	private String accessToken;
