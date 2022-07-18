@@ -5,11 +5,14 @@ import com.teamharmony.newscommunity.bookmarks.dto.ResponseBookmarkDTO;
 import com.teamharmony.newscommunity.bookmarks.entity.Bookmarks;
 import com.teamharmony.newscommunity.bookmarks.repository.BookmarkRepository;
 import com.teamharmony.newscommunity.exception.InvalidRequestException;
+import com.teamharmony.newscommunity.users.dto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -64,10 +67,11 @@ public class BookmarkService {
      * @param userId
      * @return 해당 userId가 포함된 bookmark 리스트
      */
-    public ResponseBookmarkDTO selectAllUserBookmark(String userId) {
-        return ResponseBookmarkDTO.builder()
-                .bookmarksList(bookmarkRepository.findAllByUserId(userId))
-                .build();
+    public List<ResponseBookmarkDTO> selectAllUserBookmark(String userId) {
+        List<Bookmarks> bookmarksList = bookmarkRepository.findAllByUserId(userId);
+        List<ResponseBookmarkDTO> bookmarkDtoList = bookmarksList.stream().map(ResponseBookmarkDTO::toDto).collect(toList());
+
+        return bookmarkDtoList;
     }
 
     /**

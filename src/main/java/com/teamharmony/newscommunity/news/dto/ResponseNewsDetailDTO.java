@@ -1,6 +1,8 @@
 package com.teamharmony.newscommunity.news.dto;
 
 
+import com.teamharmony.newscommunity.bookmarks.dto.ResponseBookmarkDTO;
+import com.teamharmony.newscommunity.bookmarks.entity.Bookmarks;
 import com.teamharmony.newscommunity.news.entity.NewsTable;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,18 +21,31 @@ public class ResponseNewsDetailDTO {
     private String news_url;        // 해당 뉴스의 원본 주소 (네이버 뉴스의 해당 뉴스 주소)
     private String write_time;      // 작성 시간
     private Long view;              // 조회수
+    private String explains;
 
-    /**
-     * @param newsTable
-     */
+
     @Builder
-    public ResponseNewsDetailDTO(NewsTable newsTable){
-        this.id = newsTable.getId();
-        this.title = newsTable.getTitle();
-        this.summary = newsTable.getSummary();
-        this.image_url = newsTable.getImage_url();
-        this.news_url = newsTable.getNews_url();
-        this.write_time = newsTable.getWrite_time();
-        this.view = newsTable.getView();
+    public ResponseNewsDetailDTO(String id, String title, String explains, String summary, String image_url, String news_url, String write_time, Long view){
+        this.id = id;
+        this.title = title;
+        this.summary = summary;
+        this.explains = explains;
+        this.image_url = image_url;
+        this.news_url = news_url;
+        this.write_time = write_time;
+        this.view = view;
     }
+
+    public static ResponseNewsDetailDTO toDto(NewsTable newsTable) {
+        return ResponseNewsDetailDTO.builder()
+            .id(newsTable.getId())
+            .title(newsTable.getTitle())
+            .summary(newsTable.getSummary())
+            .image_url(newsTable.getImage_url())
+            .news_url(newsTable.getNews_url())
+            .write_time(newsTable.getWrite_time())
+            .explains(newsTable.getExplains())
+            .view(newsTable.getView())
+            .build();}
+
 }
