@@ -1,5 +1,7 @@
 package com.teamharmony.newscommunity.news.service;
 
+import com.teamharmony.newscommunity.bookmarks.dto.ResponseBookmarkDTO;
+import com.teamharmony.newscommunity.bookmarks.entity.Bookmarks;
 import com.teamharmony.newscommunity.news.dto.RequestCreateNewsAccessLogDTO;
 import com.teamharmony.newscommunity.news.dto.ResponseNewsDTO;
 import com.teamharmony.newscommunity.news.dto.ResponseNewsDetailDTO;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 
 /**
@@ -28,23 +32,29 @@ public class NewsService {
      * @param: None
      * @Return: ResponseNewsDTO [뉴스 제목, 요약, 이미지_url, 실제뉴스URL, 설명, 작성시간]
      **/
-    public ResponseNewsDTO getNews(){
+    public List<ResponseNewsDetailDTO> getNews(){
         List<NewsTable> newsTableList = newsRepository.findAll();
-        return ResponseNewsDTO.builder()
-                .newsTableList(newsTableList)
-                .build();
+        return newsTableList.stream().map(ResponseNewsDetailDTO::toDto).collect(toList());
     }
 
     /** /api/news/details의 경로로 요청된 GET 메서드의 응답을 처리하는 메서드, news의 id로 뉴스 내용 조회
      * @param: newsId
-     * @Return: ResponseNewsDetailDTO // newsid, title, summary, image_url, news_url, write_time가 담김
+     * @Return: ResponseNewsDetailDTO // newsid, title, summary, image_url, news_url, write_time, view 가 담김
      **/
     public ResponseNewsDetailDTO getNewsDetail(String newsId){
 
         NewsTable newsTable = newsRepository.findById(newsId).orElseThrow(
                 ()-> new NullPointerException("해당 뉴스 id가 존재 안합니다.")
         );
-        return new ResponseNewsDetailDTO(newsTable);
+        return ResponseNewsDetailDTO.builder()
+                .id(newsTable.getId())
+                .title(newsTable.getTitle())
+                .summary(newsTable.getSummary())
+                .image_url(newsTable.getImage_url())
+                .news_url(newsTable.getNews_url())
+                .write_time(newsTable.getWrite_time())
+                .view(newsTable.getView())
+                .build();
     }
 
     /**

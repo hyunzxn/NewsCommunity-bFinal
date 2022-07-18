@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 /**
  * 뉴스 일괄 조회, 뉴스 상세 조회, 뉴스 접근 로그 생성, 조회수 증가 기능을 하는 컨트롤러
@@ -25,8 +27,8 @@ public class NewsController {
      * @return 뉴스정보(NewsTable)리스트가 담긴 ResponseNewsDTO를 리턴
      */
     @GetMapping("")
-    public ResponseEntity<ResponseNewsDTO> getNews(){
-        return ResponseEntity.status(HttpStatus.CREATED).body(newsService.getNews());
+    public ResponseEntity<List<ResponseNewsDetailDTO>> getNews(){
+        return ResponseEntity.status(HttpStatus.OK).body(newsService.getNews());
     }
 
     /**

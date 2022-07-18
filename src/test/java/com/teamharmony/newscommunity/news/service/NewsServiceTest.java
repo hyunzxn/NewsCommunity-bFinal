@@ -103,8 +103,8 @@ class NewsServiceTest {
         @Test
         void getNews(){
             doReturn(newsList()).when(newsRepository).findAll();                // 1. given: newsRepository에서 findall을 호출시, 아래 newsList()를 통해 생성된 List<newsTable>이 반환되도록
-            final ResponseNewsDTO expect = newsService.getNews();               // 2. when:  newsService의 getNews()가 호출되었을 때, 나온 ResponseNewsDTO값을 expect에 할당
-            assertThat(expect.getNewsTableList().size()).isEqualTo(5); // 3. Then:   expect의 크기가 5인지(예상하는 리스트 크기(5)) 확인
+            final List<ResponseNewsDetailDTO> expect = newsService.getNews();               // 2. when:  newsService의 getNews()가 호출되었을 때, 나온 ResponseNewsDTO값을 expect에 할당
+            assertThat(expect.size()).isEqualTo(5); // 3. Then:   expect의 크기가 5인지(예상하는 리스트 크기(5)) 확인
         }
         private List<NewsTable> newsList() {
             // 위 getNews() 테스트에서 사용할 newsTableList를 만들기 위한 함수
