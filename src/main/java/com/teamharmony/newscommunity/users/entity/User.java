@@ -11,7 +11,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,7 +28,7 @@ public class User  extends Timestamped {
 	@Column(name = "user_id")
 	private Long id;
 	@Column(unique = true, nullable = false)
-	@Size(min = 2, max = 10)
+	@Pattern(regexp = "(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}")
 	private String username;
 	@Column(nullable = false)
 	@NotBlank
