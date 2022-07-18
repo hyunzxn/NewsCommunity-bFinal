@@ -5,7 +5,11 @@ import com.teamharmony.newscommunity.bookmarks.dto.ResponseBookmarkDTO;
 import com.teamharmony.newscommunity.bookmarks.service.BookmarkService;
 import com.teamharmony.newscommunity.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -51,7 +55,7 @@ public class BookmarkController {
      * @return 해당 유저가 북마킹한 내역인 List<Bookmark>를 리턴
      */
     @GetMapping("/profiles/{userId}")
-    public ApiResponse<ResponseBookmarkDTO> bookmark(@PathVariable String userId){
-        return ApiResponse.success("result", bookmarkService.selectAllUserBookmark(userId));
+    public ResponseEntity<List<ResponseBookmarkDTO>> bookmark(@PathVariable String userId){
+        return ResponseEntity.status(HttpStatus.OK).body(bookmarkService.selectAllUserBookmark(userId));
     }
 }
