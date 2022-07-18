@@ -11,11 +11,11 @@ import java.util.List;
  * @author hyeoKing
  */
 @Getter
-public class ResponseNewsDTO {
+public class NewsResponseDto {
     private List<NewsTable> newsTableList;
 
     @Builder
-    public ResponseNewsDTO(List newsTableList){
+    public NewsResponseDto(List newsTableList){
         this.newsTableList = newsTableList;        // 뉴스 조회를 위해 뉴스 정보리스트를 입력받음
     }
 }

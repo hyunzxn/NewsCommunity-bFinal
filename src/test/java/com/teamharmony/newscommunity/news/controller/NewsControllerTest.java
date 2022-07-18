@@ -3,7 +3,7 @@ package com.teamharmony.newscommunity.news.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamharmony.newscommunity.common.ApiResponse;
-import com.teamharmony.newscommunity.news.dto.ResponseNewsDetailDTO;
+import com.teamharmony.newscommunity.news.dto.NewsDetailResponseDto;
 import com.teamharmony.newscommunity.news.entity.NewsTable;
 import com.teamharmony.newscommunity.news.service.NewsService;
 import com.teamharmony.newscommunity.auth.repository.TokensRepository;
@@ -76,7 +76,7 @@ class NewsControllerTest {
                 "2022.06.24. 오전 06:00",
                 0L
         );
-        ResponseNewsDetailDTO responseNewsDetailDTO = ResponseNewsDetailDTO.builder() // ResponseNewsDetailDTO를 newsTable 초기화
+        NewsDetailResponseDto responseNewsDetailDTO = NewsDetailResponseDto.builder() // ResponseNewsDetailDTO를 newsTable 초기화
                 .newsTable(newsTable)
                 .build();
 
@@ -94,7 +94,7 @@ class NewsControllerTest {
         ).andDo(MockMvcResultHandlers.print());
     }
 
-    public String ParseObjToJSON(ApiResponse<ResponseNewsDetailDTO> detailDTO) throws JsonProcessingException {
+    public String ParseObjToJSON(ApiResponse<NewsDetailResponseDto> detailDTO) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         //Object to JSON in String
         String targetJSON = mapper.writeValueAsString(detailDTO);

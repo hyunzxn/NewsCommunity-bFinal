@@ -1,8 +1,6 @@
 package com.teamharmony.newscommunity.news.dto;
 
 
-import com.teamharmony.newscommunity.bookmarks.dto.ResponseBookmarkDTO;
-import com.teamharmony.newscommunity.bookmarks.entity.Bookmarks;
 import com.teamharmony.newscommunity.news.entity.NewsTable;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +11,7 @@ import lombok.Getter;
  * @author hyeoKing
  */
 @Getter
-public class ResponseNewsDetailDTO {
+public class NewsDetailResponseDto {
     private String id;              // 뉴스의 id 정보: Oauth 값을 String 형태로 변환
     private String title;           // 뉴스의 제목 정보
     private String summary;         // python 외부 모듈에서 요약된 뉴스 요약 정보,
@@ -25,7 +23,7 @@ public class ResponseNewsDetailDTO {
 
 
     @Builder
-    public ResponseNewsDetailDTO(String id, String title, String explains, String summary, String image_url, String news_url, String write_time, Long view){
+    public NewsDetailResponseDto(String id, String title, String explains, String summary, String image_url, String news_url, String write_time, Long view){
         this.id = id;
         this.title = title;
         this.summary = summary;
@@ -36,8 +34,8 @@ public class ResponseNewsDetailDTO {
         this.view = view;
     }
 
-    public static ResponseNewsDetailDTO toDto(NewsTable newsTable) {
-        return ResponseNewsDetailDTO.builder()
+    public static NewsDetailResponseDto toDto(NewsTable newsTable) {
+        return NewsDetailResponseDto.builder()
             .id(newsTable.getId())
             .title(newsTable.getTitle())
             .summary(newsTable.getSummary())

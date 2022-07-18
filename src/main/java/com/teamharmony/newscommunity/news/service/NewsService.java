@@ -1,10 +1,7 @@
 package com.teamharmony.newscommunity.news.service;
 
-import com.teamharmony.newscommunity.bookmarks.dto.ResponseBookmarkDTO;
-import com.teamharmony.newscommunity.bookmarks.entity.Bookmarks;
-import com.teamharmony.newscommunity.news.dto.RequestCreateNewsAccessLogDTO;
-import com.teamharmony.newscommunity.news.dto.ResponseNewsDTO;
-import com.teamharmony.newscommunity.news.dto.ResponseNewsDetailDTO;
+import com.teamharmony.newscommunity.news.dto.CreateNewsAccessLogRequestDto;
+import com.teamharmony.newscommunity.news.dto.NewsDetailResponseDto;
 import com.teamharmony.newscommunity.news.entity.NewsAccessLog;
 import com.teamharmony.newscommunity.news.entity.NewsTable;
 import com.teamharmony.newscommunity.news.repository.NewsAccessLogRepository;
@@ -32,21 +29,21 @@ public class NewsService {
      * @param: None
      * @Return: ResponseNewsDTO [뉴스 제목, 요약, 이미지_url, 실제뉴스URL, 설명, 작성시간]
      **/
-    public List<ResponseNewsDetailDTO> getNews(){
+    public List<NewsDetailResponseDto> getNews(){
         List<NewsTable> newsTableList = newsRepository.findAll();
-        return newsTableList.stream().map(ResponseNewsDetailDTO::toDto).collect(toList());
+        return newsTableList.stream().map(NewsDetailResponseDto::toDto).collect(toList());
     }
 
     /** /api/news/details의 경로로 요청된 GET 메서드의 응답을 처리하는 메서드, news의 id로 뉴스 내용 조회
      * @param: newsId
      * @Return: ResponseNewsDetailDTO // newsid, title, summary, image_url, news_url, write_time, view 가 담김
      **/
-    public ResponseNewsDetailDTO getNewsDetail(String newsId){
+    public NewsDetailResponseDto getNewsDetail(String newsId){
 
         NewsTable newsTable = newsRepository.findById(newsId).orElseThrow(
                 ()-> new NullPointerException("해당 뉴스 id가 존재 안합니다.")
         );
-        return ResponseNewsDetailDTO.builder()
+        return NewsDetailResponseDto.builder()
                 .id(newsTable.getId())
                 .title(newsTable.getTitle())
                 .summary(newsTable.getSummary())
@@ -61,7 +58,7 @@ public class NewsService {
     /api/news/logs의 경로로 요청된 POST 메서드의 응답을 처리하는 메서드, 클릭한 news의 id와 유저 id로 접근
     @param: requestCreateNewsAccessLogDTO // newsId, userId 정보가 담겨옴
     @Return: newsAccessLog.getNews_Id()        // 생성된 뉴스로그에 담긴 뉴스 id를 리턴 **/
-    public String setNewsAccessLog(RequestCreateNewsAccessLogDTO requestCreateNewsAccessLogDTO){
+    public String setNewsAccessLog(CreateNewsAccessLogRequestDto requestCreateNewsAccessLogDTO){
         NewsAccessLog newsAccessLog = NewsAccessLog.builder()
                 .requestCreateNewsAccessLogDTO(requestCreateNewsAccessLogDTO)
                 .build();                               // newsAccessLog를 requestCreateNewsAccessLogDTO로 초기화

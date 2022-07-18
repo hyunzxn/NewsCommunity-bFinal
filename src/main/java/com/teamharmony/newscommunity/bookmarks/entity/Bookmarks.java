@@ -1,7 +1,6 @@
 package com.teamharmony.newscommunity.bookmarks.entity;
 
 
-import com.teamharmony.newscommunity.bookmarks.dto.RequestBookmarkDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

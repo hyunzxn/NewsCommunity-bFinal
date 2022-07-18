@@ -1,11 +1,10 @@
 package com.teamharmony.newscommunity.bookmarks.service;
 
-import com.teamharmony.newscommunity.bookmarks.dto.RequestBookmarkDTO;
-import com.teamharmony.newscommunity.bookmarks.dto.ResponseBookmarkDTO;
+import com.teamharmony.newscommunity.bookmarks.dto.BookmarkRequestDto;
+import com.teamharmony.newscommunity.bookmarks.dto.BookmarkResponseDto;
 import com.teamharmony.newscommunity.bookmarks.entity.Bookmarks;
 import com.teamharmony.newscommunity.bookmarks.repository.BookmarkRepository;
 import com.teamharmony.newscommunity.exception.InvalidRequestException;
-import com.teamharmony.newscommunity.users.dto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,7 @@ public class BookmarkService {
      * @param requestBookmarkDTO
      * @return 저장된 북마크 로그의 id가 리턴
      */
-    public String createBookmark(RequestBookmarkDTO requestBookmarkDTO){
+    public String createBookmark(BookmarkRequestDto requestBookmarkDTO){
         // + TODO: 북마크 생성 예외처리(기존에 news, user id가 같은 로그가 존재시 예외처리)
         Bookmarks bookmark = Bookmarks.builder()
                 .newsId(requestBookmarkDTO.getNewsId())
@@ -39,7 +38,7 @@ public class BookmarkService {
      * @param requestBookmarkDTO
      * @return 해당 newsId, userId의 복합키가 북마크 db에 존재하는지 여부 리턴(true||false)
      */
-    public Boolean isBookmarkCheck(RequestBookmarkDTO requestBookmarkDTO){
+    public Boolean isBookmarkCheck(BookmarkRequestDto requestBookmarkDTO){
         if (checkBookmarkDuplicate(requestBookmarkDTO) == null){
             return false;
         }
@@ -52,7 +51,7 @@ public class BookmarkService {
      * @return 해당 newsId, userId의 복합키가 북마크 db에 존재하는지 여부 리턴(true||false)
      */
     @Transactional
-    public String deleteBookmark(RequestBookmarkDTO requestBookmarkDTO){
+    public String deleteBookmark(BookmarkRequestDto requestBookmarkDTO){
         // + DONE: 북마크가 존재하지 않으면 예외처리
         if (checkBookmarkDuplicate(requestBookmarkDTO) == null){
             throw new InvalidRequestException("해당 사용자는 북마크 하지 않았기 때문에 북마크 해제 요청을 할 수 없습니다.", ("newsId: " + requestBookmarkDTO.getNewsId() + ", userId: "+ requestBookmarkDTO.getNewsId()), "B501");
@@ -67,9 +66,9 @@ public class BookmarkService {
      * @param userId
      * @return 해당 userId가 포함된 bookmark 리스트
      */
-    public List<ResponseBookmarkDTO> selectAllUserBookmark(String userId) {
+    public List<BookmarkResponseDto> selectAllUserBookmark(String userId) {
         List<Bookmarks> bookmarksList = bookmarkRepository.findAllByUserId(userId);
-        List<ResponseBookmarkDTO> bookmarkDtoList = bookmarksList.stream().map(ResponseBookmarkDTO::toDto).collect(toList());
+        List<BookmarkResponseDto> bookmarkDtoList = bookmarksList.stream().map(BookmarkResponseDto::toDto).collect(toList());
 
         return bookmarkDtoList;
     }
@@ -79,7 +78,7 @@ public class BookmarkService {
      * @param requestBookmarkDTO
      * @return 북마크 존재시 true, 그 외 false
      */
-    public Bookmarks checkBookmarkDuplicate(RequestBookmarkDTO requestBookmarkDTO){
+    public Bookmarks checkBookmarkDuplicate(BookmarkRequestDto requestBookmarkDTO){
         Bookmarks bookmarks = bookmarkRepository.findByNewsIdAndUserId(requestBookmarkDTO.getNewsId(), requestBookmarkDTO.getUserId());
         return bookmarks;
     }
