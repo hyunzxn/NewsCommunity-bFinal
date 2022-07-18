@@ -36,13 +36,10 @@ public class BookmarkService {
      * @return 해당 newsId, userId의 복합키가 북마크 db에 존재하는지 여부 리턴(true||false)
      */
     public Boolean isBookmarkCheck(RequestBookmarkDTO requestBookmarkDTO){
-        try {
-            bookmarkRepository.findByNewsIdAndUserId(requestBookmarkDTO.getNewsId(), requestBookmarkDTO.getUserId()).getUserId();
-            return true;
-        }catch(NullPointerException n){
-            System.out.println(n.toString());
+        if (checkBookmarkDuplicate(requestBookmarkDTO) == null){
             return false;
         }
+        return true;
     }
 
     /**
@@ -66,5 +63,15 @@ public class BookmarkService {
         return ResponseBookmarkDTO.builder()
                 .bookmarksList(bookmarkRepository.findAllByUserId(userId))
                 .build();
+    }
+
+    /**
+     * 북마크 여부 파악을 위한 메서드
+     * @param requestBookmarkDTO
+     * @return 북마크 존재시 true, 그 외 false
+     */
+    public Bookmarks checkBookmarkDuplicate(RequestBookmarkDTO requestBookmarkDTO){
+        Bookmarks bookmarks = bookmarkRepository.findByNewsIdAndUserId(requestBookmarkDTO.getNewsId(), requestBookmarkDTO.getUserId());
+        return bookmarks;
     }
 }

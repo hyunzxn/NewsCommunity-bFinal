@@ -29,7 +29,8 @@ public class BookmarkController {
      * @return 해당 뉴스에 대한 사용자의 북마크 여부 (True||False)
      */
     @GetMapping("")
-    public ApiResponse<Boolean> isBookmark(@RequestBody RequestBookmarkDTO requestBookmarkDTO){
+    public ApiResponse<Boolean> isBookmark(@RequestParam String newsId, @RequestParam String userId){
+        RequestBookmarkDTO requestBookmarkDTO = new RequestBookmarkDTO(newsId, userId, null);
         return ApiResponse.success("result", bookmarkService.isBookmarkCheck(requestBookmarkDTO));
     }
 
