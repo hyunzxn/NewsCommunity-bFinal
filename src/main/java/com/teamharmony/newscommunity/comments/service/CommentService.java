@@ -34,12 +34,6 @@ public class CommentService {
         user.addComment(comment);
     }
 
-    /* 기존에 Entity를 바로 리턴해주던 방식의 코드
-    public List<Comment> findComments(String newsId) {
-        return commentRepository.findAllByNewsId(newsId);
-    }
-    */
-
     /**
      * DB에서 newsId로 데이터를 모두 조회한 다음, 필요한 값들만 CommentResponseDto에 담는 함수
      * @param newsId
@@ -72,13 +66,6 @@ public class CommentService {
         commentRepository.deleteById(id);
     }
 
-    /* 기존 Entity 바로 return 하던 코드
-    public List<Comment> getSortedCommentsDesc(String newsId) {
-        return commentRepository.findByNewsIdOrderByCreatedAtDesc(newsId);
-    }
-     */
-
-
     public List<CommentResponseDto> getSortedCommentsDesc(String newsId) {
         List<Comment> commentList = commentRepository.findByNewsIdOrderByCreatedAtDesc(newsId);
         return commentList.stream().map(comment -> CommentResponseDto.builder()
@@ -91,11 +78,6 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    /*
-    public List<Comment> getSortedCommentsAsc(String newsId) {
-        return commentRepository.findByNewsIdOrderByCreatedAtAsc(newsId);
-    }
-     */
     public List<CommentResponseDto> getSortedCommentsAsc(String newsId) {
         List<Comment> commentList = commentRepository.findByNewsIdOrderByCreatedAtAsc(newsId);
         return commentList.stream().map(comment -> CommentResponseDto.builder()
