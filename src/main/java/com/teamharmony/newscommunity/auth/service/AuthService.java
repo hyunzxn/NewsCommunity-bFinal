@@ -70,7 +70,7 @@ public class AuthService {
 				updateTokens(username, access_token, refresh_token);
 				
 				ResponseCookie refresh = ResponseCookie.from("ref_uid", refresh_token)
-				                                       .maxAge(7*24*60*60*1000) // 밀리세컨인지 확인해야됨
+				                                       .maxAge(7*24*60*60)
 				                                       .httpOnly(true)
 				                                       .secure(true)
 				                                       .sameSite("None")

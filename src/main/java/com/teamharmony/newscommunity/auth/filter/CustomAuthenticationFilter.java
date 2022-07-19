@@ -87,7 +87,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 		response.setHeader("token", access_token);
 		response.setHeader("username", Base64.getEncoder().encodeToString(usernameHeader));
 		ResponseCookie refresh = ResponseCookie.from("ref_uid", refresh_token)
-		                                       .maxAge(7*24*60*60*1000) // 밀리세컨인지 확인해야됨
+		                                       .maxAge(7*24*60*60)
 		                                       .httpOnly(true)
 			                                     .secure(true)
 						                               .sameSite("None")
