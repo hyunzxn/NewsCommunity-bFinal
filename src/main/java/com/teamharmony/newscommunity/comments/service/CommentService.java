@@ -5,6 +5,7 @@ import com.teamharmony.newscommunity.comments.dto.CommentEditRequestDto;
 import com.teamharmony.newscommunity.comments.dto.CommentResponseDto;
 import com.teamharmony.newscommunity.comments.entity.Comment;
 import com.teamharmony.newscommunity.comments.repository.CommentRepository;
+import com.teamharmony.newscommunity.exception.InvalidRequestException;
 import com.teamharmony.newscommunity.users.dto.ProfileResponseDto;
 import com.teamharmony.newscommunity.users.entity.User;
 import com.teamharmony.newscommunity.users.repository.UserRepository;
@@ -24,7 +25,11 @@ public class CommentService {
 
     @Transactional
     public void createComment(CommentCreateRequestDto commentCreateRequestDto, String username) {
+        if (commentCreateRequestDto.getContent() == null || commentCreateRequestDto.getNewsId() == null) {
+            throw new InvalidRequestException("댓글 내용 또는 뉴스아이디가 비어있습니다", ("댓글 내용 " + commentCreateRequestDto.getContent() + " 뉴스 아이디 " + commentCreateRequestDto.getNewsId()), "C401");
+        }
         Comment comment = new Comment(commentCreateRequestDto);
+
         User user = userRepository.findByUsername(username);
         user.addComment(comment);
     }
@@ -42,6 +47,9 @@ public class CommentService {
      */
     public List<CommentResponseDto> findComments(String newsId) {
         List<Comment> commentList = commentRepository.findAllByNewsId(newsId);
+        if (commentList == null) {
+            throw new InvalidRequestException("댓글을 불러올 수 없습니다", "뉴스 아이디가 댓글에 잘 저장됐는지 확인하세요", "C402");
+        }
         return commentList.stream().map(comment -> CommentResponseDto.builder()
                         .commentId(comment.getCommentId())
                         .content(comment.getContent())
@@ -55,7 +63,7 @@ public class CommentService {
     @Transactional
     public void updateComment(Long id, CommentEditRequestDto commentEditRequestDto) {
         Comment comment = commentRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("댓글을 찾을 수 없습니다")
+                () -> new InvalidRequestException("해당 댓글은 이미 삭제되었기 때문에 수정할 수 없습니다", "삭제된 댓글 아이디 " + id, "C403")
         );
         comment.update(commentEditRequestDto);
     }
