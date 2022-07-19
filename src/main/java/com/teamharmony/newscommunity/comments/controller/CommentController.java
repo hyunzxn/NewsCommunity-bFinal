@@ -94,9 +94,8 @@ public class CommentController {
         }
     }
 
-    @GetMapping("/user/comments/profile")
-    public ResponseEntity<List<CommentResponseDto>> getCommentsOnProfilePage(@AuthenticationPrincipal UserDetails user) {
-        String username = user.getUsername();
+    @GetMapping("/user/comments/profile/{username}")
+    public ResponseEntity<List<CommentResponseDto>> getCommentsOnProfilePage(@PathVariable String username) {
         return ResponseEntity.ok().body(commentService.getCommentsByUserId(username));
     }
 }
