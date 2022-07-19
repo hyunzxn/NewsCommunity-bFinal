@@ -159,11 +159,10 @@ public class UserController {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/update_profile").toUriString());
 		return ResponseEntity.created(uri).body(userService.updateProfile(username, profile));
 	}
+	
+	@Data
+	class RoleToUserForm{
+		private String username;
+		private RoleType roleName;
+	}
 }
-
-@Data
-class RoleToUserForm{
-	private String username;
-	private RoleType roleName;
-}
-
