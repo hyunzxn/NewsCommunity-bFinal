@@ -41,7 +41,11 @@ public class NewsService {
      **/
     public NewsDetailResponseDto getNewsDetail(String newsId){
         NewsTable newsTable = newsRepository.findById(newsId).orElseThrow(
-                ()-> new InvalidRequestException("존재하지 않는 newsId에 대해 요청했습니다.", "newsId: "+ newsId, "N401")
+                ()-> InvalidRequestException.builder()
+                        .message("존재하지 않는 newsId에 대해 요청했습니다.")
+                        .invalidValue("newsId: "+ newsId)
+                        .code("N401")
+                        .build()
         );
         return NewsDetailResponseDto.builder()
                 .id(newsTable.getId())
@@ -73,7 +77,11 @@ public class NewsService {
     @Transactional
     public void addView(String newsId) {
         NewsTable newsTable = newsRepository.findById(newsId).orElseThrow(
-                ()-> new InvalidRequestException("존재하지 않는 newsId에 대해 요청했습니다.", "newsId: "+ newsId, "N402")
+                ()-> InvalidRequestException.builder()
+                                        .message("존재하지 않는 newsId에 대해 요청했습니다.")
+                                        .invalidValue("newsId: "+ newsId)
+                                        .code("N402")
+                                        .build()
         );
         newsTable.updateView();
         newsRepository.save(newsTable);
