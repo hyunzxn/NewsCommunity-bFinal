@@ -1,5 +1,6 @@
 package com.teamharmony.newscommunity.news.service;
 
+import com.teamharmony.newscommunity.exception.InvalidRequestException;
 import com.teamharmony.newscommunity.news.dto.CreateNewsAccessLogRequestDto;
 import com.teamharmony.newscommunity.news.dto.NewsDetailResponseDto;
 import com.teamharmony.newscommunity.news.entity.NewsAccessLog;
@@ -39,9 +40,8 @@ public class NewsService {
      * @Return: ResponseNewsDetailDTO // newsid, title, summary, image_url, news_url, write_time, view 가 담김
      **/
     public NewsDetailResponseDto getNewsDetail(String newsId){
-
         NewsTable newsTable = newsRepository.findById(newsId).orElseThrow(
-                ()-> new NullPointerException("해당 뉴스 id가 존재 안합니다.")
+                ()-> new InvalidRequestException("존재하지 않는 newsId에 대해 요청했습니다.", "newsId: "+ newsId, "N401")
         );
         return NewsDetailResponseDto.builder()
                 .id(newsTable.getId())
@@ -73,7 +73,7 @@ public class NewsService {
     @Transactional
     public void addView(String newsId) {
         NewsTable newsTable = newsRepository.findById(newsId).orElseThrow(
-                ()-> new NullPointerException("해당 뉴스가 존재 안합니다.")
+                ()-> new InvalidRequestException("존재하지 않는 newsId에 대해 요청했습니다.", "newsId: "+ newsId, "N402")
         );
         newsTable.updateView();
         newsRepository.save(newsTable);
