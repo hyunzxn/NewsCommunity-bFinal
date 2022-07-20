@@ -24,7 +24,10 @@ public class BookmarkService {
      * @return 저장된 북마크 로그의 id가 리턴
      */
     public String createBookmark(BookmarkRequestDto requestBookmarkDTO){
-        // + TODO: 북마크 생성 예외처리(기존에 news, user id가 같은 로그가 존재시 예외처리)
+        if (checkBookmarkDuplicate(requestBookmarkDTO) != null){
+            throw new InvalidRequestException("해당 사용자는 이미 해당 뉴스에 북마크 되어있기 때문에 북마크 요청을 할 수 없습니다.", ("newsId: " + requestBookmarkDTO.getNewsId() + ", userId: "+ requestBookmarkDTO.getNewsId()), "B402");
+        }
+
         Bookmarks bookmark = Bookmarks.builder()
                 .newsId(requestBookmarkDTO.getNewsId())
                 .userId(requestBookmarkDTO.getUserId())
@@ -54,7 +57,7 @@ public class BookmarkService {
     public String deleteBookmark(BookmarkRequestDto requestBookmarkDTO){
         // + DONE: 북마크가 존재하지 않으면 예외처리
         if (checkBookmarkDuplicate(requestBookmarkDTO) == null){
-            throw new InvalidRequestException("해당 사용자는 북마크 하지 않았기 때문에 북마크 해제 요청을 할 수 없습니다.", ("newsId: " + requestBookmarkDTO.getNewsId() + ", userId: "+ requestBookmarkDTO.getNewsId()), "B501");
+            throw new InvalidRequestException("해당 사용자는 북마크 하지 않았기 때문에 북마크 해제 요청을 할 수 없습니다.", ("newsId: " + requestBookmarkDTO.getNewsId() + ", userId: "+ requestBookmarkDTO.getNewsId()), "B401");
         }
         // + TODO: 북마크가 존재하지 않으면 예외처리
         bookmarkRepository.deleteBookmarkByNewsIdAndUserId(requestBookmarkDTO.getNewsId(), requestBookmarkDTO.getUserId());
