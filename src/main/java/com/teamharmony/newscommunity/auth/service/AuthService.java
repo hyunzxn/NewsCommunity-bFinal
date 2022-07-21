@@ -52,8 +52,9 @@ public class AuthService {
 			                          .build();
 			DecodedJWT decodedJWT = verifier.verify(refCookie);
 			String username = decodedJWT.getSubject();
-			String allowedToken = getTokens(username).getRefreshToken();
-			if(!allowedToken.equals(refCookie))throw new IllegalArgumentException("Token not found");
+			Tokens tokens = getTokens(username);
+			String allowedToken = tokens.getRefreshToken();
+			if (!allowedToken.equals(refCookie)) throw TokenException.builder().message("허용된 갱신 토큰이 아닙니다.").invalidValue("갱신 토큰: " + refCookie).code("A404").build();
 			
 			// 해당 정보로 토큰 재발급, DB 저장
 			User user = userRepository.findByUsername(username);
