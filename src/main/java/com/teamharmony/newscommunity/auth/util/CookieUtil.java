@@ -25,11 +25,11 @@ public class CookieUtil {
 	}
 	
 	// 리프레쉬 쿠키 삭제(만료시간 0으로 설정)
-	public static void removeRefCookie(HttpServletResponse response) {
+	public static String removeRefCookie() {
 		ResponseCookie refresh = ResponseCookie.from("ref_uid", "")
 		                                       .maxAge(0)
 		                                       .path("/")
 		                                       .build();
-		response.setHeader(SET_COOKIE, refresh.toString());
+		return refresh.toString();
 	}
 }
