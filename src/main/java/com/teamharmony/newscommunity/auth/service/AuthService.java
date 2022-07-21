@@ -105,15 +105,11 @@ public class AuthService {
 	 *
 	 * @param 		username 인증된 사용자 ID
 	 */
-	public void signOut(HttpServletRequest request, HttpServletResponse response, String username) {
-		// 클라이언트가 쿠키에 리프레쉬 토큰을 갖고 있는지 확인
-		String refCookie = getRefCookie(request);
-		// 쿠키가 있으면 삭제
-		if (refCookie != null) {
-			removeRefCookie(response);
-		}
-		// DB에 저장된 토큰 값 공백 처리
+	public String signOut(HttpServletRequest request, HttpServletResponse response, String username) {
+		// DB에 저장된 허용 토큰 공백 처리, 쿠키 삭제
 		updateTokens(username, "", "");
+		removeRefCookie(response);
+		return "success";
 	}
 	
 	/**
