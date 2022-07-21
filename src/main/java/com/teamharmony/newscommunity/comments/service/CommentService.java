@@ -54,6 +54,10 @@ public class CommentService {
                         .collect(Collectors.toList());
     }
 
+    public int getCommentCount(String newsId) {
+        return commentRepository.countByNewsId(newsId);
+    }
+
     @Transactional
     public void updateComment(Long id, CommentEditRequestDto commentEditRequestDto) {
         Comment comment = commentRepository.findById(id).orElseThrow(
