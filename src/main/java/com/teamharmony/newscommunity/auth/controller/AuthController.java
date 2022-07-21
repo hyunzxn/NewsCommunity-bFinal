@@ -40,8 +40,7 @@ public class AuthController {
 	 * @see				AuthService#signOut
 	 */
 	@GetMapping("/user/signout")
-	public ResponseEntity<Void> signOut(HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal UserDetails user) {
-		authService.signOut(request, response, user.getUsername());
-		return ResponseEntity.ok().build();
+	public ResponseEntity<String> signOut(HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal UserDetails user) {
+		return ResponseEntity.ok().body(authService.signOut(request, response, user.getUsername()));
 	}
 }
