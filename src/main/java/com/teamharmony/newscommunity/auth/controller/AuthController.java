@@ -1,6 +1,7 @@
 package com.teamharmony.newscommunity.auth.controller;
 
 import com.teamharmony.newscommunity.auth.service.AuthService;
+import com.teamharmony.newscommunity.exception.TokenException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,7 +29,7 @@ public class AuthController {
 	 * @see				AuthService#refreshToken
 	 */
 	@GetMapping("/token/refresh")
-	public ResponseEntity<String>refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public ResponseEntity<String>refreshToken(HttpServletRequest request, HttpServletResponse response) throws TokenException {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/token/refresh").toUriString());
 		return ResponseEntity.ok().body(authService.refreshToken(request, response));
 	}
@@ -40,7 +41,7 @@ public class AuthController {
 	 * @see				AuthService#signOut
 	 */
 	@GetMapping("/user/signout")
-	public ResponseEntity<String> signOut(HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal UserDetails user) {
+	public ResponseEntity<String> signOut(HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal UserDetails user) throws TokenException {
 		return ResponseEntity.ok().body(authService.signOut(request, response, user.getUsername()));
 	}
 }
