@@ -87,6 +87,8 @@ public class AuthService {
 			throw TokenException.builder().message("갱신 토큰이 만료되었습니다.").cause(e.getCause()).code("A402").build();
 		} catch (JWTVerificationException e) {
 			throw TokenException.builder().message("올바른 토큰이 아닙니다.").cause(e.getCause()).code("A403").build();
+		} catch (TokenException e) {
+			throw TokenException.builder().message(e.getMessage()).cause(e.getCause()).code(e.getCode()).build();
 		} catch (Exception e) {
 			throw TokenException.builder().message(e.getMessage()).cause(e.getCause()).code("A407").build();
 		}
