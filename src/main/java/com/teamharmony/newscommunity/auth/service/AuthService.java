@@ -108,7 +108,7 @@ public class AuthService {
 	public String signOut(HttpServletRequest request, HttpServletResponse response, String username) {
 		// DB에 저장된 허용 토큰 공백 처리, 쿠키 삭제
 		updateTokens(username, "", "");
-		removeRefCookie(response);
+		response.setHeader(SET_COOKIE, removeRefCookie());
 		return "success";
 	}
 	
