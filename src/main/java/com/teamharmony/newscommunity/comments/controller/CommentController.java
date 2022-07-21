@@ -76,7 +76,7 @@ public class CommentController {
      */
     @GetMapping("/user/comments/count/{news_id}")
     public ResponseEntity<Integer> getCommentCount(@PathVariable String news_id) {
-        return ResponseEntity.ok().body(commentService.findComments(news_id).size());
+        return ResponseEntity.ok().body(commentService.getCommentCount(news_id));
     }
 
     /**
