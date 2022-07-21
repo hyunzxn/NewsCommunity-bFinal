@@ -47,8 +47,8 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-          application_name: NewsCommunity-back-final
-          environment_name: Newscommunitybackfinal-env
+          application_name: harmony-FInal-deploy
+          environment_name: Harmonyfinaldeploy-env
 
           version_label: newsCommunity-prod-label-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}
           region: ap-northeast-2
