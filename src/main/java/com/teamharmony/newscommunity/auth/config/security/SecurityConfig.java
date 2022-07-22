@@ -36,18 +36,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean(), userDetailsService, tokensRepository);
 		customAuthenticationFilter.setFilterProcessesUrl("/api/login");
-		http.csrf()
-		    .ignoringAntMatchers("/h2-console/**")
-		    .disable();
+		http.csrf().disable();
 		http.formLogin().disable();
 		http.httpBasic().disable();
 		http.sessionManagement().sessionCreationPolicy(STATELESS);
-		http.authorizeRequests().antMatchers("/h2-console/**").permitAll();
 		
-		http.authorizeRequests().antMatchers("/api/login/**", "/api/token/**", "/api/signup/**", "/api/news/**", "/api/bookmarks/**", "/api/supports/**").permitAll();
-		http.authorizeRequests().antMatchers(GET, "/api/user/**").hasAuthority("ROLE_USER");
-		http.authorizeRequests().antMatchers(GET, "/api/admin/**").hasAuthority("ROLE_ADMIN");
-		http.authorizeRequests().anyRequest().authenticated();
+		http.authorizeRequests()
+		    .antMatchers("/api/login/**", "/api/signup", "/api/news/**", "/api/bookmarks/**").permitAll()
+		    .antMatchers(GET, "/api/**").permitAll()
+		    .antMatchers("/api/user/**").hasAuthority("ROLE_USER")
+				.antMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
+				.anyRequest().authenticated();
 		
 		http.addFilter(customAuthenticationFilter);
 		// this filter comes before the other filters
