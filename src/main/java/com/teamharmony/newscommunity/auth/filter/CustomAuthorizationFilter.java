@@ -39,11 +39,9 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+		// get 아니고 누군지 분간할 필요도 없는 거
 		if (request.getServletPath().equals("/api/login") ||
-				request.getServletPath().equals("/api/token/refresh") ||
-				request.getServletPath().startsWith("/api/signup") ||
-				request.getServletPath().startsWith("/api/supports") ||
-				request.getServletPath().startsWith("/api/news")) {
+				request.getServletPath().startsWith("/api/signup")) {
 			
 			filterChain.doFilter(request, response);
 		} else {
