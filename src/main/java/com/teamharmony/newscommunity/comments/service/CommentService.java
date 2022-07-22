@@ -36,7 +36,7 @@ public class CommentService {
         }
         Comment comment = new Comment(commentCreateRequestDto);
 
-        User user = userRepository.findByUsername(username);
+        User user = getUser(username);
         user.addComment(comment);
     }
 
@@ -45,7 +45,7 @@ public class CommentService {
      * @param newsId
      * @return
      */
-    public List<CommentResponseDto> findComments(String newsId, int page, int size) {
+    public List<CommentResponseDto> findComments(String newsId, int page, int size, String currentUser) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Comment> commentList = commentRepository.findAllByNewsId(newsId, pageable);
 
@@ -59,14 +59,14 @@ public class CommentService {
                         .modifiedAt(comment.getModifiedAt())
                         .createdAt(comment.getCreatedAt())
                         .profileResponseDto(new ProfileResponseDto(comment.getUser().getProfile()))
-                        .like(likeCheck(comment.getCommentId(), comment.getUser().getId()))
+                        .like(likeCheck(comment.getCommentId(), getUser(currentUser).getId()))
                         .build())
                         .collect(Collectors.toList());
     }
 
-    private Boolean likeCheck(Long commentId, Long userId) {
-        Likes likes = likesRepository.findByComment_CommentIdAndUser_Id(commentId, userId);
-        return likes == null ? false : true;
+    private Boolean likeCheck(Long commentId, Long currentUser) {
+        Likes likes = likesRepository.findByComment_CommentIdAndUser_Id(commentId, currentUser);
+        return likes != null;
     }
 
     public int getCommentCount(String newsId) {
@@ -109,8 +109,8 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    public List<CommentResponseDto> getCommentsByUserId(String username, int page, int size) {
-        User user = userRepository.findByUsername(username);
+    public List<CommentResponseDto> getCommentsByUserId(String username, int page, int size, String currentUser) {
+        User user = getUser(username);
         Long userId = user.getId();
 
         Pageable pageable = PageRequest.of(page, size);
@@ -121,8 +121,12 @@ public class CommentService {
                         .modifiedAt(comment.getModifiedAt())
                         .createdAt(comment.getCreatedAt())
                         .profileResponseDto(new ProfileResponseDto(comment.getUser().getProfile()))
-                        .like(likeCheck(comment.getCommentId(), comment.getUser().getId()))
+                        .like(likeCheck(comment.getCommentId(), getUser(currentUser).getId()))
                         .build())
                 .collect(Collectors.toList());
     }
+		
+		private User getUser(String username) {
+			return userRepository.findByUsername(username);
+		}
 }

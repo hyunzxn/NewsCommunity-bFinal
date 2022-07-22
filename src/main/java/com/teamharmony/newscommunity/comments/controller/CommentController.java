@@ -39,11 +39,12 @@ public class CommentController {
      * @param news_id
      * @return 해당 뉴스 아이디에 해당하는 댓글 리스트
      */
-    @GetMapping("/comments/{news_id}")
+    @GetMapping("/comments/{news_id}/{currentUser}")
     public ResponseEntity<List<CommentResponseDto>> getComment(@PathVariable String news_id,
                                                                @RequestParam("page") int page,
-                                                               @RequestParam("size") int size) {
-        return ResponseEntity.ok().body(commentService.findComments(news_id, (page-1), size));
+                                                               @RequestParam("size") int size,
+                                                               @PathVariable String currentUser) {
+        return ResponseEntity.ok().body(commentService.findComments(news_id, (page-1), size, currentUser));
     }
 
 
@@ -96,10 +97,11 @@ public class CommentController {
         }
     }
 
-    @GetMapping("/comments/profile/{username}")
+    @GetMapping("/comments/profile/{username}/{currentUser}")
     public ResponseEntity<List<CommentResponseDto>> getCommentsOnProfilePage(@PathVariable String username,
                                                                              @RequestParam int page,
-                                                                             @RequestParam int size) {
-        return ResponseEntity.ok().body(commentService.getCommentsByUserId(username, (page-1), size));
+                                                                             @RequestParam int size,
+                                                                             @PathVariable String currentUser) {
+        return ResponseEntity.ok().body(commentService.getCommentsByUserId(username, (page-1), size, currentUser));
     }
 }
