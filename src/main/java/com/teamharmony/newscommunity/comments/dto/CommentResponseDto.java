@@ -14,6 +14,7 @@ public class CommentResponseDto {
     private LocalDateTime createdAt;
     private String content;
     private ProfileResponseDto profileResponseDto;
+    private Boolean like;
 
 
 
@@ -22,13 +23,15 @@ public class CommentResponseDto {
                               LocalDateTime modifiedAt,
                               LocalDateTime createdAt,
                               String content,
-                              ProfileResponseDto profileResponseDto) {
+                              ProfileResponseDto profileResponseDto,
+                              Boolean like) {
 
         this.commentId = commentId;
         this.modifiedAt = modifiedAt;
         this.createdAt = createdAt;
         this.content = content;
         this.profileResponseDto = profileResponseDto;
+        this.like = like;
     }
 
 }
