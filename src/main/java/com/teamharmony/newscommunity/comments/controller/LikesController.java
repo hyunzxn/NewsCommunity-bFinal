@@ -1,6 +1,7 @@
 package com.teamharmony.newscommunity.comments.controller;
 
 import com.teamharmony.newscommunity.comments.service.LikesService;
+import com.teamharmony.newscommunity.common.annotation.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,12 +19,11 @@ public class LikesController {
     /**
      * 좋아요 요청을 받는 API
      * @param id
-     * @param user
+     * @param username
      */
     @PostMapping("/user/likes/{id}")
     public ResponseEntity<?> likes(@PathVariable Long id,
-                                   @AuthenticationPrincipal UserDetails user) {
-        String username = user.getUsername();
+                                   @CurrentUser String username) {
         likesService.likes(id, username);
         return ResponseEntity.ok().body("좋아요");
     }

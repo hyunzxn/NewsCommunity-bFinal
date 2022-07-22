@@ -1,6 +1,7 @@
 package com.teamharmony.newscommunity.auth.controller;
 
 import com.teamharmony.newscommunity.auth.service.AuthService;
+import com.teamharmony.newscommunity.common.annotation.CurrentUser;
 import com.teamharmony.newscommunity.exception.TokenException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,11 +38,11 @@ public class AuthController {
 	/**
 	 * 로그아웃
 	 *
-	 * @param 		user 인증된 사용자 정보
+	 * @param 		username 인증된 사용자 ID
 	 * @see				AuthService#signOut
 	 */
 	@GetMapping("/user/signout")
-	public ResponseEntity<String> signOut(HttpServletRequest request, HttpServletResponse response, @AuthenticationPrincipal UserDetails user) throws TokenException {
-		return ResponseEntity.ok().body(authService.signOut(request, response, user.getUsername()));
+	public ResponseEntity<String> signOut(HttpServletRequest request, HttpServletResponse response, @CurrentUser String username) throws TokenException {
+		return ResponseEntity.ok().body(authService.signOut(request, response, username));
 	}
 }

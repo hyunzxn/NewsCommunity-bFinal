@@ -82,15 +82,14 @@ public class SupportService {
     /**
      * 게시글 삭제: parameter로 주어지는 contentId를 찾아서 삭제
      * @param contentId 삭제하려는 support객체의 contentId
-     * @param user 유저정보
+     * @param username 로그인한 사람 이름(unigue)
      * @return contentId 제하려는 support객체의 contentId
      */
-    public Long removeContent(Long contentId, UserDetails user) {
+    public Long removeContent(Long contentId, String username) {
         Support supportObject = supportRepository.findById(contentId).orElseThrow(
                 () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
         );
         Long supportsUserID = supportObject.getUser().getId(); //현재 게시글에서 userID정보획득
-        String username = user.getUsername(); //현재 로그인한 사람 이름가져오기
         User currentUser = userRepository.findByUsername(username); // 현재 로그인한 사람 이름(unigue)으로 user정보 획득
         Long loginUserId = currentUser.getId();// 로그인한 사용자ID 정보(Long) 획득
 

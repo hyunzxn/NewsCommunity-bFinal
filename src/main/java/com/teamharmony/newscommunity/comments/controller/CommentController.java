@@ -4,6 +4,7 @@ import com.teamharmony.newscommunity.comments.dto.CommentCreateRequestDto;
 import com.teamharmony.newscommunity.comments.dto.CommentEditRequestDto;
 import com.teamharmony.newscommunity.comments.dto.CommentResponseDto;
 import com.teamharmony.newscommunity.comments.service.CommentService;
+import com.teamharmony.newscommunity.common.annotation.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,13 +24,12 @@ public class CommentController {
     /**
      * requestBody로 넘어오는 댓글내용과 newsId를 받아서 저장합니다.
      * @param commentCreateRequestDto
-     * @param user
+     * @param username
      * @return 저장된 댓글의 id
      */
     @PostMapping("/user/comments")
     public ResponseEntity<?> saveComment(@RequestBody @Valid CommentCreateRequestDto commentCreateRequestDto,
-                                         @AuthenticationPrincipal UserDetails user) {
-        String username = user.getUsername();
+                                         @CurrentUser String username) {
         commentService.createComment(commentCreateRequestDto, username);
         return ResponseEntity.ok().body("댓글 작성 성공");
     }
