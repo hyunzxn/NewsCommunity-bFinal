@@ -87,7 +87,15 @@ class NewsServiceTest {
                     .willReturn(optional);
 
             NewsDetailResponseDto actual = this.newsService.getNewsDetail("test-uuid");                  //2. when(1): newsService의 getNewsDetail로 test-uuid가 넘겨졌을 때, 실제값(actual)에 저장
-            NewsDetailResponseDto expect = NewsDetailResponseDto.builder().newsTable(optional.get()).build();   //2. when(2): 기존에 정의해둔 newsTable의 값을 expect값에 build
+            NewsDetailResponseDto expect = NewsDetailResponseDto.builder().id(optional.get().getId())
+                    .title(optional.get().getTitle())
+                    .summary(optional.get().getSummary())
+                    .image_url(optional.get().getImage_url())
+                    .news_url(optional.get().getNews_url())
+                    .explains(optional.get().getExplains())
+                    .write_time(optional.get().getWrite_time())
+                    .view(optional.get().getView())
+                    .build();   //2. when(2): 기존에 정의해둔 newsTable의 값을 expect값에 build
 
             assertEquals(actual.getId(), expect.getId());                               //3. then: actual과 expect를 비교
             assertEquals(actual.getNews_url(), expect.getNews_url());
