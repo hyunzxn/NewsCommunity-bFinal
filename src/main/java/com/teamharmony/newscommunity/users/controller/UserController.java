@@ -125,7 +125,7 @@ public class UserController {
 	public ResponseEntity<Map<String, Object>>getProfile(@PathVariable String profileOwner, @CurrentUser String username) {
 		boolean status = profileOwner.equals(username);
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/profile/{username}").toUriString());
-		return ResponseEntity.created(uri).body(userService.getProfile(username, status));
+		return ResponseEntity.created(uri).body(userService.getProfile(profileOwner, status));
 	}
 	
 	/**
