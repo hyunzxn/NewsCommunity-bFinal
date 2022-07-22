@@ -10,6 +10,9 @@ import com.teamharmony.newscommunity.users.dto.ProfileResponseDto;
 import com.teamharmony.newscommunity.users.entity.User;
 import com.teamharmony.newscommunity.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -39,8 +42,9 @@ public class CommentService {
      * @param newsId
      * @return
      */
-    public List<CommentResponseDto> findComments(String newsId) {
-        List<Comment> commentList = commentRepository.findAllByNewsId(newsId);
+    public List<CommentResponseDto> findComments(String newsId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Comment> commentList = commentRepository.findAllByNewsId(newsId, pageable);
         if (commentList == null) {
             throw new InvalidRequestException("댓글을 불러올 수 없습니다", "뉴스 아이디가 댓글에 잘 저장됐는지 확인하세요", "C402");
         }

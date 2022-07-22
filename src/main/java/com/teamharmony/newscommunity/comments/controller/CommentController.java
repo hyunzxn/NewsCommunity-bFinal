@@ -39,9 +39,11 @@ public class CommentController {
      * @param news_id
      * @return 해당 뉴스 아이디에 해당하는 댓글 리스트
      */
-    @GetMapping("/user/comments/{news_id}")
-    public ResponseEntity<List<CommentResponseDto>> getComment(@PathVariable String news_id) {
-        return ResponseEntity.ok().body(commentService.findComments(news_id));
+    @GetMapping("/comments/{news_id}")
+    public ResponseEntity<List<CommentResponseDto>> getComment(@PathVariable String news_id,
+                                                               @RequestParam("page") int page,
+                                                               @RequestParam("size") int size) {
+        return ResponseEntity.ok().body(commentService.findComments(news_id, (page-1), size));
     }
 
 
