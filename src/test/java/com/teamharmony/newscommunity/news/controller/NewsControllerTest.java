@@ -40,6 +40,7 @@ import static org.mockito.Mockito.when;
 // .addFilters(new CharacterEncodingFilter("UTF-8", true))
 
 
+
 @EnableMockMvc
 @MockBean(JpaMetamodelMappingContext.class)
 @RunWith(SpringRunner.class)      // SpringRunner라는 스프링 실행자를 사용
@@ -77,12 +78,20 @@ class NewsControllerTest {
                 0L
         );
         NewsDetailResponseDto responseNewsDetailDTO = NewsDetailResponseDto.builder() // ResponseNewsDetailDTO를 newsTable 초기화
-                .newsTable(newsTable)
+                .id(newsTable.getId())
+                .title(newsTable.getTitle())
+                .summary(newsTable.getSummary())
+                .image_url(newsTable.getImage_url())
+                .news_url(newsTable.getNews_url())
+                .explains(newsTable.getExplains())
+                .write_time(newsTable.getWrite_time())
+                .view(newsTable.getView())
                 .build();
 
         // When: when 메소드를 이용해 스터빙, 스터빙할 메소드 삽입 후 어떻게 제어할건지 메서드 체이닝 형태로 작성
         when(userDetailsService.loadUserByUsername(eq("cksgurwkd1"))).thenReturn(new org.springframework.security.core.userdetails.User("cksgurwkd1", "rkawk123", List.of()));
         when(newsService.getNewsDetail(eq("2786fee6-d69a-4017-8e66-f5f8bd98f54a"))).thenReturn(responseNewsDetailDTO);
+
 
         // Then
         mockMvc.perform(                              // 해당 경로로 get 요청 보냄.
@@ -90,11 +99,11 @@ class NewsControllerTest {
         ).andExpect(
                 MockMvcResultMatchers.status().isOk()                                                                                               //MvcPerform의 결과 검증, HTTP Header의 Status 검증
         ).andExpect(
-                MockMvcResultMatchers.content().string(String.valueOf(ParseObjToJSON(ApiResponse.success("result", responseNewsDetailDTO))))  // 응답 본문의 내용 검증
+                MockMvcResultMatchers.content().string(String.valueOf(ParseObjToJSON(responseNewsDetailDTO)))  // 응답 본문의 내용 검증
         ).andDo(MockMvcResultHandlers.print());
     }
 
-    public String ParseObjToJSON(ApiResponse<NewsDetailResponseDto> detailDTO) throws JsonProcessingException {
+    public String ParseObjToJSON(NewsDetailResponseDto detailDTO) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         //Object to JSON in String
         String targetJSON = mapper.writeValueAsString(detailDTO);
