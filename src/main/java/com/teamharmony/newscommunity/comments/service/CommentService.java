@@ -98,11 +98,12 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    public List<CommentResponseDto> getCommentsByUserId(String username) {
+    public List<CommentResponseDto> getCommentsByUserId(String username, int page, int size) {
         User user = userRepository.findByUsername(username);
         Long userId = user.getId();
 
-        List<Comment> commentList = commentRepository.findByUser_Id(userId);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Comment> commentList = commentRepository.findByUser_Id(userId, pageable);
         return commentList.stream().map(comment -> CommentResponseDto.builder()
                         .commentId(comment.getCommentId())
                         .content(comment.getContent())
