@@ -3,7 +3,9 @@ package com.teamharmony.newscommunity.users.filesotre;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.util.IOUtils;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +27,7 @@ public class FileStore {
 			map.forEach(metadata::addUserMetadata);
 		} });
 		try {
-			s3.putObject(path, fileName, inputStream, metadata);
+			s3.putObject(new PutObjectRequest(path, fileName, inputStream, metadata).withCannedAcl(CannedAccessControlList.PublicRead));
 		} catch (AmazonServiceException e) {
 			throw new IllegalStateException("Failed to store file to s3", e);
 		}
