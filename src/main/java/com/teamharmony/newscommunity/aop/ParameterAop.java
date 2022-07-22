@@ -26,7 +26,7 @@ public class ParameterAop {
         System.out.println(method.getName());
         Object[] args = joinPoint.getArgs();
         for(Object obj : args){
-            log.info("input parameter: {}", obj.getClass().getSimpleName());
+            log.info("input parameter: {}", obj!=null ? obj.getClass().getSimpleName() : null);
             log.info("request: {}", obj);
         }
     }
