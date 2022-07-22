@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -59,13 +60,14 @@ public class CommentService {
                         .modifiedAt(comment.getModifiedAt())
                         .createdAt(comment.getCreatedAt())
                         .profileResponseDto(new ProfileResponseDto(comment.getUser().getProfile()))
-                        .like(likeCheck(comment.getCommentId(), getUser(currentUser).getId()))
+                        .like(likeCheck(comment.getCommentId(), currentUser))
                         .build())
                         .collect(Collectors.toList());
     }
 
-    private Boolean likeCheck(Long commentId, Long currentUser) {
-        Likes likes = likesRepository.findByComment_CommentIdAndUser_Id(commentId, currentUser);
+    private Boolean likeCheck(Long commentId, String currentUser) {
+        if(Objects.equals(currentUser, "=")) return false;
+		    Likes likes = likesRepository.findByComment_CommentIdAndUser_Id(commentId, getUser(currentUser).getId());
         return likes != null;
     }
 
@@ -121,7 +123,7 @@ public class CommentService {
                         .modifiedAt(comment.getModifiedAt())
                         .createdAt(comment.getCreatedAt())
                         .profileResponseDto(new ProfileResponseDto(comment.getUser().getProfile()))
-                        .like(likeCheck(comment.getCommentId(), getUser(currentUser).getId()))
+                        .like(likeCheck(comment.getCommentId(), currentUser))
                         .build())
                 .collect(Collectors.toList());
     }
