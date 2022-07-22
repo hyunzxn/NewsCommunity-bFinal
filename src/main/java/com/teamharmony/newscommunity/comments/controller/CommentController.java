@@ -43,7 +43,7 @@ public class CommentController {
     public ResponseEntity<List<CommentResponseDto>> getComment(@PathVariable String news_id,
                                                                @RequestParam("page") int page,
                                                                @RequestParam("size") int size) {
-        return ResponseEntity.ok().body(commentService.findComments(news_id, page, size));
+        return ResponseEntity.ok().body(commentService.findComments(news_id, (page-1), size));
     }
 
 
