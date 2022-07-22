@@ -17,11 +17,13 @@ import com.teamharmony.newscommunity.users.repository.UserRepository;
 import com.teamharmony.newscommunity.users.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -38,7 +40,8 @@ public class AuthService {
 	private final TokensRepository tokensRepository;
 	private final UserRepository userRepository;
 	private final UserRoleRepository userRoleRepository;
-	
+	@Value("${auth.jwt.secret-key}")
+	private String secretKey;
 	
 	public String refreshToken(HttpServletRequest request, HttpServletResponse response) throws TokenException {
 		
@@ -47,7 +50,7 @@ public class AuthService {
 			String refCookie = getRefCookie(request);
 			
 			// 토큰이 있으면 풀어서 DB에 있는지 확인
-			Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+			Algorithm algorithm = Algorithm.HMAC256(secretKey.getBytes());
 			JWTVerifier verifier = JWT.require(algorithm)
 			                          .build();
 			DecodedJWT decodedJWT = verifier.verify(refCookie);
@@ -64,7 +67,7 @@ public class AuthService {
 			userRole.forEach(r -> roles.add(r.getRole()));
 			String access_token = JWT.create()
 			                         .withSubject(user.getUsername())
-			                         .withExpiresAt(new Date(System.currentTimeMillis() + 16 * 60 * 60 * 1000)) // 테스트를 위해 16시간으로 설정
+			                         .withExpiresAt(new Date(System.currentTimeMillis() + 60*60*1000))
 			                         .withClaim("roles", roles.stream().map(Role::getName).map(Enum::toString).collect(Collectors.toList()))
 			                         .sign(algorithm);
 			String refresh_token = JWT.create()
@@ -82,6 +85,8 @@ public class AuthService {
 			                                       .build();
 			response.setHeader(SET_COOKIE, refresh.toString());
 			response.setHeader("token", access_token);
+			byte[] usernameHeader = username.getBytes(StandardCharsets.UTF_8);
+			response.setHeader("username", Base64.getEncoder().encodeToString(usernameHeader));
 			response.setContentType(APPLICATION_JSON_VALUE);
 		} catch (TokenExpiredException e) {
 			throw TokenException.builder().message("갱신 토큰이 만료되었습니다.").cause(e.getCause()).code("A402").build();
