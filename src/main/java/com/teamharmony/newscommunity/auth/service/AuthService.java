@@ -40,8 +40,6 @@ public class AuthService {
 	private final TokensRepository tokensRepository;
 	private final UserRepository userRepository;
 	private final UserRoleRepository userRoleRepository;
-	@Value("${auth.jwt.secret-key}")
-	private String secretKey;
 	
 	public String refreshToken(HttpServletRequest request, HttpServletResponse response) throws TokenException {
 		
@@ -50,7 +48,7 @@ public class AuthService {
 			String refCookie = getRefCookie(request);
 			
 			// 토큰이 있으면 풀어서 DB에 있는지 확인
-			Algorithm algorithm = Algorithm.HMAC256(secretKey.getBytes());
+			Algorithm algorithm = Algorithm.HMAC256("secretKey".getBytes());
 			JWTVerifier verifier = JWT.require(algorithm)
 			                          .build();
 			DecodedJWT decodedJWT = verifier.verify(refCookie);
