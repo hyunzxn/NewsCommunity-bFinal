@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -84,6 +85,8 @@ public class AuthService {
 			                                       .build();
 			response.setHeader(SET_COOKIE, refresh.toString());
 			response.setHeader("token", access_token);
+			byte[] usernameHeader = username.getBytes(StandardCharsets.UTF_8);
+			response.setHeader("username", Base64.getEncoder().encodeToString(usernameHeader));
 			response.setContentType(APPLICATION_JSON_VALUE);
 		} catch (TokenExpiredException e) {
 			throw TokenException.builder().message("갱신 토큰이 만료되었습니다.").cause(e.getCause()).code("A402").build();
