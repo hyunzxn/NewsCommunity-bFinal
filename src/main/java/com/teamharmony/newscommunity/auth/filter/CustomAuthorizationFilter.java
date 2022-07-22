@@ -9,6 +9,7 @@ import com.teamharmony.newscommunity.auth.config.security.AuthConstants;
 import com.teamharmony.newscommunity.auth.repository.TokensRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,6 +37,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 	private final UserDetailsService userDetailsService;
 	private final TokensRepository tokensRepository;
+	@Value("${auth.jwt.secret-key}")
+	private String secretKey;
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -51,7 +54,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 			if (authorizationHeader != null && authorizationHeader.startsWith(AuthConstants.TOKEN_TYPE)) {
 				try {
 						String access_token = authorizationHeader.substring(AuthConstants.TOKEN_TYPE.length());
-						Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+						Algorithm algorithm = Algorithm.HMAC256(secretKey.getBytes());
 						JWTVerifier verifier = JWT.require(algorithm)
 																			.build();
 						DecodedJWT decodedJWT = verifier.verify(access_token);

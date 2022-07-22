@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamharmony.newscommunity.auth.entity.Tokens;
 import com.teamharmony.newscommunity.auth.repository.TokensRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +33,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 	private final AuthenticationManager authenticationManager;
 	private final UserDetailsService userDetailsService;
 	private final TokensRepository tokensRepository;
+	@Value("${auth.jwt.secret-key}")
+	private String secretKey;
 	
 	public CustomAuthenticationFilter(AuthenticationManager authenticationManager, UserDetailsService userDetailsService, TokensRepository tokensRepository) {
 		this.authenticationManager = authenticationManager;
@@ -52,7 +55,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
 		User user = (User)authentication.getPrincipal();
-		Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+		Algorithm algorithm = Algorithm.HMAC256(secretKey.getBytes());
 		String access_token = JWT.create()
 				.withSubject(user.getUsername())
 				.withExpiresAt(new Date(System.currentTimeMillis() + 60*60*1000))
