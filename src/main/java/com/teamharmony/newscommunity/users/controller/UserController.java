@@ -1,5 +1,6 @@
 package com.teamharmony.newscommunity.users.controller;
 
+import com.teamharmony.newscommunity.common.annotation.CurrentUser;
 import com.teamharmony.newscommunity.users.dto.UserResponseDto;
 import com.teamharmony.newscommunity.users.service.UserService;
 import com.teamharmony.newscommunity.users.vo.ProfileVO;
@@ -77,13 +78,12 @@ public class UserController {
 	/**
 	 * 현재 로그인한 유저 ID
 	 *
-	 * @param 		user 인증된 사용자 정보
+	 * @param 		username 인증된 사용자 정보
 	 * @return 		인증된 사용자 ID
 	 * @see				UserDetails#getUsername
 	 */
 	@GetMapping("/user/me")
-	public ResponseEntity<String>getUsername(@AuthenticationPrincipal UserDetails user) {
-		String username = user.getUsername();
+	public ResponseEntity<String>getUsername(@CurrentUser String username) {
 		return ResponseEntity.ok().body(username);
 	}
 	
@@ -116,14 +116,14 @@ public class UserController {
 	/**
 	 * 회원 프로필 정보
 	 *
-	 * @param 		username 프로필 회원 ID
-	 * @param 		user 인증된 사용자 정보
+	 * @param 		profileOwner 프로필 회원 ID
+	 * @param 		username 인증된 사용자 정보
 	 * @return 		인증된 사용자 ID와 일치 여부, 프로필 사진 url, 프로필 정보
 	 * @see				UserService#getProfile
 	 */
-	@GetMapping("/user/profile/{username}")
-	public ResponseEntity<Map<String, Object>>getProfile(@PathVariable String username, @AuthenticationPrincipal UserDetails user) {
-		boolean status = username.equals(user.getUsername());
+	@GetMapping("/user/profile/{profileOwner}")
+	public ResponseEntity<Map<String, Object>>getProfile(@PathVariable String profileOwner, @CurrentUser String username) {
+		boolean status = profileOwner.equals(username);
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/profile/{username}").toUriString());
 		return ResponseEntity.created(uri).body(userService.getProfile(username, status));
 	}
@@ -145,7 +145,7 @@ public class UserController {
 	 * 회원 프로필 업데이트
 	 *
 	 * @param 		profile 닉네임, 프로필 사진 파일, 소개글을 담은 객체
-	 * @param 		user 인증된 사용자 정보
+	 * @param 		username 인증된 사용자 정보
 	 * @return 		성공 확인, 메시지
 	 * @see				UserService#updateProfile
 	 */
@@ -154,8 +154,7 @@ public class UserController {
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<?>updateProfile(ProfileVO profile, @AuthenticationPrincipal UserDetails user) {
-		String username = user.getUsername();
+	public ResponseEntity<?>updateProfile(ProfileVO profile, @CurrentUser String username) {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/update_profile").toUriString());
 		return ResponseEntity.created(uri).body(userService.updateProfile(username, profile));
 	}
