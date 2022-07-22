@@ -4,7 +4,9 @@ import com.teamharmony.newscommunity.comments.dto.CommentCreateRequestDto;
 import com.teamharmony.newscommunity.comments.dto.CommentEditRequestDto;
 import com.teamharmony.newscommunity.comments.dto.CommentResponseDto;
 import com.teamharmony.newscommunity.comments.entity.Comment;
+import com.teamharmony.newscommunity.comments.entity.Likes;
 import com.teamharmony.newscommunity.comments.repository.CommentRepository;
+import com.teamharmony.newscommunity.comments.repository.LikesRepository;
 import com.teamharmony.newscommunity.exception.InvalidRequestException;
 import com.teamharmony.newscommunity.users.dto.ProfileResponseDto;
 import com.teamharmony.newscommunity.users.entity.User;
@@ -25,6 +27,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final LikesRepository likesRepository;
 
     @Transactional
     public void createComment(CommentCreateRequestDto commentCreateRequestDto, String username) {
@@ -45,6 +48,8 @@ public class CommentService {
     public List<CommentResponseDto> findComments(String newsId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Comment> commentList = commentRepository.findAllByNewsId(newsId, pageable);
+
+
         if (commentList == null) {
             throw new InvalidRequestException("댓글을 불러올 수 없습니다", "뉴스 아이디가 댓글에 잘 저장됐는지 확인하세요", "C402");
         }
@@ -54,8 +59,14 @@ public class CommentService {
                         .modifiedAt(comment.getModifiedAt())
                         .createdAt(comment.getCreatedAt())
                         .profileResponseDto(new ProfileResponseDto(comment.getUser().getProfile()))
+                        .like(likeCheck(comment.getCommentId(), comment.getUser().getId()))
                         .build())
                         .collect(Collectors.toList());
+    }
+
+    private Boolean likeCheck(Long commentId, Long userId) {
+        Likes likes = likesRepository.findByComment_CommentIdAndUser_Id(commentId, userId);
+        return likes == null ? false : true;
     }
 
     public int getCommentCount(String newsId) {
@@ -110,6 +121,7 @@ public class CommentService {
                         .modifiedAt(comment.getModifiedAt())
                         .createdAt(comment.getCreatedAt())
                         .profileResponseDto(new ProfileResponseDto(comment.getUser().getProfile()))
+                        .like(likeCheck(comment.getCommentId(), comment.getUser().getId()))
                         .build())
                 .collect(Collectors.toList());
     }
