@@ -86,7 +86,7 @@ public class UserService implements UserDetailsService {
 	 */
 	public void saveUser(User user) {
 		log.info("Saving new user {} to the database", user.getUsername());
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.encodePW(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 	}
 	
@@ -109,9 +109,8 @@ public class UserService implements UserDetailsService {
 		UserProfile profile = UserProfile.builder()
 		                                 .nickname(user.getUsername())
 		                                 .profile_pic("default")
+		                                 .user(user)
 		                                 .build();
-		
-		profile.setUser(user);
 		profileRepository.save(profile);
 	}
 	
