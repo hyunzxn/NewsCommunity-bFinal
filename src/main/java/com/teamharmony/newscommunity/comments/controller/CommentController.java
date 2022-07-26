@@ -101,7 +101,7 @@ public class CommentController {
     }
 
     @GetMapping("/comments/profile/{username}/{currentUser}")
-    public ResponseEntity<List<CommentResponseDto>> getCommentsOnProfilePage(@PathVariable String username,
+    public ResponseEntity<Page<CommentResponseDto>> getCommentsOnProfilePage(@PathVariable String username,
                                                                              @RequestParam int page,
                                                                              @RequestParam int size,
                                                                              @PathVariable String currentUser) {
