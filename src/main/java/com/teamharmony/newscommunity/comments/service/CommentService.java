@@ -111,21 +111,16 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    public List<CommentResponseDto> getCommentsByUserId(String username, int page, int size, String currentUser) {
+    public Page<CommentResponseDto> getCommentsByUserId(String username, int page, int size, String currentUser) {
         User user = getUser(username);
         Long userId = user.getId();
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Comment> commentList = commentRepository.findByUser_Id(userId, pageable);
-        return commentList.stream().map(comment -> CommentResponseDto.builder()
-                        .commentId(comment.getCommentId())
-                        .content(comment.getContent())
-                        .modifiedAt(comment.getModifiedAt())
-                        .createdAt(comment.getCreatedAt())
-                        .profileResponseDto(new ProfileResponseDto(comment.getUser().getProfile()))
-                        .like(likeCheck(comment.getCommentId(), currentUser))
-                        .build())
-                .collect(Collectors.toList());
+
+        Page<CommentResponseDto> dtoList = commentList.map(CommentResponseDto::toDto);
+        dtoList.forEach(dto -> dto.likeUser(likeCheck(dto.getCommentId(), currentUser)));
+        return dtoList;
     }
 		
 		private User getUser(String username) {
