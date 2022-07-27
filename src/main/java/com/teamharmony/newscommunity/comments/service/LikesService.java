@@ -51,6 +51,9 @@ public class LikesService {
     }
 
     public boolean isLiked(Long commentId, String username) {
+        if(username == null) {
+            return false;
+        }
         User user = userRepository.findByUsername(username);
         Long userId = user.getId();
 
