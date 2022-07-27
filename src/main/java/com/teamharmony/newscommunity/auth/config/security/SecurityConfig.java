@@ -40,11 +40,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.formLogin().disable();
 		http.httpBasic().disable();
 		http.sessionManagement().sessionCreationPolicy(STATELESS);
-		
+
 		http.authorizeRequests()
-		    .antMatchers("/api/login/**", "/api/signup/**", "/api/news/**", "/api/bookmarks/**", "/actuator/health").permitAll()
-		    .antMatchers(GET, "/api/**").permitAll()
-		    .antMatchers("/api/user/**").hasAuthority("ROLE_USER")
+				.antMatchers("/api/login/**", "/api/signup/**", "/api/news/**", "/api/bookmarks/**", "/actuator/health").permitAll()
+				.antMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html","/swagger-ui/**").permitAll()
+				.antMatchers(GET, "/api/**").permitAll()
+				.antMatchers("/api/user/**").hasAuthority("ROLE_USER")
 				.antMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
 				.anyRequest().authenticated();
 		
