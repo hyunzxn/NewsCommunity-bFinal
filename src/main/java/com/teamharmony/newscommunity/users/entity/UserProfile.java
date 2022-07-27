@@ -1,7 +1,7 @@
 package com.teamharmony.newscommunity.users.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.teamharmony.newscommunity.users.vo.ProfileVO;
+import com.teamharmony.newscommunity.users.dto.ProfileRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -34,13 +34,9 @@ public class UserProfile {
 		this.user = user;
 	}
 
-	public void update(ProfileVO vo) {
-		this.nickname = vo.getName();
-		this.profile_pic = vo.getFile().getOriginalFilename();
-		this.profile_info = vo.getAbout();
-	}
-	public void notUpdatePic(ProfileVO vo) {
-		this.nickname = vo.getName();
-		this.profile_info = vo.getAbout()!=null ? vo.getAbout() : "";
+	public void update(ProfileRequestDto dto) {
+		this.nickname = dto.getName();
+		if (dto.getFile()!=null) this.profile_pic = dto.getFile().getOriginalFilename();
+		if (dto.getAbout()!=null) this.profile_info = dto.getAbout();
 	}
 }

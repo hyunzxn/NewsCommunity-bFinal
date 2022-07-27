@@ -20,7 +20,7 @@ public class Role {
 	@Column(nullable = false)
 	private RoleType name;
 	
-	@OneToMany(mappedBy="role", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy="role", cascade = CascadeType.ALL)
 	private List<UserRole> users = new ArrayList<>();
 	
 	public Role(RoleType name) {
