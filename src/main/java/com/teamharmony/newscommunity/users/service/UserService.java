@@ -2,7 +2,6 @@ package com.teamharmony.newscommunity.users.service;
 
 import com.teamharmony.newscommunity.exception.InvalidRequestException;
 import com.teamharmony.newscommunity.users.dto.*;
-import com.teamharmony.newscommunity.users.vo.ProfileVO;
 import com.teamharmony.newscommunity.users.entity.*;
 import com.teamharmony.newscommunity.users.filesotre.FileStore;
 import com.teamharmony.newscommunity.users.repository.*;
@@ -118,16 +117,15 @@ public class UserService implements UserDetailsService {
 	 * 프로필 정보 변경
 	 *
 	 * @param 		username 프로필을 변경할 사용자 ID
-	 * @param 		profileVO 변경할 프로필 정보
+	 * @param 		requestDto 변경할 프로필 정보
 	 * @return 		성공 확인, 메시지
 	 */
-	public Map<String, String> updateProfile(String username, ProfileVO profileVO) {
+	public Map<String, String> updateProfile(String username, ProfileRequestDto requestDto) {
 		UserProfile existingProfile = getUser(username).getProfile();	// 해당 유저의 기존 프로필 찾기
 		if (existingProfile == null) throw new InvalidRequestException("사용자의 프로필을 찾을 수 없습니다.", "사용자 ID: "+username, "U401");
 		
-		if (profileVO.getFile()!=null) {
-			MultipartFile file = profileVO.getFile();
-			file.isEmpty();
+		MultipartFile file = requestDto.getFile();
+		if (file!=null) {
 			isImage(file); // 파일이 이미지인지 확인
 			// 버킷에 저장될 경로, 파일명 그리고 파일의 metadata 생성
 			String path = String.format("%s/%s", bucketName, username);
@@ -135,21 +133,15 @@ public class UserService implements UserDetailsService {
 			Map<String, String> metadata = extractMetadata(file);
 			
 			try {
-				if(!existingProfile.getProfile_pic().equals("default")) fileStore.delete(path, existingProfile.getProfile_pic()); // 기존 파일 삭제
 				fileStore.save(path, fileName, Optional.of(metadata), file.getInputStream()); // 업데이트 파일 저장
 			} catch (IOException e) {
 				throw new IllegalArgumentException("Failed to save image to s3 cause=", e.getCause());
 			}
-			
-			// 프로필 변경 사항 적용 후 DB 저장
-			existingProfile.update(profileVO);
-			profileRepository.save(existingProfile);
-
-		} else {
-			// 프로필 사진 외 변경 사항 적용 후 DB 저장
-			existingProfile.notUpdatePic(profileVO);
-			profileRepository.save(existingProfile);
 		}
+		// 프로필 변경 사항 적용 후 DB 저장
+		existingProfile.update(requestDto);
+		profileRepository.save(existingProfile);
+		
 		Map<String, String> body = new HashMap<>();
 		body.put("result", "success");
 		body.put("msg", "프로필 변경이 완료되었습니다.");

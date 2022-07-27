@@ -1,9 +1,9 @@
 package com.teamharmony.newscommunity.users.controller;
 
 import com.teamharmony.newscommunity.common.annotation.CurrentUser;
+import com.teamharmony.newscommunity.users.dto.ProfileRequestDto;
 import com.teamharmony.newscommunity.users.dto.UserResponseDto;
 import com.teamharmony.newscommunity.users.service.UserService;
-import com.teamharmony.newscommunity.users.vo.ProfileVO;
 import com.teamharmony.newscommunity.users.dto.SignupRequestDto;
 import com.teamharmony.newscommunity.users.entity.*;
 import lombok.Data;
@@ -142,7 +142,7 @@ public class UserController {
 	/**
 	 * 회원 프로필 업데이트
 	 *
-	 * @param 		profile 닉네임, 프로필 사진 파일, 소개글을 담은 객체
+	 * @param 		requestDto 닉네임, 프로필 사진 파일, 소개글을 담은 객체
 	 * @param 		username 인증된 사용자 정보
 	 * @return 		성공 확인, 메시지
 	 * @see				UserService#updateProfile
@@ -152,9 +152,9 @@ public class UserController {
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<?>updateProfile(ProfileVO profile, @CurrentUser String username) {
+	public ResponseEntity<?>updateProfile(ProfileRequestDto requestDto, @CurrentUser String username) {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/update_profile").toUriString());
-		return ResponseEntity.created(uri).body(userService.updateProfile(username, profile));
+		return ResponseEntity.created(uri).body(userService.updateProfile(username, requestDto));
 	}
 	
 	@Data
