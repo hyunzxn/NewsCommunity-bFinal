@@ -1,9 +1,7 @@
 package com.teamharmony.newscommunity.aop.advice;
 
+import com.teamharmony.newscommunity.exception.*;
 import com.teamharmony.newscommunity.exception.Error;
-import com.teamharmony.newscommunity.exception.ErrorResponse;
-import com.teamharmony.newscommunity.exception.InvalidRequestException;
-import com.teamharmony.newscommunity.exception.TokenException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,21 +25,22 @@ public class GlobalHandlerException {
         String fieldName = "invalid Error";
         String message = ex.getMessage();
         String invalidValue = ex.getInvalidValue();
+        String code = ex.getCode();
 
         Error errorMessage = Error.builder()
-                                    .field(fieldName)
-                                    .invalidValue(invalidValue)
-                                    .build();
+                                  .field(fieldName)
+                                  .code(code)
+                                  .message(message)
+                                  .invalidValue(invalidValue)
+                                  .build();
         errorList.add(errorMessage);
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .errorList(errorList)
-                .message(message)
-                .requestUrl(httpServletRequest.getRequestURI())
-                .statusCode(HttpStatus.BAD_REQUEST.toString())
-                .resultCode("FAIL")
-                .code(ex.getCode())
-                .build();
+                                                   .errorList(errorList)
+                                                   .requestUrl(httpServletRequest.getRequestURI())
+                                                   .statusCode(HttpStatus.BAD_REQUEST.toString())
+                                                   .resultCode("FAIL")
+                                                   .build();
 
         log.error("Oops so sick, harmony: {}", message , ex);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
@@ -53,29 +52,31 @@ public class GlobalHandlerException {
         String fieldName = "Token Refresh Error";
 				String message = ex.getMessage();
         String invalidValue = ex.getInvalidValue();
+        String code = ex.getCode();
 
         Error errorMessage = Error.builder()
-                                    .field(fieldName)
-                                    .invalidValue(invalidValue)
-                                    .build();
+                                  .field(fieldName)
+                                  .code(code)
+                                  .message(message)
+                                  .invalidValue(invalidValue)
+                                  .build();
         errorList.add(errorMessage);
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .errorList(errorList)
-                .message(message)
-                .requestUrl(httpServletRequest.getRequestURI())
-                .statusCode(HttpStatus.BAD_REQUEST.toString())
-                .resultCode("FAIL")
-                .code(ex.getCode())
-                .build();
+                                                   .errorList(errorList)
+                                                   .requestUrl(httpServletRequest.getRequestURI())
+                                                   .statusCode(HttpStatus.BAD_REQUEST.toString())
+                                                   .resultCode("FAIL")
+                                                   .build();
+				
 				log.error("Oops so sick, harmony: {}", message , ex);
         return ResponseEntity.badRequest().header(SET_COOKIE, removeRefCookie()).body(errorResponse);
     }
 
     @ExceptionHandler(value = Exception.class)
-    public ResponseEntity exception(Exception e){
+    public ResponseEntity<String> exception(Exception e){
         System.out.println(e.getClass().getName());
         log.error("Oops so sick, harmony: {}", e.getClass().getName() , e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("FAIL");
     }
 }
