@@ -1,5 +1,6 @@
 package com.teamharmony.newscommunity.domain.news.entity;
 
+import com.teamharmony.newscommunity.common.util.TimestampedOnLog;
 import com.teamharmony.newscommunity.domain.news.dto.CreateNewsAccessLogRequestDto;
 import lombok.*;
 
@@ -19,8 +20,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NewsAccessLog extends TimestampedOnLog {
-    /* 뉴스에 접근(클릭)에 관련된 기록을 남기기 위한 엔티티*/
-
     @Id
     @Column(nullable = false)
     private String id;                      // 접근 기록에 대한 ID

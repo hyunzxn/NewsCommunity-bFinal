@@ -2,6 +2,7 @@ package com.teamharmony.newscommunity.domain.news.dto;
 
 
 import com.teamharmony.newscommunity.domain.news.entity.NewsTable;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,13 +13,21 @@ import lombok.Getter;
  */
 @Getter
 public class NewsDetailResponseDto {
-    private String id;              // 뉴스의 id 정보: Oauth 값을 String 형태로 변환
-    private String title;           // 뉴스의 제목 정보
-    private String summary;         // python 외부 모듈에서 요약된 뉴스 요약 정보,
-    private String image_url;       // html 상의 이미지 표현을 위한 뉴스의 이미지가 저장된 image_url
-    private String news_url;        // 해당 뉴스의 원본 주소 (네이버 뉴스의 해당 뉴스 주소)
-    private String write_time;      // 작성 시간
-    private Long view;              // 조회수
+    @ApiModelProperty(value = "뉴스 식별 id", example = "02c1e768-a5c0-4958-aa44-130512", required = true)
+    private String id;
+    @ApiModelProperty(value = "뉴스 제목", example = "아데산야 충격의 KO패배는 거짓말이지롱~", required = true)
+    private String title;           
+    @ApiModelProperty(value = "뉴스 요약 정보", example = "아데산야는 충격적인 패배를 하지 않았다. 사실 이것은 글쓴이가 너를 속인것이다.", required = true)
+    private String summary;
+    @ApiModelProperty(value = "해당 뉴스의 이미지 url", example = "https://t1.daumcdn.net/cfile/tistory/246A2A34544518512C", required = true)
+    private String image_url;
+    @ApiModelProperty(value = "해당 뉴스의 url", example = "https://blog.naver.com/cksgurwkd12", required = true)
+    private String news_url;
+    @ApiModelProperty(value = "작성 시간", example = "2022-07-29", required = true)
+    private String write_time;
+    @ApiModelProperty(value = "조회수", example = "30", required = true)
+    private Long view;
+    @ApiModelProperty(value = "뉴스에 대한 간략한 설명", example = "아데 산야는 결국 패배하지 못..", required = true)
     private String explains;
 
 
