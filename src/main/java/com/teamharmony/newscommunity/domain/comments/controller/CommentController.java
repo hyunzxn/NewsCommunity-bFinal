@@ -124,6 +124,14 @@ public class CommentController {
         return ResponseEntity.ok().body(commentService.getCommentCount(news_id));
     }
 
+    /**
+     * 프로필 페이지에서 유저가 쓴 댓글을 모아서 볼 수 있게 유저가 쓴 댓글을 모두 다 리턴해주는 API
+     * @param username
+     * @param page
+     * @param size
+     * @param currentUser
+     * @return 유저가 쓴 모든 댓글
+     */
     @ApiImplicitParams({
             @ApiImplicitParam(name = "currentUser", value = "현재 로그인 한 유저", required = true, dataType = "string", paramType = "path"),
             @ApiImplicitParam(name = "page", value = "페이지 번호", required = true, dataType = "int", paramType = "query"),
