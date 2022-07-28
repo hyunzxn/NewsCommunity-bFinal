@@ -31,18 +31,19 @@ import java.util.Map;
 @RequestMapping("/api")
 public class UserController {
 	private final UserService userService;
-	
+
 	/**
-	 * 전체 유저 불러오기
+	 * 회원 ID 중복 확인
 	 *
-	 * @return		전체 유저를 담은 List
-	 * @see 			UserService#getUsers
+	 * @param 		requestDto 가입하려는 사용자 ID
+	 * @return 		중복 여부
+	 * @see				UserService#checkUser
 	 */
-	@GetMapping("/admin/users")
-	public ResponseEntity<List<UserResponseDto>>getUsers() {
-		return ResponseEntity.ok().body(userService.getUsers());
+	@PostMapping("/signup/checkdup")
+	public ResponseEntity<?>checkUser(@RequestBody @Valid SignupRequestDto.CheckDup requestDto) {
+		return ResponseEntity.ok().body(userService.checkUser(requestDto.username));
 	}
-	
+
 	/**
 	 * 회원 가입 요청 처리
 	 *
@@ -61,19 +62,7 @@ public class UserController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
-	
-	/**
-	 * 회원 ID 중복 확인
-	 *
-	 * @param 		requestDto 가입하려는 사용자 ID
-	 * @return 		중복 여부
-	 * @see				UserService#checkUser
-	 */
-	@PostMapping("/signup/checkdup")
-	public ResponseEntity<?>checkUser(@RequestBody @Valid SignupRequestDto.CheckDup requestDto) {
-		return ResponseEntity.ok().body(userService.checkUser(requestDto.username));
-	}
-	
+
 	/**
 	 * 현재 로그인한 유저 ID
 	 *
@@ -85,7 +74,7 @@ public class UserController {
 	public ResponseEntity<String>getUsername(@CurrentUser String username) {
 		return ResponseEntity.ok().body(username);
 	}
-	
+
 	/**
 	 * 권한 추가
 	 *
@@ -98,7 +87,7 @@ public class UserController {
 		userService.saveRole(role);
 		return ResponseEntity.created(uri).build();
 	}
-	
+
 	/**
 	 * 사용자 정보에 권한 추가
 	 *
@@ -111,7 +100,18 @@ public class UserController {
 		userService.addRoleToUser(form.getUsername(), form.getRoleName());
 		return ResponseEntity.created(uri).build();
 	}
-	
+
+	/**
+	 * 전체 유저 불러오기
+	 *
+	 * @return		전체 유저를 담은 List
+	 * @see 			UserService#getUsers
+	 */
+	@GetMapping("/admin/users")
+	public ResponseEntity<List<UserResponseDto>>getUsers() {
+		return ResponseEntity.ok().body(userService.getUsers());
+	}
+
 	/**
 	 * 회원 프로필 정보
 	 *
