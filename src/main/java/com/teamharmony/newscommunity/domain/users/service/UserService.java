@@ -73,7 +73,6 @@ public class UserService implements UserDetailsService {
 	 * @return 사용자 ID 중복 여부
 	 */
 	public Map<String, Boolean> checkUser(String username) {
-		log.info("Checking duplicates username {}", username);
 		Map<String, Boolean> body = new HashMap<>();
 		Boolean exists = getUser(username) != null;
 		body.put("exists", exists);
@@ -111,7 +110,6 @@ public class UserService implements UserDetailsService {
 	 * @param user 저장할 사용자 정보
 	 */
 	public void saveUser(User user) {
-		log.info("Saving new user {} to the database", user.getUsername());
 		user.encodePW(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 	}
@@ -122,7 +120,6 @@ public class UserService implements UserDetailsService {
 	 * @param role 저장할 권한 정보
 	 */
 	public void saveRole(Role role) {
-		log.info("Saving new role {} to the database", role.getName());
 		roleRepository.save(role);
 	}
 	
@@ -147,7 +144,6 @@ public class UserService implements UserDetailsService {
 	 * @param roleName 추가할 권한명
 	 */
 	public void addRoleToUser(String username, RoleType roleName) throws IllegalArgumentException {
-		log.info("Adding role {} to user {}", roleName, username);
 		User user = getUser(username);
 		Role role = getRole(roleName);
 		if (role == null) throw InvalidRequestException.builder()
@@ -166,7 +162,6 @@ public class UserService implements UserDetailsService {
 	 * @return 사용자 정보
 	 */
 	private User getUser(String username) {
-		log.info("Fetching user {}", username);
 		return userRepository.findByUsername(username);
 	}
 	
@@ -177,7 +172,6 @@ public class UserService implements UserDetailsService {
 	 * @return 권한 정보
 	 */
 	private Role getRole(RoleType roleName) {
-		log.info("Fetching role {}", roleName);
 		return roleRepository.findByName(roleName);
 	}
 	
@@ -187,7 +181,6 @@ public class UserService implements UserDetailsService {
 	 * @return 전체 사용자 정보
 	 */
 	public List<UserResponseDto> getUsers() {
-		log.info("Fetching all users");
 		List<User> users= userRepository.findAll();
 		return users.stream().map(UserResponseDto::toDto).collect(toList());
 	}
@@ -200,7 +193,6 @@ public class UserService implements UserDetailsService {
 	 * @return 인증된 사용자 ID와 일치 여부, 프로필 사진 url, 프로필 정보
 	 */
 	public Map<String, Object> getProfile(String username, boolean status) {
-		log.info("Fetching profile of user {}", username);
 		User user = getUser(username);
 		UserProfile profile = user.getProfile();
 		ProfileResponseDto profileDto = new ProfileResponseDto(profile);
