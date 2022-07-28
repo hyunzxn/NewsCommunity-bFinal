@@ -38,7 +38,7 @@ public class LikesController {
     /**
      * 특정 댓글에 표시된 좋아요 개수를 보여주는 API
      * @param commentId
-     * @return
+     * @return 특정 댓글에 표시된 좋아요 개수
      */
     @ApiImplicitParams({
             @ApiImplicitParam(name = "commentId", value = "댓글의 아이디", required = true, dataType = "int", paramType = "path")
@@ -52,6 +52,12 @@ public class LikesController {
         return ResponseEntity.ok().body(likesService.LikedCommentsCount(commentId));
     }
 
+    /**
+     * 유저가 특정 댓글에 좋아요를 했는지 여부를 확인하기 위한 API
+     * @param commentId
+     * @param username
+     * @return 유저가 좋아요 한 이력이 있으면 true, 아니면 false
+     */
     @ApiImplicitParams({
             @ApiImplicitParam(name = "commentId", value = "댓글의 아이디", required = true, dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "username", value = "현재 로그인 한 유저", required = true, paramType = "body")

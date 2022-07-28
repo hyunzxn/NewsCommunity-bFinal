@@ -19,7 +19,11 @@ public class LikesService {
     private final CommentRepository commentRepository;
     private final LikesRepository likesRepository;
 
-    // 좋아요 테이블 업데이트
+    /**
+     * 특정 유저가 좋아요를 했는지를 확인하기 위해 DB에서 찾아서 결과가 있다면 좋아요 요청 시 DB에서 데이터 삭제, 반대의 경우에 DB에 데이터 추가
+     * @param commentId
+     * @param username
+     */
     @Transactional
     public void likes(Long commentId, String username) {
 
@@ -44,11 +48,21 @@ public class LikesService {
             }
     }
 
-    // 해당 댓글이 가지고 있는 좋아요 개수를 반환합니다.
+    /**
+     * 특정 댓글의 좋아요 개수 반환
+     * @param id
+     * @return
+     */
     public int LikedCommentsCount(Long id) {
         return likesRepository.findByComment_CommentId(id).size();
     }
 
+    /**
+     * 유저가 특정 댓글에 좋아요를 한 이력이 있는지를 확인
+     * @param commentId
+     * @param username
+     * @return 좋아요를 한 이력이 있다면 true, 반대의 경우에 false 반환
+     */
     public boolean isLiked(Long commentId, String username) {
         if(username == null) {
             return false;
