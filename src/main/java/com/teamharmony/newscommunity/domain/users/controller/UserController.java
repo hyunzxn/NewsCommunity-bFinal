@@ -51,7 +51,7 @@ public class UserController {
 	 * @see   		UserService#signUp
 	 */
 	@PostMapping("/signup")
-	public ResponseEntity<?>signUp(@RequestBody @Valid SignupRequestDto requestDto) {
+	public ResponseEntity<String> signUp(@RequestBody @Valid SignupRequestDto requestDto) {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/signup").toUriString());
 		try {
 			userService.signUp(requestDto);

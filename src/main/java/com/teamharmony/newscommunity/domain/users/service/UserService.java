@@ -79,8 +79,8 @@ public class UserService implements UserDetailsService {
 		body.put("exists", exists);
 		return body;
 	}
-	
-	public void signUp(SignupRequestDto dto) throws HibernateException {
+
+	public String signUp(SignupRequestDto dto) throws HibernateException {
 		User user = new User(dto);
 		saveUser(user);
 		Role role = getRole(new Role(RoleType.USER).getName());
@@ -92,10 +92,11 @@ public class UserService implements UserDetailsService {
 			addRoleToUser(user.getUsername(), RoleType.USER);
 			// 기본 프로필 추가
 			defaultProfile(user);
-		} catch (DataIntegrityViolationException|ConstraintViolationException e) {
+		} catch (DataIntegrityViolationException | ConstraintViolationException e) {
 			log.error("Faild to sign up");
 			throw new HibernateException("Failed to add role or profile to user cause=", e.getCause());
 		}
+		return "success";
 	}
 	
 	/**
