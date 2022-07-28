@@ -27,6 +27,10 @@ public class CommentController {
      * @param username
      * @return 저장된 댓글의 id
      */
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "댓글 저장 성공"),
+            @ApiResponse(code = 400, message = "c401 댓글 내용이나 뉴스 아이디가 비어있습니다", response = ErrorResponse.class)
+    })
     @ApiOperation(value = "댓글 저장")
     @PostMapping("/user/comments")
     public ResponseEntity<?> saveComment(@RequestBody @Valid CommentCreateRequestDto commentCreateRequestDto,
@@ -48,6 +52,10 @@ public class CommentController {
             @ApiImplicitParam(name="size",value = "페이지에 보일 댓글의 수",  required = true, dataType = "int", paramType = "query"),
             @ApiImplicitParam(name="sortBy",value = "정렬 기준",  required = true, dataType = "string", paramType = "query")
     })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "댓글 조회 성공", response = CommentResponseDto.class),
+            @ApiResponse(code = 400, message = "C402 댓글을 불러올 수 없습니다", response = ErrorResponse.class)
+    })
     @ApiOperation(value = "댓글 조회")
     @GetMapping("/comments/{news_id}/{currentUser}")
     public ResponseEntity<Page<CommentResponseDto>> getComment(@PathVariable String news_id,
@@ -66,6 +74,10 @@ public class CommentController {
      * @param commentEditRequestDto
      * @return 수정된 댓글의 id
      */
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "댓글 수정 성공"),
+            @ApiResponse(code = 400, message = "c403 이미 삭제된 댓글은 수정할 수 없습니다", response = ErrorResponse.class)
+    })
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "댓글의 아이디", required = true, dataType = "int", paramType = "path")
     })
@@ -82,6 +94,9 @@ public class CommentController {
      * @param id
      * @return 삭제된 댓글의 id
      */
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "댓글 삭제 성공")
+    })
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "댓글의 아이디", required = true, dataType = "int", paramType = "path")
     })
@@ -97,6 +112,9 @@ public class CommentController {
      * @param news_id
      * @return 해당 기사에 달린 댓글의 개수
      */
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "댓글 개수 조회 성공")
+    })
     @ApiImplicitParams({
             @ApiImplicitParam(name = "news_id", value = "뉴스 아이디", required = true, dataType = "string", paramType = "path")
     })
@@ -112,6 +130,9 @@ public class CommentController {
             @ApiImplicitParam(name = "size", value = "한 페이지에 보일 댓글의 개수", required = true, dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "username", value = "유저의 아이디", required = true, dataType = "string", paramType = "path")
 
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "댓글 조회 성공", response = CommentResponseDto.class)
     })
     @ApiOperation(value = "프로필 페이지에서 유저가 작성한 댓글 조회")
     @GetMapping("/comments/profile/{username}/{currentUser}")
