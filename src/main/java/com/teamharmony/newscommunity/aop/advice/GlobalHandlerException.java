@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.teamharmony.newscommunity.auth.util.CookieUtil.removeRefCookie;
+import static com.teamharmony.newscommunity.domain.auth.util.CookieUtil.removeRefCookie;
 import static org.springframework.http.HttpHeaders.SET_COOKIE;
 
 @RestControllerAdvice
