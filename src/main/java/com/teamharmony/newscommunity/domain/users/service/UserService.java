@@ -127,8 +127,12 @@ public class UserService implements UserDetailsService {
 	 * @return 		성공 확인, 메시지
 	 */
 	public Map<String, String> updateProfile(String username, ProfileRequestDto requestDto) {
-		UserProfile existingProfile = getUser(username).getProfile();	// 해당 유저의 기존 프로필 찾기
-		if (existingProfile == null) throw new InvalidRequestException("사용자의 프로필을 찾을 수 없습니다.", "사용자 ID: "+username, "U401");
+		UserProfile existingProfile = getUser(username).getProfile();  // 해당 유저의 기존 프로필 찾기
+		if (existingProfile == null) throw InvalidRequestException.builder()
+		                                                          .message("사용자의 프로필을 찾을 수 없습니다.")
+		                                                          .invalidValue("사용자 ID: " + username)
+		                                                          .code("U401")
+		                                                          .build();
 		
 		MultipartFile file = requestDto.getFile();
 		if (file!=null) {
@@ -162,8 +166,12 @@ public class UserService implements UserDetailsService {
 	 */
 	public String getProfileImageUrl(String username) {
 		UserProfile profile = getUser(username).getProfile();
-		if (profile == null) throw new InvalidRequestException("사용자의 프로필을 찾을 수 없습니다.", "사용자 ID: "+username, "U401");
-		String path = String.format("%s/%s", bucketName,username);
+		if (profile == null) throw InvalidRequestException.builder()
+		                                                  .message("사용자의 프로필을 찾을 수 없습니다.")
+		                                                  .invalidValue("사용자 ID: " + username)
+		                                                  .code("U401")
+		                                                  .build();
+		String path = String.format("%s/%s", bucketName, username);
 		// 버킷에서 프로필 사진 가져오기
 		if (!profile.getProfile_pic().equals("default")) {
 			return fileStore.download(path, profile.getProfile_pic());
@@ -195,7 +203,11 @@ public class UserService implements UserDetailsService {
 		log.info("Adding role {} to user {}", roleName, username);
 		User user = getUser(username);
 		Role role = getRole(roleName);
-		if (role == null) throw new InvalidRequestException("해당 권한을 찾을 수 없습니다", "권한명: "+roleName, "U403");
+		if (role == null) throw InvalidRequestException.builder()
+		                                               .message("해당 권한을 찾을 수 없습니다")
+		                                               .invalidValue("권한명: " + roleName)
+		                                               .code("U403")
+		                                               .build();
 		UserRole userRole = new UserRole(user, role);
 		userRoleRepository.save(userRole);
 	}
