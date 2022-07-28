@@ -33,7 +33,7 @@ public class User  extends Timestamped {
 	@Column(nullable = false)
 	@NotBlank
 	private String password;
-	private String email;
+
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL)
 	private Collection<UserRole> userRoles = new ArrayList<>();
 
