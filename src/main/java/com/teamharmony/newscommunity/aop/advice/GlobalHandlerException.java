@@ -45,12 +45,12 @@ public class GlobalHandlerException {
         log.error("Oops so sick, harmony: {}", message , ex);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
-    @ExceptionHandler(value = { TokenException.class })
-    public ResponseEntity<Object> handleApiRequestException(TokenException ex, HttpServletRequest httpServletRequest) {
+    @ExceptionHandler(value = { AuthException.class })
+    public ResponseEntity<Object> handleApiRequestException(AuthException ex, HttpServletRequest httpServletRequest) {
         List<Error> errorList = new ArrayList<>();
 
         String fieldName = "Token Refresh Error";
-				String message = ex.getMessage();
+        String message = ex.getMessage();
         String invalidValue = ex.getInvalidValue();
         String code = ex.getCode();
 
@@ -68,15 +68,15 @@ public class GlobalHandlerException {
                                                    .statusCode(HttpStatus.BAD_REQUEST.toString())
                                                    .resultCode("FAIL")
                                                    .build();
-				
-				log.error("Oops so sick, harmony: {}", message , ex);
+
+        log.error("Oops so sick, harmony: {}", message , ex);
         return ResponseEntity.badRequest().header(SET_COOKIE, removeRefCookie()).body(errorResponse);
     }
 
     @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<String> exception(Exception e){
-        System.out.println(e.getClass().getName());
-        log.error("Oops so sick, harmony: {}", e.getClass().getName() , e);
+    public ResponseEntity<String> exception(Exception ex){
+        System.out.println(ex.getClass().getName());
+        log.error("Oops so sick, harmony: {}", ex.getClass().getName() , ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("FAIL");
     }
 }

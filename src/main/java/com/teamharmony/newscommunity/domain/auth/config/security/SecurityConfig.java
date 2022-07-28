@@ -2,6 +2,7 @@ package com.teamharmony.newscommunity.domain.auth.config.security;
 
 import com.teamharmony.newscommunity.domain.auth.filter.CustomAuthenticationFilter;
 import com.teamharmony.newscommunity.domain.auth.filter.CustomAuthorizationFilter;
+import com.teamharmony.newscommunity.domain.auth.filter.ExceptionHandlerFilter;
 import com.teamharmony.newscommunity.domain.auth.repository.TokensRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -50,8 +51,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated();
 		
 		http.addFilter(customAuthenticationFilter);
-		// this filter comes before the other filters
 		http.addFilterBefore(new CustomAuthorizationFilter(userDetailsService, tokensRepository), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(new ExceptionHandlerFilter(), CustomAuthorizationFilter.class);
+		http.addFilterBefore(new ExceptionHandlerFilter(), CustomAuthenticationFilter.class);
 	}
 	@Bean
 	@Override

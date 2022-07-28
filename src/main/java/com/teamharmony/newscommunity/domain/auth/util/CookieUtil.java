@@ -1,13 +1,13 @@
 package com.teamharmony.newscommunity.domain.auth.util;
 
-import com.teamharmony.newscommunity.exception.TokenException;
+import com.teamharmony.newscommunity.exception.AuthException;
 import org.springframework.http.ResponseCookie;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 public class CookieUtil {
 	// 리프레쉬 쿠키값 가져오기
-	public static String getRefCookie(HttpServletRequest request) throws TokenException {
+	public static String getRefCookie(HttpServletRequest request) throws AuthException {
 		Cookie[] cookies = request.getCookies();
 		Cookie cookie = null;
 		if (cookies != null && cookies.length > 0) {
@@ -18,7 +18,7 @@ public class CookieUtil {
 				}
 			}
 		}
-		if(cookie == null)	throw TokenException.builder().message("갱신 토큰을 찾을 수 없습니다.").code("A401").build();
+		if(cookie == null)	throw AuthException.builder().message("갱신 토큰을 찾을 수 없습니다.").code("A408").build();
 		return cookie.getValue();
 	}
 	
