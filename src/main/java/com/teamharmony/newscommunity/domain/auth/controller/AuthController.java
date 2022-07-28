@@ -2,7 +2,7 @@ package com.teamharmony.newscommunity.domain.auth.controller;
 
 import com.teamharmony.newscommunity.domain.auth.service.AuthService;
 import com.teamharmony.newscommunity.common.annotation.CurrentUser;
-import com.teamharmony.newscommunity.exception.TokenException;
+import com.teamharmony.newscommunity.exception.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,10 +24,10 @@ public class AuthController {
 	/**
 	 * 접근 토큰, 갱신 토큰 갱신
 	 *
-	 * @see				AuthService#refreshToken
+	 * @see AuthService#refreshToken
 	 */
 	@GetMapping("/token/refresh")
-	public ResponseEntity<String>refreshToken(HttpServletRequest request, HttpServletResponse response) throws TokenException {
+	public ResponseEntity<String>refreshToken(HttpServletRequest request, HttpServletResponse response) throws AuthException {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/token/refresh").toUriString());
 		return ResponseEntity.ok().body(authService.refreshToken(request, response));
 	}
@@ -35,11 +35,11 @@ public class AuthController {
 	/**
 	 * 로그아웃
 	 *
-	 * @param 		username 인증된 사용자 ID
-	 * @see				AuthService#signOut
+	 * @param username 인증된 사용자 ID
+	 * @see AuthService#signOut
 	 */
 	@GetMapping("/user/signout")
-	public ResponseEntity<String> signOut(HttpServletRequest request, HttpServletResponse response, @CurrentUser String username) throws TokenException {
+	public ResponseEntity<String> signOut(HttpServletRequest request, HttpServletResponse response, @CurrentUser String username) throws AuthException {
 		return ResponseEntity.ok().body(authService.signOut(request, response, username));
 	}
 }
