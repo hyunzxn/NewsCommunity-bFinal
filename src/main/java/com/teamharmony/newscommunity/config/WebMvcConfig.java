@@ -1,7 +1,7 @@
 package com.teamharmony.newscommunity.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.teamharmony.newscommunity.util.HTMLCharacterEscapes;
+import com.teamharmony.newscommunity.common.util.HTMLCharacterEscapes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
