@@ -6,7 +6,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamharmony.newscommunity.domain.auth.entity.Tokens;
 import com.teamharmony.newscommunity.domain.auth.repository.TokensRepository;
 import com.teamharmony.newscommunity.domain.auth.util.CookieUtil;
@@ -22,13 +21,11 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.SET_COOKIE;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
@@ -94,16 +91,6 @@ public class AuthService {
 			throw AuthException.builder().message(e.getMessage()).code(e.getCode()).build();
 		}
 		return "success";
-	}
-	
-	// 에러 발생시 헤더와 output 설정
-	private void setError(HttpServletResponse response, String msg) throws IOException {
-		response.setHeader("error", msg);
-		response.setStatus(FORBIDDEN.value());
-		Map<String, String> error = new HashMap<>();
-		error.put("error", msg);
-		response.setContentType(APPLICATION_JSON_VALUE);
-		new ObjectMapper().writeValue(response.getOutputStream(), error);
 	}
 	
 	/**
