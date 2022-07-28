@@ -5,6 +5,7 @@ import com.teamharmony.newscommunity.domain.comments.dto.CommentEditRequestDto;
 import com.teamharmony.newscommunity.domain.comments.dto.CommentResponseDto;
 import com.teamharmony.newscommunity.domain.comments.service.CommentService;
 import com.teamharmony.newscommunity.common.annotation.CurrentUser;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,8 @@ public class CommentController {
      * @param username
      * @return 저장된 댓글의 id
      */
+    @ApiOperation(value = "댓글 저장")
+    @ApiResponse(code = 501, message = "댓글 내용이 비었거나 뉴스 아이디가 없습니다")
     @PostMapping("/user/comments")
     public ResponseEntity<?> saveComment(@RequestBody @Valid CommentCreateRequestDto commentCreateRequestDto,
                                          @CurrentUser String username) {
@@ -37,14 +40,24 @@ public class CommentController {
      * @param news_id
      * @return 해당 뉴스 아이디에 해당하는 댓글 리스트
      */
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="news_id",value = "뉴스 아이디", required = true, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name="currentUser",value = "로그인 한 유저",  required = true, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name="isAsc",value = "오름차순 정렬",  required = true, dataType = "boolean", paramType = "query"),
+            @ApiImplicitParam(name="page",value = "페이지 번호",  required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name="size",value = "페이지에 보일 댓글의 수",  required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name="sortBy",value = "정렬 기준",  required = true, dataType = "string", paramType = "query")
+    })
+    @ApiResponse(code = 402, message = "댓글을 불러올 수 없습니다")
+    @ApiOperation(value = "댓글 조회")
     @GetMapping("/comments/{news_id}/{currentUser}")
     public ResponseEntity<Page<CommentResponseDto>> getComment(@PathVariable String news_id,
-                                                @RequestParam("page") int page,
-                                                @RequestParam("size") int size,
-                                                @RequestParam("sortBy") String sortBy,
-                                                @RequestParam("isAsc") boolean isAsc,
-                                                @PathVariable String currentUser) {
-        return ResponseEntity.ok().body(commentService.findComments(news_id, (page-1), size, sortBy, isAsc, currentUser));
+                                                               @RequestParam("page") int page,
+                                                               @RequestParam("size") int size,
+                                                               @RequestParam("sortBy") String sortBy,
+                                                               @RequestParam("isAsc") boolean isAsc,
+                                                               @PathVariable String currentUser) {
+        return ResponseEntity.ok().body(commentService.findComments(news_id, (page - 1), size, sortBy, isAsc, currentUser));
     }
 
 
@@ -54,6 +67,10 @@ public class CommentController {
      * @param commentEditRequestDto
      * @return 수정된 댓글의 id
      */
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "댓글의 아이디", required = true, dataType = "int", paramType = "path")
+    })
+    @ApiOperation(value = "댓글 수정")
     @PutMapping("/user/comments/{id}")
     public ResponseEntity<?> editComment(@PathVariable Long id,
                                          @RequestBody @Valid CommentEditRequestDto commentEditRequestDto) {
@@ -66,6 +83,10 @@ public class CommentController {
      * @param id
      * @return 삭제된 댓글의 id
      */
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "댓글의 아이디", required = true, dataType = "int", paramType = "path")
+    })
+    @ApiOperation(value = "댓글 삭제")
     @DeleteMapping("/user/comments/{id}")
     public ResponseEntity<?> deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
@@ -77,11 +98,23 @@ public class CommentController {
      * @param news_id
      * @return 해당 기사에 달린 댓글의 개수
      */
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "news_id", value = "뉴스 아이디", required = true, dataType = "string", paramType = "path")
+    })
+    @ApiOperation(value = "댓글 개수 조회")
     @GetMapping("/user/comments/count/{news_id}")
     public ResponseEntity<Integer> getCommentCount(@PathVariable String news_id) {
         return ResponseEntity.ok().body(commentService.getCommentCount(news_id));
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "currentUser", value = "현재 로그인 한 유저", required = true, dataType = "string", paramType = "path"),
+            @ApiImplicitParam(name = "page", value = "페이지 번호", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "한 페이지에 보일 댓글의 개수", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "username", value = "유저의 아이디", required = true, dataType = "string", paramType = "path")
+
+    })
+    @ApiOperation(value = "프로필 페이지에서 유저가 작성한 댓글 조회")
     @GetMapping("/comments/profile/{username}/{currentUser}")
     public ResponseEntity<Page<CommentResponseDto>> getCommentsOnProfilePage(@PathVariable String username,
                                                                              @RequestParam int page,
