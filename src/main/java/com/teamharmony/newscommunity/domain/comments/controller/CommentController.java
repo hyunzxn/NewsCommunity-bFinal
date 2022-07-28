@@ -5,6 +5,7 @@ import com.teamharmony.newscommunity.domain.comments.dto.CommentEditRequestDto;
 import com.teamharmony.newscommunity.domain.comments.dto.CommentResponseDto;
 import com.teamharmony.newscommunity.domain.comments.service.CommentService;
 import com.teamharmony.newscommunity.common.annotation.CurrentUser;
+import com.teamharmony.newscommunity.exception.ErrorResponse;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,7 +28,6 @@ public class CommentController {
      * @return 저장된 댓글의 id
      */
     @ApiOperation(value = "댓글 저장")
-    @ApiResponse(code = 501, message = "댓글 내용이 비었거나 뉴스 아이디가 없습니다")
     @PostMapping("/user/comments")
     public ResponseEntity<?> saveComment(@RequestBody @Valid CommentCreateRequestDto commentCreateRequestDto,
                                          @CurrentUser String username) {
@@ -48,7 +48,6 @@ public class CommentController {
             @ApiImplicitParam(name="size",value = "페이지에 보일 댓글의 수",  required = true, dataType = "int", paramType = "query"),
             @ApiImplicitParam(name="sortBy",value = "정렬 기준",  required = true, dataType = "string", paramType = "query")
     })
-    @ApiResponse(code = 402, message = "댓글을 불러올 수 없습니다")
     @ApiOperation(value = "댓글 조회")
     @GetMapping("/comments/{news_id}/{currentUser}")
     public ResponseEntity<Page<CommentResponseDto>> getComment(@PathVariable String news_id,
