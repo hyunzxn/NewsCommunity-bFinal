@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
-import static org.apache.http.entity.ContentType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -179,19 +178,6 @@ public class UserService implements UserDetailsService {
 		} else {
 			return "default";
 		}
-	}
-	
-	private Map<String, String> extractMetadata(MultipartFile file) {
-		Map<String, String> metadata = new HashMap<>();
-		metadata.put("Content-Type", file.getContentType());
-		metadata.put("Content-Length", String.valueOf(file.getSize()));
-		return metadata;
-	}
-	
-	private void isImage(MultipartFile file) {
-		if (!Arrays.asList(IMAGE_JPEG.getMimeType(), IMAGE_PNG.getMimeType(), IMAGE_GIF.getMimeType())
-		           .contains(file.getContentType()))
-			throw new InvalidRequestException("파일이 이미지가 아닙니다.", "파일 유형: "+file.getContentType(), "U402");
 	}
 	
 	/**
