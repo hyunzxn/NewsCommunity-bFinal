@@ -92,6 +92,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 			tokensRepository.save(existingTokens);
 		}
 
+		// 응답 헤더에 토큰과 사용자 ID 추가
 		byte[] usernameHeader = username.getBytes(StandardCharsets.UTF_8);
 		response.setHeader("token", access_token);
 		response.setHeader("username", Base64.getEncoder()

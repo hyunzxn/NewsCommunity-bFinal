@@ -6,7 +6,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 public class CookieUtil {
-	// 리프레쉬 쿠키값 가져오기
+	// 갱신 토큰이 저장된 쿠키 값 가져오기
 	public static String getRefCookie(HttpServletRequest request) throws AuthException {
 		Cookie[] cookies = request.getCookies();
 		Cookie cookie = null;
