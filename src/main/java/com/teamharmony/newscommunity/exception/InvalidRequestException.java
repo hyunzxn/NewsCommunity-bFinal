@@ -5,7 +5,7 @@ import lombok.Getter;
 
 
 /**
- * IllegalArgumentException을 상속받는
+ * IllegalArgumentException을 상속받는 예외 생성
  * @author hyeoKing
  */
 @Getter

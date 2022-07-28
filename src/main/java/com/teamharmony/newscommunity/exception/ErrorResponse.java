@@ -6,6 +6,13 @@ import lombok.Data;
 
 import java.util.List;
 
+
+
+/**
+ *
+ * @author hyeoking, yj
+ */
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 public class ErrorResponse {
