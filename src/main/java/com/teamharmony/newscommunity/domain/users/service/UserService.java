@@ -9,6 +9,7 @@ import com.teamharmony.newscommunity.domain.users.repository.RoleRepository;
 import com.teamharmony.newscommunity.domain.users.repository.UserProfileRepository;
 import com.teamharmony.newscommunity.domain.users.repository.UserRepository;
 import com.teamharmony.newscommunity.domain.users.repository.UserRoleRepository;
+import static com.teamharmony.newscommunity.domain.users.util.ProfileUtil.*;
 import com.teamharmony.newscommunity.exception.InvalidRequestException;
 import com.teamharmony.newscommunity.domain.users.filesotre.FileStore;
 import lombok.RequiredArgsConstructor;
