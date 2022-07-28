@@ -53,15 +53,7 @@ public class UserController {
 	 */
 	@PostMapping("/signup")
 	public ResponseEntity<String> signUp(@RequestBody @Valid SignupRequestDto requestDto) {
-		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/signup").toUriString());
-		try {
-			userService.signUp(requestDto);
-			return ResponseEntity.created(uri).build();
-		} catch (HibernateException e) {
-			return ResponseEntity.internalServerError().build();
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.badRequest().build();
-		}
+		return ResponseEntity.ok().body(userService.signUp(requestDto));
 	}
 
 	/**
@@ -84,9 +76,8 @@ public class UserController {
 	 */
 	@PostMapping("/admin/role/save")
 	public ResponseEntity<Void> saveUser(@RequestBody Role role) {
-		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save").toUriString());
 		userService.saveRole(role);
-		return ResponseEntity.created(uri).build();
+		return ResponseEntity.ok().build();
 	}
 
 	/**
@@ -97,9 +88,8 @@ public class UserController {
 	 */
 	@PostMapping("/admin/role/addtouser")
 	public ResponseEntity<Void> addRoleToUser(@RequestBody RoleToUserForm form) {
-		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/admin/role/addtouser").toUriString());
 		userService.addRoleToUser(form.getUsername(), form.getRoleName());
-		return ResponseEntity.created(uri).build();
+		return ResponseEntity.ok().build();
 	}
 
 	/**
@@ -124,8 +114,7 @@ public class UserController {
 	@GetMapping("/user/profile/{profileOwner}")
 	public ResponseEntity<Map<String, Object>> getProfile(@PathVariable String profileOwner, @CurrentUser String username) {
 		boolean status = profileOwner.equals(username);
-		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/profile/{username}").toUriString());
-		return ResponseEntity.created(uri).body(userService.getProfile(profileOwner, status));
+		return ResponseEntity.ok().body(userService.getProfile(profileOwner, status));
 	}
 	
 	/**
@@ -137,8 +126,7 @@ public class UserController {
 	 */
 	@GetMapping("/user/profile/pic/{username}")
 	public ResponseEntity<String> getProfilePicUrl(@PathVariable String username) {
-		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/profile/pic/{username}").toUriString());
-		return ResponseEntity.created(uri).body(userService.getProfileImageUrl(username));
+		return ResponseEntity.ok().body(userService.getProfileImageUrl(username));
 	}
 	
 	/**
@@ -155,8 +143,7 @@ public class UserController {
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public ResponseEntity<?> updateProfile(ProfileRequestDto requestDto, @CurrentUser String username) {
-		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/update_profile").toUriString());
-		return ResponseEntity.created(uri).body(userService.updateProfile(username, requestDto));
+		return ResponseEntity.ok().body(userService.updateProfile(username, requestDto));
 	}
 
 	@Data
