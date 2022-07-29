@@ -34,7 +34,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 	private final UserDetailsService userDetailsService;
 	private final TokensRepository tokensRepository;
-	
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 		// 인가 과정을 거칠 필요가 없는 요청
@@ -52,7 +52,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 					JWTVerifier verifier = JWT.require(algorithm).build();
 					DecodedJWT decodedJWT = verifier.verify(access_token);
 					String username = decodedJWT.getSubject();
-					
+
 					// 해당 유저의 허용된 토큰값과 비교
 					Tokens tokens = tokensRepository.findByUsername(username);
 					if (tokens == null)
@@ -61,8 +61,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 					if(!allowedToken.equals(access_token))
 						throw AuthException.builder().message("허용된 접근 토큰이 아닙니다.").invalidValue("접근 토큰: " + access_token).code("A404").build();
 				
-					String[] roles = decodedJWT.getClaim("roles")
-																		 .asArray(String.class);
+					String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
 					Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 					stream(roles).forEach(role -> {authorities.add(new SimpleGrantedAuthority(role));});
 					User user = (User) userDetailsService.loadUserByUsername(username);
@@ -74,8 +73,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 					throw AuthException.builder().message("접근 토큰이 만료되었습니다.").code("A406").build();
 				} catch (JWTVerificationException e) {
 					throw AuthException.builder().message("올바른 토큰이 아닙니다.").code("A402").build();
-				} catch (AuthException e) {
-					throw AuthException.builder().message(e.getMessage()).code(e.getCode()).build();
 				}
 			} else {
 				filterChain.doFilter(request, response);
