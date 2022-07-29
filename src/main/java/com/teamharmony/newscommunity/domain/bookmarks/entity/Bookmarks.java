@@ -6,15 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(indexes = @Index(name= "u_NewsId", columnList = "id"))
 public class Bookmarks extends TimestampedOnBookmark {
     @Id
     @Column(nullable = false, unique = true, length = 60)

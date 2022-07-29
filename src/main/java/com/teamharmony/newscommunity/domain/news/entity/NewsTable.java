@@ -1,24 +1,20 @@
 package com.teamharmony.newscommunity.domain.news.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 
 /**
  * 파이썬 뉴스 정보 관리 외부 모듈로부터 RDS에 저장된 NewsTable을 연동하기 위한 엔티티
  * @Author hyeoKing
  */
-@Setter @Getter
+@Getter @Setter //  NewsServiceTest 테스트 코드에서 의도적 값 수정을 위해 어쩔 수 없이 Setter 추가
 @NoArgsConstructor
 @Entity
-@AllArgsConstructor
+@Table(indexes = @Index(name= "u_NewsId", columnList = "id"))
 public class NewsTable {
     @Id
     @Column(nullable = false, unique = true, length = 30)
@@ -47,5 +43,16 @@ public class NewsTable {
 
     public void updateView() {this.view += 1;}  // DB에 대한 조회수 증가 요청을 처리할 함수
 
+    @Builder
+    public NewsTable(String id, String title, String summary, String image_url, String news_url, String explains, String write_time, Long view){
+        this.id = id;
+        this.title = title;
+        this.summary = summary;
+        this.image_url = image_url;
+        this.news_url = news_url;
+        this.explains = explains;
+        this.write_time = write_time;
+        this.view = view;
+    }
 }
 

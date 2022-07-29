@@ -74,7 +74,16 @@ class NewsServiceTest {
         private NewsRepository newsRepository;
         @InjectMocks
         private NewsService newsService;
-        private NewsTable newsTable = new NewsTable("test-uuid", "테스트 제목", "테스트 요약", "테스트 이미지주소", "테스트 뉴스 주소", "테스트 설명", "테스트작성 시간", 1L);
+        private NewsTable newsTable = NewsTable.builder()
+                .id("test-uuid")
+                .title("테스트 제목")
+                .summary("테스트 요약")
+                .image_url("테스트 이미지주소")
+                .news_url("테스트 뉴스 주소")
+                .explains("테스트 설명")
+                .write_time("테스트작성 시간")
+                .view(1L)
+                .build();
         @BeforeEach
         void setup() {
             newsTable.setId("test-uuid");

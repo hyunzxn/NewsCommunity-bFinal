@@ -4,9 +4,7 @@ import com.teamharmony.newscommunity.common.util.TimestampedOnLog;
 import com.teamharmony.newscommunity.domain.news.dto.CreateNewsAccessLogRequestDto;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.UUID;
 
 
@@ -19,6 +17,7 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(indexes = @Index(name= "u_NewsId", columnList = "id"))
 public class NewsAccessLog extends TimestampedOnLog {
     @Id
     @Column(nullable = false)
