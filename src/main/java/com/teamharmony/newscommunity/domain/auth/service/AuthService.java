@@ -128,7 +128,6 @@ public class AuthService {
 	 * @return 사용자의 허용 토큰 정보
 	 */
 	private Tokens getTokens(String username) throws AuthException {
-		log.info("Fetching tokens of user {}", username);
 		Tokens tokens = tokensRepository.findByUsername(username);
 		if (tokens == null) throw AuthException.builder()
 		                                       .message("허용 토큰 정보를 찾을 수 없습니다.")
