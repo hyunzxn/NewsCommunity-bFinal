@@ -36,7 +36,11 @@ public class CommentService {
     @Transactional
     public void createComment(CommentCreateRequestDto commentCreateRequestDto, String username) {
         if (commentCreateRequestDto.getContent() == null || commentCreateRequestDto.getNewsId() == null) {
-            throw new InvalidRequestException("댓글 내용 또는 뉴스아이디가 비어있습니다", ("댓글 내용 " + commentCreateRequestDto.getContent() + " 뉴스 아이디 " + commentCreateRequestDto.getNewsId()), "C401");
+            throw InvalidRequestException.builder()
+                    .message("댓글 내용 또는 뉴스 아이디가 비어있습니다.")
+                    .invalidValue("댓글 내용 " + commentCreateRequestDto.getContent() + " 뉴스 아이디 " + commentCreateRequestDto.getNewsId())
+                    .code("C401")
+                    .build();
         }
         Comment comment = new Comment(commentCreateRequestDto);
 
@@ -58,7 +62,11 @@ public class CommentService {
 
 
         if (commentList == null) {
-            throw new InvalidRequestException("댓글을 불러올 수 없습니다", "뉴스 아이디가 댓글에 잘 저장됐는지 확인하세요", "C402");
+            throw InvalidRequestException.builder()
+                    .message("댓글을 불러올 수 없습니다.")
+                    .invalidValue("뉴스 아이디가 댓글에 잘 저장됐는지 확인해주세요")
+                    .code("C402")
+                    .build();
         }
         Page<CommentResponseDto> dtoList = commentList.map(CommentResponseDto::toDto);
         dtoList.forEach(dto -> dto.likeUser(likeCheck(dto.getCommentId(), currentUser)));

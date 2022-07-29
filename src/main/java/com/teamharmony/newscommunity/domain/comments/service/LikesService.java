@@ -51,7 +51,7 @@ public class LikesService {
     /**
      * 특정 댓글의 좋아요 개수 반환
      * @param id
-     * @return
+     * @return 댓글 좋아요 개수
      */
     public int LikedCommentsCount(Long id) {
         return likesRepository.findByComment_CommentId(id).size();

@@ -33,7 +33,7 @@ public class CommentController {
     })
     @ApiOperation(value = "댓글 저장")
     @PostMapping("/user/comments")
-    public ResponseEntity<?> saveComment(@RequestBody @Valid CommentCreateRequestDto commentCreateRequestDto,
+    public ResponseEntity<String> saveComment(@RequestBody @Valid CommentCreateRequestDto commentCreateRequestDto,
                                          @CurrentUser String username) {
         commentService.createComment(commentCreateRequestDto, username);
         return ResponseEntity.ok().body("댓글 작성 성공");
@@ -83,7 +83,7 @@ public class CommentController {
     })
     @ApiOperation(value = "댓글 수정")
     @PutMapping("/user/comments/{id}")
-    public ResponseEntity<?> editComment(@PathVariable Long id,
+    public ResponseEntity<String> editComment(@PathVariable Long id,
                                          @RequestBody @Valid CommentEditRequestDto commentEditRequestDto) {
         commentService.updateComment(id, commentEditRequestDto);
         return ResponseEntity.ok().body("수정 성공");
@@ -102,7 +102,7 @@ public class CommentController {
     })
     @ApiOperation(value = "댓글 삭제")
     @DeleteMapping("/user/comments/{id}")
-    public ResponseEntity<?> deleteComment(@PathVariable Long id) {
+    public ResponseEntity<String> deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
         return ResponseEntity.ok().body("삭제 성공");
     }

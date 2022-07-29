@@ -29,7 +29,7 @@ public class LikesController {
     })
     @ApiOperation(value = "좋아요 작동")
     @PostMapping("/user/likes/{id}")
-    public ResponseEntity<?> likes(@PathVariable Long id,
+    public ResponseEntity<String> likes(@PathVariable Long id,
                                    @CurrentUser String username) {
         likesService.likes(id, username);
         return ResponseEntity.ok().body("좋아요");

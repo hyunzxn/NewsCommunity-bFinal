@@ -11,7 +11,6 @@ import javax.validation.constraints.Size;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
 @Getter
 public class CommentCreateRequestDto {
 
