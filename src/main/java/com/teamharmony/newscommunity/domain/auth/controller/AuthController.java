@@ -24,11 +24,11 @@ public class AuthController {
 	/**
 	 * 접근 토큰, 갱신 토큰 갱신
 	 *
+	 * @return 성공 확인
 	 * @see AuthService#refreshToken
 	 */
 	@GetMapping("/token/refresh")
-	public ResponseEntity<String>refreshToken(HttpServletRequest request, HttpServletResponse response) throws AuthException {
-		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/token/refresh").toUriString());
+	public ResponseEntity<String> refreshToken(HttpServletRequest request, HttpServletResponse response) throws AuthException {
 		return ResponseEntity.ok().body(authService.refreshToken(request, response));
 	}
 	
