@@ -10,6 +10,7 @@ import com.teamharmony.newscommunity.domain.users.repository.UserProfileReposito
 import com.teamharmony.newscommunity.domain.users.repository.UserRepository;
 import com.teamharmony.newscommunity.domain.users.repository.UserRoleRepository;
 import static com.teamharmony.newscommunity.domain.users.util.ProfileUtil.*;
+import com.teamharmony.newscommunity.exception.AuthException;
 import com.teamharmony.newscommunity.exception.InvalidRequestException;
 import com.teamharmony.newscommunity.domain.users.filesotre.FileStore;
 import lombok.RequiredArgsConstructor;
@@ -57,7 +58,11 @@ public class UserService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userRepository.findByUsername(username);
-		if (user == null) throw new UsernameNotFoundException("User not found");
+		if (user == null) throw AuthException.builder()
+		                                     .message("사용자를 찾을 수 없습니다.")
+		                                     .invalidValue("사용자 ID: " + username)
+		                                     .code("A410")
+		                                     .build();
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		Collection<UserRole> userRole = userRoleRepository.findByUser(user);
 		Collection<Role> roles = new ArrayList<>();
@@ -233,7 +238,7 @@ public class UserService implements UserDetailsService {
 	 * @return 성공 확인, 메시지
 	 */
 	public Map<String, String> updateProfile(String username, ProfileRequestDto requestDto) {
-		UserProfile existingProfile = getUser(username).getProfile();  // 해당 유저의 기존 프로필 찾기
+		UserProfile existingProfile = getUser(username).getProfile();  // 해당 사용자의 기존 프로필 찾기
 		if (existingProfile == null) throw InvalidRequestException.builder()
 		                                                          .message("사용자의 프로필을 찾을 수 없습니다.")
 		                                                          .invalidValue("사용자 ID: " + username)
@@ -249,9 +254,9 @@ public class UserService implements UserDetailsService {
 			Map<String, String> metadata = extractMetadata(file);
 
 			try {
-				fileStore.save(path, fileName, Optional.of(metadata), file.getInputStream()); // 업데이트 파일 저장
+				fileStore.save(path, fileName, Optional.of(metadata), file.getInputStream()); // 변경 파일 저장
 			} catch (IOException e) {
-				throw new IllegalArgumentException("Failed to save image to s3 cause=", e.getCause());
+				throw new IllegalStateException("프로필 사진 저장에 실패했습니다.", e.getCause());
 			}
 		}
 		// 프로필 변경 사항 적용 후 DB 저장
