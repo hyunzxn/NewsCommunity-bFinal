@@ -40,7 +40,7 @@ public class UserController {
 	 * @see UserService#checkUser
 	 */
 	@PostMapping("/signup/checkdup")
-	public ResponseEntity<?> checkUser(@RequestBody @Valid SignupRequestDto.CheckDup requestDto) {
+	public ResponseEntity<Map<String, Boolean>> checkUser(@RequestBody @Valid SignupRequestDto.CheckDup requestDto) {
 		return ResponseEntity.ok().body(userService.checkUser(requestDto.username));
 	}
 
@@ -142,7 +142,7 @@ public class UserController {
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
-	public ResponseEntity<?> updateProfile(ProfileRequestDto requestDto, @CurrentUser String username) {
+	public ResponseEntity<Map<String, String>> updateProfile(ProfileRequestDto requestDto, @CurrentUser String username) {
 		return ResponseEntity.ok().body(userService.updateProfile(username, requestDto));
 	}
 
