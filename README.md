@@ -3,7 +3,7 @@
 # 👵Granny'll hear you out - A news community
 📆 2022. 06. 24 - 2022. 07. 29
 ###  [👉 Click here to see our Frontend repository](https://github.com/2022-Harmony/NewsCommunity-fFinal)
-###  [💡  And don't forget to check our Github Issues](https://github.com/2022-Harmony/NewsCommunity-fFinal)
+###  [💡  And don't forget to check our Github Issues](https://github.com/2022-Harmony/NewsCommunity-bFinal/issues)
 
 </div>
 
