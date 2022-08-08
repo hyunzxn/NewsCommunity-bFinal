@@ -26,7 +26,7 @@
 
 ## 3. ERD 설계
 
-<img src="/Users/moonhyunjun/Downloads/ERD.png" alt="ERD" style="zoom:50%;" /> 
+<img src="https://drive.google.com/uc?export=view&id=1tgbvSpsGVIznFvMTlj4kAaJ5kARCtM45" alt="ERD" style="zoom:50%;" /> 
 
 
 
@@ -34,7 +34,7 @@
 
 ## 4. 프로젝트 아키텍처
 
-<img src="/Users/moonhyunjun/Downloads/아키텍쳐.png" alt="아키텍쳐" style="zoom:50%;" />
+<img src="https://drive.google.com/uc?export=view&id=1nB18a9fwVLoBpLk405UrrkrLDhwMnml0" alt="아키텍쳐" style="zoom:50%;" />
 
 
 
