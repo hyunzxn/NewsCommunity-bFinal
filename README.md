@@ -1,59 +1,78 @@
-<div align="center">
+# 할머니는 다 들어주셔
 
-# 👵Granny'll hear you out - A news community
-📆 2022. 06. 24 - 2022. 07. 29
-###  [👉 Click here to see our Frontend repository](https://github.com/2022-Harmony/NewsCommunity-fFinal)
-###  [💡  And don't forget to check our Github Issues](https://github.com/2022-Harmony/NewsCommunity-bFinal/issues)
+###### <br>
 
-</div>
+### 1. 프로젝트 개요
 
-![메인이미지](https://user-images.githubusercontent.com/96354426/181408749-d3f37f40-0ec8-49eb-9930-a83da810beda.png)
+- 개발기간: 2022.06.24 ~ 2022.07.29 
+- 참여인원: 4명
+- 소개: 네이버 스포츠 뉴스를 스크래핑 해와서 그것에 대한 댓글을 남기며 의견을 공유하는 커뮤니티 서비스
 
-## Technical selection
-|<div align="center"> Area </div>| <div align="center"> Techonology </div> |
-  | :--- | :---- | 
-|<div align="center"> Backend </div> | <img src="https://img.shields.io/badge/JAVA-E85C33?style=for-the-badge&logo=Java&logoColor=white"> <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/Spring Security-137CBD?style=for-the-badge&logo=Spring Security&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"> <img src="https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white">| 
-|<div align="center"> Frontend </div>| <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> <img src="https://img.shields.io/badge/jquery-0769AD?style=for-the-badge&logo=jquery&logoColor=white">  <img src="https://img.shields.io/badge/bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white"> <img src="https://img.shields.io/badge/Bulma-00D1B2?style=for-the-badge&logo=Bulma&logoColor=white">|
-| <div align="center"> Database </div> | <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/Spring Data JPA-7A1FA2?style=for-the-badge&logo=java&logoColor=white">  |
-| <div align="center"> Cloud </div> | <img src="https://img.shields.io/badge/AWS-232F32?style=for-the-badge&logo=Amazon%20AWS&logoColor=white"/> <img src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=Amazon%20S3&logoColor=white"/> <img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=for-the-badge&logo=Amazon%20EC2&logoColor=white"/> <img src="https://img.shields.io/badge/Amazon RDS-527FFF?style=for-the-badge&logo=Amazon%20RDS&logoColor=white"/>  <img src="https://img.shields.io/badge/Amazon Route53-FF9900?style=for-the-badge&logoColor=white"/> <img src="https://img.shields.io/badge/Amazon Cloudfront-F05032?style=for-the-badge&logoColor=white"/>|
-| <div align="center"> Version Control </div> | <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white"/>|
-| <div align="center"> CI/CD </div> | <img src="https://img.shields.io/badge/GitHub Actions-2088FF?style=for-the-badge&logo=GitHub Actions&logoColor=white">|
+
 
 <br>
 
-##  Notable Features
-#### 🍀 [CLOVA Summary API](https://api.ncloud-docs.com/docs/en/ai-naver-clovasummary) : Extracting core sentences
-#### 🔑 Security : Spring Security, Prevent XSS attack
-#### 📃 Logging : Slf4j
-#### ✨ Feature of each domain
-|<div align="center"> Featrues </div>| <div align="center"> Description </div> |
-| :--- | :---- | 
-|<div align="center"> Auth </div>| - Manage user identity with JWT </br> - Manage autorization and restrict access |
-|<div align="center"> Bookmarks </div>|  - Create, read and delete user's bookmark activity</br>|
-|<div align="center"> Comments </div>|  - Create, Read, Update and Delete user's comment on each article</br> - Manage user's like activity|
-|<div align="center"> News </div>| - News data management</br> - Update user views |
-|<div align="center"> Supports </div>| - Create, Read, Update and Delete user's feedback</br> |
-|<div align="center"> Users </div>| - Sign up/Sign in</br> - User profile management</br> |
+## 2. 사용기술
+
+- Backend: Java 11 / Spring Boot 2.7.0 / Gradle 7.4.1 / Spring Data JPA
+- Database: AWS RDS (MySQL)
+- Security: Spring Security
+- Infra: AWS ElasticBeanstalk
+- CI/CD: Github Action
+
+
 
 <br>
 
-## System Architecture Diagram
-<img width="1109" src="https://user-images.githubusercontent.com/96354426/181658659-b00b5e35-1f60-412c-bcae-7fda4518bb2d.png">
+## 3. ERD 설계
+
+<img src="/Users/moonhyunjun/Downloads/ERD.png" alt="ERD" style="zoom:50%;" /> 
+
+
 
 <br>
 
-## ERD
-![ERD](https://user-images.githubusercontent.com/96354426/181658487-2947bde3-6809-4a9b-9e25-b1467369ca15.png)
+## 4. 프로젝트 아키텍처
 
-<div align="center">
+<img src="/Users/moonhyunjun/Downloads/아키텍쳐.png" alt="아키텍쳐" style="zoom:50%;" />
+
+
+
 <br>
 
-## 🤘 Member of Team Harmony
-| <div align="center"> Contact us : teamharmoney22@gmail.com </div>|
-| :---------------------------------------- |
-|<div align="center">Choi, Chanhyeok</div>|
-|<div align="center">Kim, Yejin</div>| 
-|<div align="center">Moon, Hyun-jun</div>| 
-|<div align="center">Jo, Youngeun</div>| 
+## 5. 기여한 부분
 
-</div>
+**담당 기능: 댓글 관련 기능**
+
+- 뉴스 상세페이지 댓글 CRUD
+- 프로필 페이지 유저 댓글 모아보기
+- 뉴스 상세페이지 댓글 좋아요 기능
+- 뉴스 상세페이지 댓글 시간순 정렬 기능
+- 뉴스 상세페이지 및 프로필 페이지 댓글 페이징 기능
+
+<br>
+
+[코드 확인](https://github.com/hyunzxn/NewsCommunity-bFinal/tree/develop/src/main/java/com/teamharmony/newscommunity/domain/comments) (클릭하시면 이동합니다.)
+
+
+
+## 6. 기억에 남는 기능
+
+> **6-1 좋아요 기능**
+>
+> - 선정이유: 이 기능은 처음으로 복붙과 다른 사람의 도움보다 제 힘으로 완성한 비중이 더 큰 기능입니다. 이 기능을 완성한 이후에 '나도 내 힘으로 코드를 짤 수 있구나' 하는 자신감이 생겼기 때문에 기억에 남는 첫번째 기능으로 선정했습니다.
+>
+>   <br>
+>
+>   <details>
+>     <summary>좋아요 기능 흐름</summary>
+>   	<img src="https://drive.google.com/uc?export=view&id=1RtGESL8Rh53VKN2uLTSPjCLaXK4Um5-9"/>
+>
+>   </details>
+>
+>      
+
+
+
+
+
