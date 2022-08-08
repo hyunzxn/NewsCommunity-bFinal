@@ -52,7 +52,7 @@
 
 <br>
 
-[코드 확인](https://github.com/hyunzxn/NewsCommunity-bFinal/tree/develop/src/main/java/com/teamharmony/newscommunity/domain/comments) (클릭하시면 이동합니다.)
+[📌 코드 확인](https://github.com/hyunzxn/NewsCommunity-bFinal/tree/develop/src/main/java/com/teamharmony/newscommunity/domain/comments) (클릭하시면 이동합니다.)
 
 
 
@@ -66,11 +66,11 @@
 >
 >   <details>
 >     <summary>좋아요 기능 흐름</summary>
->   	<img src="https://drive.google.com/uc?export=view&id=1RtGESL8Rh53VKN2uLTSPjCLaXK4Um5-9"/>
+>       <img src="https://drive.google.com/uc?export=view&id=1RtGESL8Rh53VKN2uLTSPjCLaXK4Um5-9"/>
 >
 >   </details>
->
->      
+> [📌 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/ad132d8b888f46084cd7f8cb3d8f70a3c119e8ac/src/main/java/com/teamharmony/newscommunity/domain/comments/service/LikesService.java#L27-L49) (클릭하시면 이동합니다.)
+>   
 
 
 
