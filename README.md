@@ -50,7 +50,6 @@
 - 뉴스 상세페이지 댓글 시간순 정렬 기능
 - 뉴스 상세페이지 및 프로필 페이지 댓글 페이징 기능
 
-<br>
 
 [📌 코드 확인](https://github.com/hyunzxn/NewsCommunity-bFinal/tree/develop/src/main/java/com/teamharmony/newscommunity/domain/comments) (클릭하시면 이동합니다.)
 
@@ -60,19 +59,35 @@
 
 > **6-1 좋아요 기능**
 >
-> - 선정이유: 이 기능은 처음으로 복붙과 다른 사람의 도움보다 제 힘으로 완성한 비중이 더 큰 기능입니다. 이 기능을 완성한 이후에 '나도 내 힘으로 코드를 짤 수 있구나' 하는 자신감이 생겼기 때문에 기억에 남는 첫번째 기능으로 선정했습니다.
+> - 선정이유
+>
+>   - 복붙과 다른 사람의 도움을 받기보다 제 힘으로 완성한 비중이 더 큰 첫 코드입니다.
+>   - 이 기능을 완성한 이후 '내 힘으로도 코드를 짤 수 있다'는 자신감이 생겼습니다.
 >
 >   <br>
 >
 >   <details>
 >     <summary>좋아요 기능 흐름</summary>
->       <img src="https://drive.google.com/uc?export=view&id=1RtGESL8Rh53VKN2uLTSPjCLaXK4Um5-9"/>
->
+>       <img src="https://drive.google.com/uc?export=view&id=1BZHn_m0McWTbx8fuW2kzX98CtE7ZddYB"/>
 >   </details>
 > [📌 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/ad132d8b888f46084cd7f8cb3d8f70a3c119e8ac/src/main/java/com/teamharmony/newscommunity/domain/comments/service/LikesService.java#L27-L49) (클릭하시면 이동합니다.)
+>
+
+
+
+> **6-2 페이징 기능**
+>
+> - 선정이유
+>   - 뉴스 상세페이지 댓글 로딩 시간이 길다는 것에 대한 성능적 보완을 위해 도입한 기능이라 기억에 남습니다.
+>   - 고객 피드백에서 많은 지적을 받은 기능이라 기억에 남습니다.
 >   
-
-
-
-
-
+>   <br>
+>   
+>   <details>
+>     <summary>페이징 기능 흐름</summary>
+>     <img src="https://drive.google.com/uc?export=view&id=1Q0RKZuXiD4B68tKUGtkex4zlcRXbFijm" />
+>   </details>
+> [📌 컨트롤러 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/controller/CommentController.java#L60-L68) (클릭하시면 이동합니다.) <br>
+> [📌 서비스 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/service/CommentService.java#L56-L74) (클릭하시면 이동합니다.)
+>   
+>   
