@@ -15,7 +15,7 @@
 ## 2. 사용기술
 
 - Backend: Java 11 / Spring Boot 2.7.0 / Gradle 7.4.1 / Spring Data JPA
-- Database: AWS RDS (MySQL)
+- Database: AWS RDS (MySQL 8.0.28)
 - Security: Spring Security
 - Infra: AWS ElasticBeanstalk
 - CI/CD: Github Action
@@ -53,7 +53,7 @@
 
 [📌 패키지 확인](https://github.com/hyunzxn/NewsCommunity-bFinal/tree/develop/src/main/java/com/teamharmony/newscommunity/domain/comments) (클릭하시면 이동합니다.)
 
-
+<br>
 
 ## 6. 기억에 남는 기능
 
@@ -145,4 +145,16 @@
     <summary>github project 사용</summary>
   <img src="https://drive.google.com/uc?export=view&id=1S2kTFgVUORkiiluEgwcE4WRSVeugq1vx" />
   </details>
+
+<br>
+
+## 10. 프로젝트 간단 회고
+
+[📌프로젝트 회고 확인](https://moon-daniel.tistory.com/entry/%EC%B5%9C%EC%A2%85-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%ED%9A%8C%EA%B3%A0) (클릭하시면 이동합니다.)
+
+<br>
+
+## 기타
+
+[📌 팀 Github Repository](https://github.com/2022-Harmony/NewsCommunity-bFinal.git) (클릭하시면 이동합니다.)
 
