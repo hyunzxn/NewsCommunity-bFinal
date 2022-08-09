@@ -99,7 +99,7 @@
 ### 페이징 기능 
 
 - 고객 피드백에서 많은 지적을 받은 기능<br>
-<img src="https://drive.google.com/uc?export=view&id=1TqfnAkuNaZSRDLBEErmcYLAxhw3ZvqUE" alt="고객피드백-댓글 부분 응답 결과" style="zoom:50%;" />
+![고객피드백-댓글 응답 결과](https://drive.google.com/uc?export=view&id=1TqfnAkuNaZSRDLBEErmcYLAxhw3ZvqUE)
 - 문제 상황 : 댓글의 총 개수와 상관없이 페이지 locator 번호가 나타나고 해당 페이지 번호를 눌렀을 때 아무 댓글이 없는 페이지로 이동됨.<br>
 <br>
 - 문제 원인 
