@@ -16,8 +16,8 @@ public class SwaggerConfig {
 
     @Bean
     public Docket restAPI() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .useDefaultResponseMessages(true)
+        return new Docket(DocumentationType.OAS_30)
+                .useDefaultResponseMessages(false)
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.teamharmony.newscommunity"))
