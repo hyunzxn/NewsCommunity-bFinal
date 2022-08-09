@@ -101,14 +101,17 @@
 - 고객 피드백에서 많은 지적을 받은 기능<br>
 ![고객피드백-댓글 응답 결과](https://drive.google.com/uc?export=view&id=1TqfnAkuNaZSRDLBEErmcYLAxhw3ZvqUE)<br>
 <br>
+
 - 문제 상황 : 댓글의 총 개수와 상관없이 페이지 locator 번호가 나타나고 해당 페이지 번호를 눌렀을 때 아무 댓글이 없는 페이지로 이동됨.<br>
 <br>
+
 - 문제 원인
   - Spring Data JPA을 이용해서 페이징 기능 구현 시 Pageable 인터페이스와 Page 인터페이스를 사용함.
   - 이 때 기존 코드는 반환하는 타입을 `List<CommentReponseDto>` 으로 작성함.
   - `Page<CommentResponseDto>`타입으로 해주지 않음으로써 프론트엔드에 전달하는 응답에서 **totalElements**가 null이 됨.
   - 이로 인해 댓글의 총 개수와 상관없이 프론트엔드에서 지정해놓은 총 페이지 개수만큼 페이지 번호가 보이게 되고 페이지 번호를 눌렀을 때도 해당 페이지로 이동이 되는 현상이 발생함.<br>
 <br>
+
 - 문제 해결
   - Service 와 Controller에서 댓글을 조회하는 메소드와 API의 Return 타입을 `Page<CommentResponseDto>`타입으로 수정
 
