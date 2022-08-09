@@ -87,8 +87,8 @@
 >     <summary>페이징 기능 흐름</summary>
 >     <img src="https://drive.google.com/uc?export=view&id=1Q0RKZuXiD4B68tKUGtkex4zlcRXbFijm" />
 >   </details>
->   [📌 컨트롤러 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/controller/CommentController.java#L60-L68) (클릭하시면 이동합니다.) <br>
->   [📌 서비스 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/service/CommentService.java#L56-L74) (클릭하시면 이동합니다.)
+> [📌 컨트롤러 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/controller/CommentController.java#L60-L68) (클릭하시면 이동합니다.) <br>
+> [📌 서비스 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/service/CommentService.java#L56-L74) (클릭하시면 이동합니다.)
 >   
 >   
 
