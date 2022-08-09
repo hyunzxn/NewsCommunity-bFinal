@@ -2,7 +2,7 @@
 
 ###### <br>
 
-### 1. 프로젝트 개요
+## 1. 프로젝트 개요
 
 - 개발기간: 2022.06.24 ~ 2022.07.29 
 - 참여인원: 4명
@@ -26,7 +26,7 @@
 
 ## 3. ERD 설계
 
-<img src="https://drive.google.com/uc?export=view&id=1tgbvSpsGVIznFvMTlj4kAaJ5kARCtM45" alt="ERD" style="zoom:50%;" /> 
+![ERD](https://drive.google.com/uc?export=view&id=1tgbvSpsGVIznFvMTlj4kAaJ5kARCtM45)
 
 
 
@@ -34,7 +34,7 @@
 
 ## 4. 프로젝트 아키텍처
 
-<img src="https://drive.google.com/uc?export=view&id=1nB18a9fwVLoBpLk405UrrkrLDhwMnml0" alt="아키텍쳐" style="zoom:50%;" />
+![Architecture](https://drive.google.com/uc?export=view&id=1nB18a9fwVLoBpLk405UrrkrLDhwMnml0)
 
 
 
@@ -51,7 +51,7 @@
 - 뉴스 상세페이지 및 프로필 페이지 댓글 페이징 기능
 
 
-[📌 코드 확인](https://github.com/hyunzxn/NewsCommunity-bFinal/tree/develop/src/main/java/com/teamharmony/newscommunity/domain/comments) (클릭하시면 이동합니다.)
+[📌 패키지 확인](https://github.com/hyunzxn/NewsCommunity-bFinal/tree/develop/src/main/java/com/teamharmony/newscommunity/domain/comments) (클릭하시면 이동합니다.)
 
 
 
@@ -73,7 +73,7 @@
 > [📌 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/ad132d8b888f46084cd7f8cb3d8f70a3c119e8ac/src/main/java/com/teamharmony/newscommunity/domain/comments/service/LikesService.java#L27-L49) (클릭하시면 이동합니다.)
 >
 
-
+<br>
 
 > **6-2 페이징 기능**
 >
@@ -87,7 +87,30 @@
 >     <summary>페이징 기능 흐름</summary>
 >     <img src="https://drive.google.com/uc?export=view&id=1Q0RKZuXiD4B68tKUGtkex4zlcRXbFijm" />
 >   </details>
-> [📌 컨트롤러 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/controller/CommentController.java#L60-L68) (클릭하시면 이동합니다.) <br>
-> [📌 서비스 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/service/CommentService.java#L56-L74) (클릭하시면 이동합니다.)
+>   [📌 컨트롤러 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/controller/CommentController.java#L60-L68) (클릭하시면 이동합니다.) <br>
+>   [📌 서비스 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/service/CommentService.java#L56-L74) (클릭하시면 이동합니다.)
 >   
 >   
+
+<br>
+
+## 7. 핵심 트러블 슈팅
+
+### 페이징 기능 
+
+- 고객 피드백에서 많은 지적을 받은 기능<br>
+<img src="https://drive.google.com/uc?export=view&id=1TqfnAkuNaZSRDLBEErmcYLAxhw3ZvqUE" alt="고객피드백-댓글 부분 응답 결과" style="zoom:50%;" /><br>
+- 문제 상황 : 댓글의 총 개수와 상관없이 페이지 locator 번호가 나타나고 해당 페이지 번호를 눌렀을 때 아무 댓글이 없는 페이지로 이동됨.<br>
+<br>
+- 문제 원인 
+  - Spring Data JPA을 이용해서 페이징 기능 구현 시 Pageable 인터페이스와 Page 인터페이스를 사용함.
+  - 이 때 기존 코드는 반환하는 타입을 `List<CommentReponseDto>` 으로 작성함.
+  - `Page<CommentResponseDto>`타입으로 해주지 않음으로써 프론트엔드에 전달하는 응답에서 **totalElements**가 null이 됨.
+  - 이로 인해 댓글의 총 개수와 상관없이 프론트엔드에서 지정해놓은 총 페이지 개수만큼 페이지 번호가 보이게 되고 페이지 번호를 눌렀을 때도 해당 페이지로 이동이 되는 현상이 발생함.<br>
+
+- 문제 해결
+  - Service 와 Controller에서 댓글을 조회하는 메소드와 API의 Return 타입을 `Page<CommentResponseDto>`타입으로 수정
+
+
+
+[📌 코드 변경 커밋 확인](https://github.com/hyunzxn/NewsCommunity-bFinal/commit/2bf32ded6f960d18064f65388695be8bf4e3bf42) (클릭하시면 이동합니다.)
