@@ -87,8 +87,8 @@
 >     <summary>페이징 기능 흐름</summary>
 >     <img src="https://drive.google.com/uc?export=view&id=1Q0RKZuXiD4B68tKUGtkex4zlcRXbFijm" />
 >   </details>
-> [📌 컨트롤러 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/controller/CommentController.java#L60-L68) (클릭하시면 이동합니다.) <br>
-> [📌 서비스 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/service/CommentService.java#L56-L74) (클릭하시면 이동합니다.)
+>[📌 컨트롤러 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/controller/CommentController.java#L60-L68) (클릭하시면 이동합니다.) <br>
+>[📌 서비스 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/service/CommentService.java#L56-L74) (클릭하시면 이동합니다.)
 >   
 >   
 
@@ -128,3 +128,21 @@
 > - 프로젝트를 진행하다가 갑자기 git push가 되지 않는 이슈 발생  [📌 이슈 해결 확인](https://moon-daniel.tistory.com/entry/220722-Today-I-Learned?category=1004799) (클릭하시면 이동합니다.)
 
 <br>
+
+## 9. 팀 협업 방식 소개
+
+- 평일 오전 9:00 매일 데일리 스크럼 진행
+- 주 2회 팀 미팅 진행
+
+- git issue / github project 사용
+
+  <details>
+    <summary>git issue 사용</summary>
+    <img src="https://drive.google.com/uc?export=view&id=1ye3lBV8LrJNbEzYO2vRGSGX3QNLW7ZRQ" />
+  </details>
+
+  <details>
+    <summary>github project 사용</summary>
+  <img src="https://drive.google.com/uc?export=view&id=1S2kTFgVUORkiiluEgwcE4WRSVeugq1vx" />
+  </details>
+
