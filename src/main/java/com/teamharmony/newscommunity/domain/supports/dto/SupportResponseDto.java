@@ -17,9 +17,9 @@ public class SupportResponseDto {
 	private String post_content;
 	@ApiModelProperty(value = "이메일", example = "teamharmoney22@gmail.com", required = true)
 	private String post_email;
-	@ApiModelProperty(value = "게시물 수정 시각", example = "2022-07-23 07:19:37.945735", required = true)
-	private LocalDateTime created_at;
 	@ApiModelProperty(value = "게시물 생성 시각", example = "2022-07-23 07:19:37.945735", required = true)
+	private LocalDateTime created_at;
+	@ApiModelProperty(value = "게시물 수정 시각", example = "2022-07-23 07:19:37.945735", required = true)
 	private LocalDateTime modified_at;
 
     @Builder
