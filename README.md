@@ -26,7 +26,7 @@
 
 ## 3. ERD 설계
 
-![ERD](https://drive.google.com/uc?export=view&id=1tgbvSpsGVIznFvMTlj4kAaJ5kARCtM45)
+![ERD](https://user-images.githubusercontent.com/100478841/184053770-399b1534-8b9f-442f-9092-a0c5a04c5db2.png)
 
 
 
@@ -34,7 +34,7 @@
 
 ## 4. 프로젝트 아키텍처
 
-![Architecture](https://drive.google.com/uc?export=view&id=1nB18a9fwVLoBpLk405UrrkrLDhwMnml0)
+<img width="882" alt="아키텍쳐" src="https://user-images.githubusercontent.com/100478841/184053835-060776de-a8ec-4164-b217-4492185118e6.png">
 
 
 
@@ -68,9 +68,10 @@
 >
 >   <details>
 >     <summary>좋아요 기능 흐름</summary>
->       <img src="https://drive.google.com/uc?export=view&id=1BZHn_m0McWTbx8fuW2kzX98CtE7ZddYB"/>
+>       <img width="1727" alt="likes_flow" src="https://user-images.githubusercontent.com/100478841/184053895-8bed50f7-eb81-42a9-936d-449af611836e.png">
 >   </details>
-> [📌 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/ad132d8b888f46084cd7f8cb3d8f70a3c119e8ac/src/main/java/com/teamharmony/newscommunity/domain/comments/service/LikesService.java#L27-L49) (클릭하시면 이동합니다.)
+>
+>   [📌 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/ad132d8b888f46084cd7f8cb3d8f70a3c119e8ac/src/main/java/com/teamharmony/newscommunity/domain/comments/service/LikesService.java#L27-L49) (클릭하시면 이동합니다.)
 >
 
 <br>
@@ -80,17 +81,18 @@
 > - 선정이유
 >   - 뉴스 상세페이지 댓글 로딩 시간이 길다는 것에 대한 성능적 보완을 위해 도입한 기능이라 기억에 남습니다.
 >   - 고객 피드백에서 많은 지적을 받은 기능이라 기억에 남습니다.
->   
+>
 >   <br>
->   
+>
 >   <details>
 >     <summary>페이징 기능 흐름</summary>
->     <img src="https://drive.google.com/uc?export=view&id=1Q0RKZuXiD4B68tKUGtkex4zlcRXbFijm" />
+>     <img width="1728" alt="댓글 페이징 흐름" src="https://user-images.githubusercontent.com/100478841/184053970-3d689dff-5c75-4c71-8ba4-cc5acb76a1b9.png">
 >   </details>
->[📌 컨트롤러 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/controller/CommentController.java#L60-L68) (클릭하시면 이동합니다.) <br>
->[📌 서비스 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/service/CommentService.java#L56-L74) (클릭하시면 이동합니다.)
->   
->   
+>
+>    [📌 컨트롤러 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/controller/CommentController.java#L60-L68) (클릭하시면 이동합니다.) <br>
+>    [📌 서비스 코드확인](https://github.com/hyunzxn/NewsCommunity-bFinal/blob/7ce08f0d2468e385e657e61f1ec9970c329c848c/src/main/java/com/teamharmony/newscommunity/domain/comments/service/CommentService.java#L56-L74) (클릭하시면 이동합니다.)
+>
+> 
 
 <br>
 
@@ -99,8 +101,11 @@
 ### 페이징 기능 
 
 - 고객 피드백에서 많은 지적을 받은 기능<br>
-![고객피드백-댓글 응답 결과](https://drive.google.com/uc?export=view&id=1TqfnAkuNaZSRDLBEErmcYLAxhw3ZvqUE)<br>
-<br>
+
+  <img width="769" alt="고객 피드백 댓글" src="https://user-images.githubusercontent.com/100478841/184054043-bf32f4c7-6c90-4ed4-80ef-521bc14cc6c9.png">
+
+  <br>
+  <br>
 
 - 문제 상황 : 댓글의 총 개수와 상관없이 페이지 locator 번호가 나타나고 해당 페이지 번호를 눌렀을 때 아무 댓글이 없는 페이지로 이동됨.<br>
 <br>
@@ -138,12 +143,12 @@
 
   <details>
     <summary>git issue 사용</summary>
-    <img src="https://drive.google.com/uc?export=view&id=1ye3lBV8LrJNbEzYO2vRGSGX3QNLW7ZRQ" />
+    <img width="1208" alt="깃 이슈" src="https://user-images.githubusercontent.com/100478841/184054096-82ee774d-ba41-4ab1-a8b7-4a082f8daed3.png">
   </details>
 
   <details>
     <summary>github project 사용</summary>
-  <img src="https://drive.google.com/uc?export=view&id=1S2kTFgVUORkiiluEgwcE4WRSVeugq1vx" />
+  	<img width="1720" alt="github 프로젝트" src="https://user-images.githubusercontent.com/100478841/184054144-ff6874c5-03de-414e-906d-8b0dfdc408a0.png">
   </details>
 
 <br>
