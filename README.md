@@ -134,6 +134,26 @@
 
 <br>
 
+>  **JPA 순환참조 문제 해결**
+>
+> - 댓글 기능을 구현하기 위해 User와 Comment를 양방향관계로 맵핑함에 따라 순환참조 문제 발생
+>
+>   <br>
+> 
+>   <details>
+>     <summary>문제해결방법</summary>
+    
+>     @JsonBackReference 와 @JsonManagedReference 사용
+>
+>     1. @JsonBackReference
+>       연관관계의 주인이 되는 User Entity에 붙여줌. 직렬화가 되지 않게 함.
+>     <br>
+>     2. @JsonManagedReference
+>       연관관계의 주인이 아닌 Comment Entity에 붙여줌. 직렬화가 되게 진행되게 함.
+>   </details>  
+>
+>   
+
 ## 9. 팀 협업 방식 소개
 
 - 평일 오전 9:00 매일 데일리 스크럼 진행
